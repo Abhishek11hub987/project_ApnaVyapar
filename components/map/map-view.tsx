@@ -25,9 +25,12 @@ export default function MapView({ locations, centerOverride }: { locations: Reso
   if (centerOverride) {
     center = centerOverride;
     zoom = 12;
-  } else if (locations.length > 0) {
-    center = [locations[0].latitude, locations[0].longitude];
-    zoom = 10;
+  } else {
+    const validLocation = locations.find(loc => loc.latitude !== null && loc.longitude !== null);
+    if (validLocation) {
+      center = [validLocation.latitude!, validLocation.longitude!];
+      zoom = 10;
+    }
   }
 
   return (
@@ -36,8 +39,8 @@ export default function MapView({ locations, centerOverride }: { locations: Reso
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
       />
-      {locations.map((loc) => (
-        <Marker key={loc.id} position={[loc.latitude, loc.longitude]} icon={icon}>
+      {locations.filter((loc) => loc.latitude !== null && loc.longitude !== null).map((loc) => (
+        <Marker key={loc.id} position={[loc.latitude!, loc.longitude!]} icon={icon}>
           <Popup>
             <div className="p-1 min-w-[200px]">
               <span className="inline-block px-2 py-0.5 bg-teal-100 text-teal-800 text-[10px] font-bold uppercase rounded mb-2">

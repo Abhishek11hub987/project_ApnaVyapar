@@ -1,7 +1,7 @@
 import { ChecklistTask } from '@/types/database';
 import { CheckCircle2, Circle, Clock } from 'lucide-react';
 
-export default function TaskItem({ task, onStatusChange }: { task: ChecklistTask, onStatusChange: (id: number, status: string) => void }) {
+export default function TaskItem({ task, onStatusChange }: { task: ChecklistTask, onStatusChange: (id: string, status: string) => void }) {
   const isCompleted = task.status === 'completed';
   const isInProgress = task.status === 'in_progress';
   

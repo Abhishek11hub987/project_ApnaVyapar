@@ -51,7 +51,7 @@ function ChecklistContent() {
           .from('checklist_tasks')
           .select('*')
           .eq('checklist_id', cl.id)
-          .order('order_index');
+          .order('sort_order');
           
         setTasks(existingTasks || []);
       } else if (ideaId) {
@@ -87,7 +87,7 @@ function ChecklistContent() {
               description: 'Register your business name and entity (Proprietorship, LLP, or Pvt Ltd).',
               category: 'Registration',
               estimated_time: '1-2 Weeks',
-              order_index: order++,
+              sort_order: order++,
             });
             newTasks.push({
               checklist_id: newChecklist.id,
@@ -95,7 +95,7 @@ function ChecklistContent() {
               description: 'Open a business bank account to keep personal and business finances separate.',
               category: 'Finance',
               estimated_time: '2-4 Days',
-              order_index: order++,
+              sort_order: order++,
             });
             newTasks.push({
               checklist_id: newChecklist.id,
@@ -104,7 +104,7 @@ function ChecklistContent() {
               category: 'Registration',
               estimated_time: '1 Day',
               resource_link: 'https://udyamregistration.gov.in/',
-              order_index: order++,
+              sort_order: order++,
             });
 
             // 2. Idea specific licenses
@@ -116,7 +116,7 @@ function ChecklistContent() {
                   description: `Required specific license for ${idea.title}.`,
                   category: 'Licenses',
                   estimated_time: 'Variable',
-                  order_index: order++,
+                  sort_order: order++,
                 });
               }
             }
@@ -126,7 +126,7 @@ function ChecklistContent() {
               .from('checklist_tasks')
               .insert(newTasks)
               .select()
-              .order('order_index');
+              .order('sort_order');
               
             setTasks(insertedTasks || []);
           }
@@ -143,7 +143,7 @@ function ChecklistContent() {
     }
   };
 
-  const handleStatusChange = async (taskId: number, newStatus: string) => {
+  const handleStatusChange = async (taskId: string, newStatus: string) => {
     // Optimistic update
     setTasks(tasks.map(t => t.id === taskId ? { ...t, status: newStatus as any } : t));
     
@@ -186,7 +186,7 @@ function ChecklistContent() {
   const categories = Array.from(new Set(tasks.map(t => t.category)));
   const groupedTasks = categories.map(cat => ({
     category: cat,
-    tasks: tasks.filter(t => t.category === cat).sort((a, b) => a.order_index - b.order_index)
+    tasks: tasks.filter(t => t.category === cat).sort((a, b) => a.sort_order - b.sort_order)
   }));
 
   return (
