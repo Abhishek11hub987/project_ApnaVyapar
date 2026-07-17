@@ -25,14 +25,24 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     // Load from local storage on mount
     const saved = localStorage.getItem('app-language') as Language;
-    if (saved && (saved === 'en' || saved === 'hi')) {
-      setLanguageState(saved);
+    const initialLang = (saved && (saved === 'en' || saved === 'hi')) ? saved : 'en';
+    setLanguageState(initialLang);
+    
+    if (initialLang === 'hi') {
+      document.body.classList.add('font-hindi');
+    } else {
+      document.body.classList.remove('font-hindi');
     }
   }, []);
 
   const setLanguage = (lang: Language) => {
     setLanguageState(lang);
     localStorage.setItem('app-language', lang);
+    if (lang === 'hi') {
+      document.body.classList.add('font-hindi');
+    } else {
+      document.body.classList.remove('font-hindi');
+    }
   };
 
   const t = (key: string): string => {

@@ -12,30 +12,36 @@ export default function TaskItem({ task, onStatusChange }: { task: ChecklistTask
   };
 
   return (
-    <div className={`p-4 rounded-xl border mb-3 transition-colors ${isCompleted ? 'bg-teal-50/50 border-teal-100' : isInProgress ? 'bg-amber-50/30 border-amber-200' : 'bg-white border-slate-200'}`}>
+    <div className={`p-4 rounded-xl border mb-3 transition-colors ${
+      isCompleted 
+        ? 'bg-teal-50/50 dark:bg-teal-900/10 border-teal-100 dark:border-teal-900/50' 
+        : isInProgress 
+          ? 'bg-amber-50/30 dark:bg-amber-900/10 border-amber-200 dark:border-amber-800/50' 
+          : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700'
+    }`}>
       <div className="flex gap-4">
         <button onClick={handleToggle} className="mt-0.5 flex-shrink-0 focus:outline-none transition-transform active:scale-90">
           {isCompleted ? (
-            <CheckCircle2 className="text-teal-600" size={24} />
+            <CheckCircle2 className="text-teal-600 dark:text-teal-500" size={24} />
           ) : isInProgress ? (
-            <Clock className="text-amber-500" size={24} />
+            <Clock className="text-amber-500 dark:text-amber-500" size={24} />
           ) : (
-            <Circle className="text-slate-300 hover:text-teal-500 transition-colors" size={24} />
+            <Circle className="text-slate-300 dark:text-slate-600 hover:text-teal-500 dark:hover:text-teal-400 transition-colors" size={24} />
           )}
         </button>
         <div className="flex-1">
-          <h4 className={`font-semibold ${isCompleted ? 'text-slate-500 line-through' : 'text-slate-800'}`}>
+          <h4 className={`font-semibold ${isCompleted ? 'text-slate-500 dark:text-slate-500 line-through' : 'text-slate-800 dark:text-slate-200'}`}>
             {task.title}
           </h4>
           {task.description && (
-             <p className={`text-sm mt-1 mb-2 ${isCompleted ? 'text-slate-400' : 'text-slate-600'}`}>{task.description}</p>
+             <p className={`text-sm mt-1 mb-2 ${isCompleted ? 'text-slate-400 dark:text-slate-500' : 'text-slate-600 dark:text-slate-400'}`}>{task.description}</p>
           )}
           <div className="flex flex-wrap items-center gap-3 mt-2">
-            <span className={`text-xs font-medium px-2 py-1 rounded-md ${isCompleted ? 'bg-slate-100 text-slate-500' : 'bg-slate-100 text-slate-600'}`}>
+            <span className={`text-xs font-medium px-2 py-1 rounded-md ${isCompleted ? 'bg-slate-100 dark:bg-slate-800/50 text-slate-500 dark:text-slate-500' : 'bg-slate-100 dark:bg-slate-700/50 text-slate-600 dark:text-slate-300'}`}>
               ⏳ {task.estimated_time || 'Varies'}
             </span>
             {task.resource_link && (
-              <a href={task.resource_link} target="_blank" rel="noopener noreferrer" className="text-xs font-semibold text-teal-600 hover:underline">
+              <a href={task.resource_link} target="_blank" rel="noopener noreferrer" className="text-xs font-semibold text-teal-600 dark:text-teal-400 hover:underline">
                 View Resource →
               </a>
             )}

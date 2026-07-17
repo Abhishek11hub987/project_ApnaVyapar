@@ -8,12 +8,14 @@ import TaskItem from '@/components/checklist/task-item';
 import ProgressBar from '@/components/checklist/progress-bar';
 import { FileText, Bot } from 'lucide-react';
 import Link from 'next/link';
+import { useLanguage } from '@/lib/language-context';
 
 function ChecklistContent() {
   const { user, isAuthenticated, isLoading: authLoading } = useAuth();
   const searchParams = useSearchParams();
   const router = useRouter();
   const ideaId = searchParams.get('idea');
+  const { t } = useLanguage();
   
   const [checklist, setChecklist] = useState<Checklist | null>(null);
   const [tasks, setTasks] = useState<ChecklistTask[]>([]);
@@ -215,8 +217,8 @@ function ChecklistContent() {
   if (loading || authLoading) {
     return (
       <div className="flex flex-col h-[60vh] items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-teal-700"></div>
-        <p className="mt-4 text-slate-500 font-medium">Loading your checklist...</p>
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-teal-700 dark:border-teal-400"></div>
+        <p className="mt-4 text-slate-500 dark:text-slate-400 font-medium">Loading your checklist...</p>
       </div>
     );
   }
@@ -224,15 +226,15 @@ function ChecklistContent() {
   if (!checklist) {
     return (
       <div className="text-center py-20 px-4">
-        <div className="w-20 h-20 bg-teal-50 text-teal-600 rounded-full flex items-center justify-center mx-auto mb-6">
+        <div className="w-20 h-20 bg-teal-50 dark:bg-teal-900/30 text-teal-600 dark:text-teal-400 rounded-full flex items-center justify-center mx-auto mb-6">
           <FileText size={40} />
         </div>
-        <h2 className="text-2xl font-bold text-slate-800 mb-3">No Active Checklist</h2>
-        <p className="text-slate-600 mb-8 max-w-sm mx-auto">
-          Explore our business ideas and generate a custom launch checklist to track your progress.
+        <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100 mb-3">{t('checklist.noActive')}</h2>
+        <p className="text-slate-600 dark:text-slate-400 mb-8 max-w-sm mx-auto">
+          {t('checklist.noActiveDesc')}
         </p>
-        <Link href="/ideas" className="bg-teal-700 text-white font-bold py-3 px-8 rounded-full hover:bg-teal-800 transition-colors">
-          Explore Ideas
+        <Link href="/ideas" className="bg-teal-700 dark:bg-teal-600 text-white font-bold py-3 px-8 rounded-full hover:bg-teal-800 dark:hover:bg-teal-500 transition-colors">
+          {t('checklist.exploreIdeas')}
         </Link>
       </div>
     );
@@ -250,18 +252,18 @@ function ChecklistContent() {
   return (
     <div className="max-w-3xl mx-auto py-8 px-4">
       <div className="mb-8">
-        <h1 className="text-2xl md:text-3xl font-extrabold text-slate-900 mb-2">{checklist.title}</h1>
-        <p className="text-slate-500 mb-6 font-medium">Track your steps from idea to launch.</p>
+        <h1 className="text-2xl md:text-3xl font-extrabold text-slate-900 dark:text-slate-100 mb-2">{checklist.title}</h1>
+        <p className="text-slate-500 dark:text-slate-400 mb-6 font-medium">Track your steps from idea to launch.</p>
         
-        <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+        <div className="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
           <ProgressBar completed={completedCount} total={tasks.length} />
           
           {completedCount === tasks.length && tasks.length > 0 && (
-            <div className="mt-4 bg-emerald-50 text-emerald-800 p-4 rounded-xl border border-emerald-100 flex items-start gap-3">
+            <div className="mt-4 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-800 dark:text-emerald-300 p-4 rounded-xl border border-emerald-100 dark:border-emerald-800/50 flex items-start gap-3">
               <span className="text-2xl">🎉</span>
               <div>
-                <h4 className="font-bold">You're ready to launch!</h4>
-                <p className="text-sm font-medium opacity-90">All essential tasks are complete. Need help marketing? Ask Vyapar Mitra!</p>
+                <h4 className="font-bold">{t('checklist.ready')}</h4>
+                <p className="text-sm font-medium opacity-90">{t('checklist.readyDesc')}</p>
               </div>
             </div>
           )}
@@ -271,8 +273,8 @@ function ChecklistContent() {
       <div className="space-y-8">
         {groupedTasks.map(group => (
           <div key={group.category}>
-            <h3 className="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2">
-              <div className="w-2 h-6 bg-amber-500 rounded-full"></div>
+            <h3 className="text-lg font-bold text-slate-800 dark:text-slate-200 mb-4 flex items-center gap-2">
+              <div className="w-2 h-6 bg-amber-500 dark:bg-amber-600 rounded-full"></div>
               {group.category}
             </h3>
             <div className="space-y-1">
@@ -284,15 +286,18 @@ function ChecklistContent() {
         ))}
       </div>
       
-      <div className="mt-12 bg-slate-900 rounded-2xl p-6 text-white flex flex-col md:flex-row items-center gap-6 shadow-xl">
-        <div className="w-16 h-16 bg-teal-500/20 text-teal-400 rounded-full flex items-center justify-center flex-shrink-0">
+      <div className="mt-12 bg-slate-900 p-6 rounded-2xl text-white flex flex-col md:flex-row items-center gap-6 shadow-xl relative overflow-hidden">
+        <div className="absolute -top-10 -right-10 opacity-10 text-teal-400">
+          <Bot size={150} />
+        </div>
+        <div className="w-16 h-16 bg-teal-500/20 text-teal-400 rounded-full flex items-center justify-center flex-shrink-0 relative z-10">
           <Bot size={32} />
         </div>
-        <div className="flex-1 text-center md:text-left">
+        <div className="flex-1 text-center md:text-left relative z-10">
           <h4 className="text-xl font-bold mb-1">Stuck on a step?</h4>
           <p className="text-slate-300 text-sm">Vyapar Mitra can guide you through any registration or compliance process.</p>
         </div>
-        <Link href={`/chat?idea=${checklist.business_idea_id}`} className="bg-teal-500 hover:bg-teal-400 text-white font-bold py-3 px-6 rounded-xl transition-colors whitespace-nowrap w-full md:w-auto text-center">
+        <Link href={`/chat?idea=${checklist.business_idea_id}`} className="bg-teal-500 hover:bg-teal-400 text-white font-bold py-3 px-6 rounded-xl transition-colors whitespace-nowrap w-full md:w-auto text-center relative z-10">
           Ask for Help
         </Link>
       </div>
@@ -302,8 +307,8 @@ function ChecklistContent() {
 
 export default function ChecklistPage() {
   return (
-    <div className="min-h-screen bg-slate-50 pb-32">
-      <Suspense fallback={<div className="p-8 text-center">Loading...</div>}>
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 pb-32 transition-colors">
+      <Suspense fallback={<div className="p-8 text-center text-slate-500 dark:text-slate-400">Loading...</div>}>
         <ChecklistContent />
       </Suspense>
     </div>

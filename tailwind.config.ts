@@ -9,6 +9,9 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        hindi: ['var(--font-hind)', 'sans-serif'],
+      },
       colors: {
         teal: {
           700: "#0F766E",

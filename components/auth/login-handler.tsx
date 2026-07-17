@@ -38,5 +38,7 @@ export default function LoginHandler() {
     }
   };
 
-  return <LoginModal isOpen={isModalOpen} onClose={handleClose} />;
+  if (!isModalOpen) return null;
+
+  return <LoginModal onClose={handleClose} />;
 }
