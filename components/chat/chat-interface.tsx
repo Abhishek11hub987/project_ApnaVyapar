@@ -86,6 +86,21 @@ function ChatContent() {
     }
   }, [businessIdeaId]);
 
+  useEffect(() => {
+    if (sessionId) {
+      import('@/lib/supabase').then(({ supabase }) => {
+        supabase.from('chat_sessions').select('messages').eq('id', sessionId).single()
+          .then(({ data }) => { 
+            if (data && data.messages) {
+              setMessages(data.messages);
+            }
+          });
+      });
+    } else {
+      setMessages([]);
+    }
+  }, [sessionId, setMessages]);
+
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
