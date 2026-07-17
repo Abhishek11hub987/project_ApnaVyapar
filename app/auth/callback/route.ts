@@ -36,6 +36,29 @@ export async function GET(request: NextRequest) {
     }
   }
 
-  // If no code or error, redirect to home with login prompt
-  return NextResponse.redirect(new URL('/?login=true', request.url))
+  // If no code, serve a page that handles hash-based tokens (implicit flow)
+  // This happens with Google OAuth where the token comes as #access_token=...
+  const html = `
+    <!DOCTYPE html>
+    <html>
+      <head><title>Logging in...</title></head>
+      <body>
+        <p>Completing login...</p>
+        <script>
+          // Hash fragments aren't sent to the server, so handle client-side
+          const hash = window.location.hash;
+          if (hash && (hash.includes('access_token') || hash.includes('error_description'))) {
+            // The createBrowserClient in lib/supabase.ts will pick up the hash
+            window.location.href = '/' + hash;
+          } else {
+            window.location.href = '/?login=true';
+          }
+        </script>
+      </body>
+    </html>
+  `;
+  
+  return new NextResponse(html, {
+    headers: { 'Content-Type': 'text/html' },
+  })
 }
