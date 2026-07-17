@@ -19,7 +19,7 @@ export default function LoginModal({ isOpen, onClose }: { isOpen: boolean, onClo
       const { error } = await supabase.auth.signInWithOtp({
         email,
         options: {
-          emailRedirectTo: `${window.location.origin}/`,
+          emailRedirectTo: `${window.location.origin}/auth/callback`,
         },
       });
       if (error) throw error;
@@ -37,7 +37,7 @@ export default function LoginModal({ isOpen, onClose }: { isOpen: boolean, onClo
       setLoading(true);
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
-        options: { redirectTo: `${window.location.origin}/` }
+        options: { redirectTo: `${window.location.origin}/auth/callback` }
       });
       if (error) throw error;
     } catch (err: any) {
