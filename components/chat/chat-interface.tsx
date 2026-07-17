@@ -11,7 +11,17 @@ function ChatContent() {
   const businessIdeaId = searchParams.get('idea');
   const { messages, isLoading, language, sessionId, addMessage, updateLastMessage, setLanguage, setLoading, setSessionId } = useChat();
   const [input, setInput] = useState('');
+  const [ideaTitle, setIdeaTitle] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (businessIdeaId) {
+      import('@/lib/supabase').then(({ supabase }) => {
+        supabase.from('business_ideas').select('title').eq('id', parseInt(businessIdeaId)).single()
+          .then(({ data }) => { if (data) setIdeaTitle(data.title); });
+      });
+    }
+  }, [businessIdeaId]);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -108,6 +118,13 @@ function ChatContent() {
           {language === 'english' ? 'English' : 'Hinglish'}
         </button>
       </div>
+      
+      {ideaTitle && (
+        <div className="bg-teal-50 border-b border-teal-100 px-4 py-2 text-xs font-medium text-teal-800 flex items-center gap-2 animate-in slide-in-from-top-2">
+          <span className="w-1.5 h-1.5 rounded-full bg-teal-500 animate-pulse"></span>
+          Vyapar Mitra has context for: <strong>{ideaTitle}</strong>
+        </div>
+      )}
 
       {/* Messages Area */}
       <div className="flex-1 overflow-y-auto p-4 md:p-6">

@@ -76,50 +76,108 @@ function ChecklistContent() {
           if (newChecklist) {
             setChecklist(newChecklist);
             
-            // Generate tasks
+            // Generate enhanced 5-phase tasks
             const newTasks = [];
             let order = 1;
             
-            // 1. Generic setup
+            // Phase 1: Planning
             newTasks.push({
               checklist_id: newChecklist.id,
-              title: 'Business Name Registration',
-              description: 'Register your business name and entity (Proprietorship, LLP, or Pvt Ltd).',
-              category: 'Registration',
-              estimated_time: '1-2 Weeks',
+              title: 'Market Research & Validation',
+              description: 'Research local competition and validate your pricing model.',
+              category: 'Phase 1: Planning',
+              estimated_time: '1 Week',
               sort_order: order++,
             });
             newTasks.push({
               checklist_id: newChecklist.id,
-              title: 'Open Current Bank Account',
-              description: 'Open a business bank account to keep personal and business finances separate.',
-              category: 'Finance',
-              estimated_time: '2-4 Days',
+              title: 'Finalize Business Plan & Budget',
+              description: 'Calculate your exact initial investment and monthly operating costs.',
+              category: 'Phase 1: Planning',
+              estimated_time: '3 Days',
+              sort_order: order++,
+            });
+
+            // Phase 2: Legal & Registration
+            newTasks.push({
+              checklist_id: newChecklist.id,
+              title: 'Business Name Registration',
+              description: 'Register your entity (Proprietorship, LLP, or Pvt Ltd).',
+              category: 'Phase 2: Legal',
+              estimated_time: '1-2 Weeks',
+              resource_link: 'https://www.mca.gov.in/',
               sort_order: order++,
             });
             newTasks.push({
               checklist_id: newChecklist.id,
               title: 'Udyam Registration (MSME)',
-              description: 'Get your MSME certificate for government subsidies and priority sector lending.',
-              category: 'Registration',
+              description: 'Get your free MSME certificate for government subsidies and priority lending.',
+              category: 'Phase 2: Legal',
               estimated_time: '1 Day',
               resource_link: 'https://udyamregistration.gov.in/',
               sort_order: order++,
             });
+            
+            // Add GST if applicable (Most businesses need it eventually)
+            newTasks.push({
+              checklist_id: newChecklist.id,
+              title: 'GST Registration',
+              description: 'Required if turnover exceeds ₹40 Lakhs (₹20L for services) or for interstate/online sales.',
+              category: 'Phase 2: Legal',
+              estimated_time: '1 Week',
+              resource_link: 'https://www.gst.gov.in/',
+              sort_order: order++,
+            });
 
-            // 2. Idea specific licenses
+            // Add specific licenses from DB
             if (idea.required_licenses && idea.required_licenses.length > 0) {
               for (const license of idea.required_licenses) {
+                let link = null;
+                if (license.toLowerCase().includes('fssai')) link = 'https://foscos.fssai.gov.in/';
+                if (license.toLowerCase().includes('trade license')) link = 'https://www.india.gov.in/';
+                
                 newTasks.push({
                   checklist_id: newChecklist.id,
                   title: `Obtain ${license}`,
-                  description: `Required specific license for ${idea.title}.`,
-                  category: 'Licenses',
-                  estimated_time: 'Variable',
+                  description: `Required mandatory license for operating a ${idea.title}.`,
+                  category: 'Phase 2: Legal',
+                  estimated_time: '2-4 Weeks',
+                  resource_link: link,
                   sort_order: order++,
                 });
               }
             }
+
+            // Phase 3: Finance
+            newTasks.push({
+              checklist_id: newChecklist.id,
+              title: 'Open Current Bank Account',
+              description: 'Keep personal and business finances strictly separate.',
+              category: 'Phase 3: Finance',
+              estimated_time: '2-4 Days',
+              sort_order: order++,
+            });
+            
+            // Phase 4: Operations
+            newTasks.push({
+              checklist_id: newChecklist.id,
+              title: 'Source Equipment & Inventory',
+              description: 'Purchase initial supplies and set up your workspace/location.',
+              category: 'Phase 4: Operations',
+              estimated_time: '1-2 Weeks',
+              sort_order: order++,
+            });
+
+            // Phase 5: Marketing
+            newTasks.push({
+              checklist_id: newChecklist.id,
+              title: 'Create Digital Presence',
+              description: 'Set up WhatsApp Business, Google My Business, and Instagram.',
+              category: 'Phase 5: Marketing',
+              estimated_time: '2 Days',
+              resource_link: 'https://business.google.com/',
+              sort_order: order++,
+            });
 
             // Insert tasks
             const { data: insertedTasks } = await supabase

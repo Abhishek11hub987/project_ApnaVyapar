@@ -73,12 +73,36 @@ export async function POST(req: Request) {
     if (businessIdeaId) {
       const { data: idea } = await supabaseAdmin
         .from('business_ideas')
-        .select('title, category, investment_min, investment_max, required_licenses')
+        .select('title, category, investment_min, investment_max, required_licenses, description, pros, cons')
         .eq('id', businessIdeaId)
         .single();
 
       if (idea) {
-        businessContext = `\n[Selected Business Idea]\n- Name: ${idea.title}\n- Category: ${idea.category}\n- Investment: ₹${idea.investment_min.toLocaleString('en-IN')} - ₹${idea.investment_max.toLocaleString('en-IN')}\n- Required Licenses: ${idea.required_licenses.join(', ')}\n`;
+        businessContext = `\n[Selected Business Idea]\n- Name: ${idea.title}\n- Category: ${idea.category}\n- Description: ${idea.description}\n- Pros: ${idea.pros?.join(', ') || 'N/A'}\n- Cons: ${idea.cons?.join(', ') || 'N/A'}\n- Investment: ₹${idea.investment_min.toLocaleString('en-IN')} - ₹${idea.investment_max.toLocaleString('en-IN')}\n- Required Licenses: ${idea.required_licenses.join(', ')}\n`;
+        
+        // Fetch active checklist tasks
+        const { data: checklist } = await supabaseAdmin
+          .from('checklists')
+          .select('id')
+          .eq('user_id', userId)
+          .eq('business_idea_id', businessIdeaId)
+          .single();
+
+        if (checklist) {
+          const { data: tasks } = await supabaseAdmin
+            .from('checklist_tasks')
+            .select('title, status, category')
+            .eq('checklist_id', checklist.id)
+            .order('sort_order');
+            
+          if (tasks && tasks.length > 0) {
+            businessContext += `\n[User's Current Checklist Workflow]\n`;
+            tasks.forEach(t => {
+              businessContext += `- [${t.status === 'completed' ? 'Completed' : 'Pending'}] ${t.title} (${t.category})\n`;
+            });
+            businessContext += `\nINSTRUCTION: The user is currently following this workflow. If they ask about next steps, refer to their pending tasks.\n`;
+          }
+        }
       }
     }
 
