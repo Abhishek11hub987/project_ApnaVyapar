@@ -6,7 +6,7 @@ export default function TaskItem({ task, onStatusChange }: { task: ChecklistTask
   const isInProgress = task.status === 'in_progress';
   
   const handleToggle = () => {
-    if (isCompleted) onStatusChange(task.id, 'pending');
+    if (isCompleted) onStatusChange(task.id, 'not_started');
     else if (isInProgress) onStatusChange(task.id, 'completed');
     else onStatusChange(task.id, 'in_progress');
   };
