@@ -30,6 +30,9 @@ export default function Header() {
         
         {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center gap-6">
+          <Link href="/" className={`font-semibold text-sm transition-colors hover:text-teal-600 dark:hover:text-teal-400 ${pathname === '/' ? 'text-teal-600 dark:text-teal-400' : 'text-slate-600 dark:text-slate-300'}`}>
+            {t('nav.home')}
+          </Link>
           <Link href="/ideas" className={`font-semibold text-sm transition-colors hover:text-teal-600 dark:hover:text-teal-400 ${pathname.startsWith('/ideas') ? 'text-teal-600 dark:text-teal-400' : 'text-slate-600 dark:text-slate-300'}`}>
             {t('nav.ideas')}
           </Link>
