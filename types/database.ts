@@ -43,6 +43,13 @@ export type BusinessIdea = {
   is_trending: boolean;
   is_active: boolean;
   view_count: number;
+  market_analysis?: any;
+  competition_strategy?: any;
+  roadmap?: any;
+  financial_projections?: any;
+  resources_needed?: string[];
+  risk_analysis?: any;
+  success_stories?: any;
   created_at: string;
   updated_at: string;
 };

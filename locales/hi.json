@@ -58,6 +58,13 @@
   "ideaDetail.licenses": "आवश्यक लाइसेंस",
   "ideaDetail.whyGood": "यह एक अच्छा आइडिया क्यों है",
   "ideaDetail.challenges": "ध्यान रखने योग्य चुनौतियाँ",
+  "ideaDetail.marketAnalysis": "बाजार विश्लेषण",
+  "ideaDetail.competitionStrategy": "प्रतियोगिता की रणनीति",
+  "ideaDetail.roadmap": "स्टेप-बाय-स्टेप रोडमैप",
+  "ideaDetail.financialProjections": "वित्तीय अनुमान",
+  "ideaDetail.resourcesNeeded": "आवश्यक संसाधन",
+  "ideaDetail.riskAnalysis": "जोखिम विश्लेषण",
+  "ideaDetail.successStories": "सफलता की कहानियाँ",
   
   "auth.signIn": "साइन इन करें",
   "auth.subtitle": "अपने सपनों को साकार करने वाले हज़ारों भारतीय उद्यमियों से जुड़ें।",

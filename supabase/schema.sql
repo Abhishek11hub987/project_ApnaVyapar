@@ -65,6 +65,13 @@ create table business_ideas (
   is_trending boolean default false,
   is_active boolean default true,
   view_count integer default 0,
+  market_analysis jsonb default '{}'::jsonb,
+  competition_strategy jsonb default '{}'::jsonb,
+  roadmap jsonb default '{}'::jsonb,
+  financial_projections jsonb default '{}'::jsonb,
+  resources_needed text[] default '{}',
+  risk_analysis jsonb default '[]'::jsonb,
+  success_stories jsonb default '[]'::jsonb,
   created_at timestamp with time zone default timezone('utc'::text, now()),
   updated_at timestamp with time zone default timezone('utc'::text, now())
 );
@@ -207,7 +214,8 @@ create index idx_resource_locations_city on resource_locations(city, type);
 insert into business_ideas (
   title, slug, category, description, investment_min, investment_max, location_type, 
   time_commitment, skill_level, monthly_profit_min, monthly_profit_max, pros, cons, 
-  required_licenses, real_example_name, real_example_location, competition_level, is_trending
+  required_licenses, real_example_name, real_example_location, competition_level, is_trending,
+  market_analysis, competition_strategy, roadmap, financial_projections, resources_needed, risk_analysis, success_stories
 ) values 
 (
   'Home-Based Tiffin Service', 'home-tiffin-service', 'Food', 
@@ -216,7 +224,14 @@ insert into business_ideas (
   ARRAY['Low startup cost', 'High demand in urban areas', 'Recurring revenue'], 
   ARRAY['Requires early morning preparation', 'FSSAI license mandatory', 'Logistics can be tough'], 
   ARRAY['FSSAI Basic Registration', 'GST (if turnover exceeds ₹20 lakh)'], 
-  'Sharma Tiffin', 'Pune, Maharashtra', 'high', true
+  'Sharma Tiffin', 'Pune, Maharashtra', 'high', true,
+  '{"marketSize": "₹500 Crore+ urban market", "targetAudience": "Bachelors, corporate employees, students living away from home.", "growthTrends": "15% YoY growth due to rising health consciousness."}'::jsonb,
+  '{"localCompetitors": "Local dhabas, Swiggy/Zomato, other home chefs.", "differentiation": "Focus on extreme hygiene, zero artificial colors, and customizable diet plans (keto, low carb)."}'::jsonb,
+  '{"week1": "Get FSSAI license, buy containers and bulk groceries, finalize menu.", "week2": "Distribute flyers in nearby corporate parks/PGs, start WhatsApp marketing.", "month1": "Reach 20 daily subscribers, optimize delivery routes.", "month3": "Reach 50+ subscribers, hire a part-time delivery person."}'::jsonb,
+  '{"breakEven": "Month 2 (assuming 15 regular subscribers)", "monthlyPnL": "Revenue: ₹45,000 (15 subs x ₹3000), Costs: ₹20,000, Profit: ₹25,000"}'::jsonb,
+  ARRAY['Commercial gas stove', 'Large utensils', 'Disposable/reusable delivery containers', 'Two-wheeler for delivery'],
+  '[{"risk": "Food spoilage or contamination", "mitigation": "Strict daily hygiene protocol, fresh sourcing."},{"risk": "Delivery delays", "mitigation": "Hire dedicated reliable delivery staff or partner with local delivery services."}]'::jsonb,
+  '[{"name": "Maa Ki Rasoi", "description": "Started from a 1BHK in Bangalore, now serves 300+ corporate meals daily."}]'::jsonb
 ),
 (
   'Tuition Center', 'tuition-center', 'Education', 

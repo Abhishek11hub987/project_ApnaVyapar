@@ -195,6 +195,154 @@ export default function IdeaDetailClient({ idea }: { idea: BusinessIdea }) {
             </div>
           )}
 
+          {/* Market Analysis */}
+          {idea.market_analysis && Object.keys(idea.market_analysis).length > 0 && (
+            <div className="bg-white dark:bg-slate-900 p-6 md:p-8 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+              <h3 className="text-xl font-extrabold text-slate-900 dark:text-slate-100 mb-6 flex items-center gap-2">
+                <Target className="text-blue-500" /> {t('ideaDetail.marketAnalysis')}
+              </h3>
+              <div className="space-y-4">
+                {idea.market_analysis.marketSize && (
+                  <div>
+                    <h4 className="font-bold text-slate-800 dark:text-slate-200">Market Size</h4>
+                    <p className="text-slate-600 dark:text-slate-400">{idea.market_analysis.marketSize}</p>
+                  </div>
+                )}
+                {idea.market_analysis.targetAudience && (
+                  <div>
+                    <h4 className="font-bold text-slate-800 dark:text-slate-200">Target Audience</h4>
+                    <p className="text-slate-600 dark:text-slate-400">{idea.market_analysis.targetAudience}</p>
+                  </div>
+                )}
+                {idea.market_analysis.growthTrends && (
+                  <div>
+                    <h4 className="font-bold text-slate-800 dark:text-slate-200">Growth Trends</h4>
+                    <p className="text-slate-600 dark:text-slate-400">{idea.market_analysis.growthTrends}</p>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Competition */}
+          {idea.competition_strategy && Object.keys(idea.competition_strategy).length > 0 && (
+            <div className="bg-white dark:bg-slate-900 p-6 md:p-8 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+              <h3 className="text-xl font-extrabold text-slate-900 dark:text-slate-100 mb-6 flex items-center gap-2">
+                <ShieldAlert className="text-orange-500" /> {t('ideaDetail.competitionStrategy')}
+              </h3>
+              <div className="space-y-4">
+                {idea.competition_strategy.localCompetitors && (
+                  <div>
+                    <h4 className="font-bold text-slate-800 dark:text-slate-200">Local Competitors</h4>
+                    <p className="text-slate-600 dark:text-slate-400">{idea.competition_strategy.localCompetitors}</p>
+                  </div>
+                )}
+                {idea.competition_strategy.differentiation && (
+                  <div>
+                    <h4 className="font-bold text-slate-800 dark:text-slate-200">How to Differentiate</h4>
+                    <p className="text-slate-600 dark:text-slate-400">{idea.competition_strategy.differentiation}</p>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Roadmap */}
+          {idea.roadmap && Object.keys(idea.roadmap).length > 0 && (
+            <div className="bg-white dark:bg-slate-900 p-6 md:p-8 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+              <h3 className="text-xl font-extrabold text-slate-900 dark:text-slate-100 mb-6 flex items-center gap-2">
+                <MapPin className="text-emerald-500" /> {t('ideaDetail.roadmap')}
+              </h3>
+              <div className="space-y-4">
+                {['week1', 'week2', 'month1', 'month3'].map((step, idx) => (
+                  idea.roadmap[step] && (
+                    <div key={idx} className="flex gap-4">
+                      <div className="flex flex-col items-center">
+                        <div className="w-8 h-8 rounded-full bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 flex items-center justify-center font-bold text-xs">{idx + 1}</div>
+                        {idx !== 3 && <div className="w-px h-full bg-slate-200 dark:bg-slate-700 my-1"></div>}
+                      </div>
+                      <div className="pb-4">
+                        <h4 className="font-bold text-slate-800 dark:text-slate-200 capitalize">{step.replace(/([0-9]+)/, ' $1')}</h4>
+                        <p className="text-slate-600 dark:text-slate-400 text-sm mt-1">{idea.roadmap[step]}</p>
+                      </div>
+                    </div>
+                  )
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Financials */}
+          {idea.financial_projections && Object.keys(idea.financial_projections).length > 0 && (
+            <div className="bg-white dark:bg-slate-900 p-6 md:p-8 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+              <h3 className="text-xl font-extrabold text-slate-900 dark:text-slate-100 mb-6 flex items-center gap-2">
+                <IndianRupee className="text-amber-500" /> {t('ideaDetail.financialProjections')}
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {idea.financial_projections.breakEven && (
+                  <div className="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl border border-slate-100 dark:border-slate-700">
+                    <h4 className="font-bold text-slate-800 dark:text-slate-200 text-sm mb-1">Break-Even Point</h4>
+                    <p className="text-slate-600 dark:text-slate-400">{idea.financial_projections.breakEven}</p>
+                  </div>
+                )}
+                {idea.financial_projections.monthlyPnL && (
+                  <div className="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl border border-slate-100 dark:border-slate-700">
+                    <h4 className="font-bold text-slate-800 dark:text-slate-200 text-sm mb-1">Monthly P&L Estimate</h4>
+                    <p className="text-slate-600 dark:text-slate-400">{idea.financial_projections.monthlyPnL}</p>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Resources */}
+          {idea.resources_needed && idea.resources_needed.length > 0 && (
+            <div className="bg-white dark:bg-slate-900 p-6 md:p-8 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+              <h3 className="text-xl font-extrabold text-slate-900 dark:text-slate-100 mb-4 flex items-center gap-2">
+                <Briefcase className="text-purple-500" /> {t('ideaDetail.resourcesNeeded')}
+              </h3>
+              <ul className="list-disc list-inside space-y-2 text-slate-600 dark:text-slate-400">
+                {idea.resources_needed.map((res: string, i: number) => (
+                  <li key={i}>{res}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {/* Risks */}
+          {idea.risk_analysis && Array.isArray(idea.risk_analysis) && idea.risk_analysis.length > 0 && (
+            <div className="bg-white dark:bg-slate-900 p-6 md:p-8 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+              <h3 className="text-xl font-extrabold text-slate-900 dark:text-slate-100 mb-6 flex items-center gap-2">
+                <ShieldAlert className="text-red-500" /> {t('ideaDetail.riskAnalysis')}
+              </h3>
+              <div className="space-y-4">
+                {idea.risk_analysis.map((item: any, idx: number) => (
+                  <div key={idx} className="bg-red-50 dark:bg-red-900/10 p-4 rounded-xl border border-red-100 dark:border-red-900/30">
+                    <h4 className="font-bold text-red-900 dark:text-red-200 text-sm mb-1">Risk: {item.risk}</h4>
+                    <p className="text-red-700 dark:text-red-400 text-sm"><span className="font-semibold">Mitigation:</span> {item.mitigation}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Additional Success Stories */}
+          {idea.success_stories && Array.isArray(idea.success_stories) && idea.success_stories.length > 0 && (
+            <div className="bg-white dark:bg-slate-900 p-6 md:p-8 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+              <h3 className="text-xl font-extrabold text-slate-900 dark:text-slate-100 mb-6 flex items-center gap-2">
+                <TrendingUp className="text-teal-500" /> {t('ideaDetail.successStories')}
+              </h3>
+              <div className="space-y-4">
+                {idea.success_stories.map((story: any, idx: number) => (
+                  <div key={idx} className="p-4 rounded-xl border border-slate-200 dark:border-slate-700">
+                    <h4 className="font-bold text-slate-800 dark:text-slate-200">{story.name}</h4>
+                    <p className="text-slate-600 dark:text-slate-400 text-sm mt-1 italic">"{story.description}"</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
         </div>
       </div>
 

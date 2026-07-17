@@ -1,6 +1,6 @@
 'use client';
 import { useState, useRef, useEffect, Suspense } from 'react';
-import { Send, Globe, Bot } from 'lucide-react';
+import { Send, Globe, Bot, MapPin } from 'lucide-react';
 import { useChat } from '@/hooks/use-chat';
 import { useSearchParams } from 'next/navigation';
 import MessageBubble from './message-bubble';
@@ -161,6 +161,14 @@ function ChatContent() {
 
       {/* Input Area */}
       <div className="bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 p-4 transition-colors">
+        <div className="max-w-4xl mx-auto flex items-center gap-2 mb-3 overflow-x-auto no-scrollbar">
+          <button 
+            onClick={() => handleSubmit(undefined, "Find nearby MSME-DI, DIC, and Bank branches")}
+            className="shrink-0 flex items-center gap-1.5 text-xs font-semibold bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 hover:bg-blue-100 dark:hover:bg-blue-900/50 px-3 py-1.5 rounded-full border border-blue-200 dark:border-blue-800 transition-colors"
+          >
+            <MapPin size={14} /> Find Nearby Offices
+          </button>
+        </div>
         <form onSubmit={handleSubmit} className="relative flex items-center max-w-4xl mx-auto">
           <input
             type="text"

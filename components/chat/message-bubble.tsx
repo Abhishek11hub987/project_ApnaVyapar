@@ -1,4 +1,5 @@
 import { Bot, User } from 'lucide-react';
+import LocationMapCard from './location-map-card';
 
 export default function MessageBubble({ role, content }: { role: 'user' | 'assistant' | 'system', content: string }) {
   if (role === 'system') return null;
@@ -13,7 +14,17 @@ export default function MessageBubble({ role, content }: { role: 'user' | 'assis
         </div>
         <div className={`px-4 py-3 rounded-2xl shadow-sm ${isAI ? 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-bl-none text-slate-800 dark:text-slate-200' : 'bg-teal-700 dark:bg-teal-600 text-white rounded-br-none'}`}>
           <div className="whitespace-pre-wrap text-sm leading-relaxed prose prose-sm prose-teal dark:prose-invert max-w-none">
-            {content || <span className="animate-pulse">...</span>}
+            {!content ? (
+              <span className="animate-pulse">...</span>
+            ) : (
+              content.split(/(\[MAP:[^\]]+\])/).map((part, i) => {
+                if (part.startsWith('[MAP:') && part.endsWith(']')) {
+                  const query = part.replace('[MAP:', '').replace(']', '');
+                  return <LocationMapCard key={i} typeQuery={query} />;
+                }
+                return <span key={i}>{part}</span>;
+              })
+            )}
           </div>
         </div>
       </div>
