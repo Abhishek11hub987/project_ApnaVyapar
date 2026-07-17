@@ -65,7 +65,7 @@ function TasksContent() {
           .single();
 
         if (idea) {
-          const { data: newChecklist } = await supabase
+          const { data: newChecklist, error: checklistInsertError } = await supabase
             .from('checklists')
             .insert({
               user_id: user!.id,
@@ -74,6 +74,10 @@ function TasksContent() {
             })
             .select()
             .single();
+
+          if (checklistInsertError) {
+            console.error('Error inserting checklist:', checklistInsertError);
+          }
 
           if (newChecklist) {
             setChecklist(newChecklist);
@@ -182,14 +186,22 @@ function TasksContent() {
             });
 
             // Insert tasks
-            const { data: insertedTasks } = await supabase
+            const { data: insertedTasks, error: taskInsertError } = await supabase
               .from('checklist_tasks')
               .insert(newTasks)
               .select()
               .order('sort_order');
+            
+            if (taskInsertError) {
+              console.error('Error inserting tasks:', taskInsertError);
+            }
               
             setTasks(insertedTasks || []);
+          } else {
+             console.error('Failed to create new checklist');
           }
+        } else {
+           console.error('Idea not found for id:', ideaId);
         }
       } else {
         // No idea provided and no existing checklists

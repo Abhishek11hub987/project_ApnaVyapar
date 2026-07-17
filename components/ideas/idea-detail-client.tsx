@@ -358,12 +358,12 @@ export default function IdeaDetailClient({ idea }: { idea: BusinessIdea }) {
             <span className="sm:hidden">Ask AI</span>
           </Link>
           <Link
-            href={`/checklist?idea=${idea.id}`}
+            href={`/tasks?idea=${idea.id}`}
             className="flex-1 flex items-center justify-center gap-2.5 bg-amber-500 text-white font-extrabold py-4 px-4 rounded-xl hover:bg-amber-600 hover:shadow-lg hover:-translate-y-0.5 transition-all shadow-sm"
           >
             <CheckCircle size={22} />
             <span className="hidden sm:inline">{t('ideaDetail.generateChecklist')}</span>
-            <span className="sm:hidden">Get Checklist</span>
+            <span className="sm:hidden">Get Tasks</span>
           </Link>
         </div>
       </div>
