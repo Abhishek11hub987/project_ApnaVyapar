@@ -7,22 +7,21 @@ import Link from 'next/link';
 export const revalidate = 60; // ISR cache for 60 seconds
 
 export default async function IdeaDetailPage({ params }: { params: { slug: string } }) {
-  const { data: idea } = await supabaseAdmin
+  const { data: idea, error: fetchError } = await supabaseAdmin
     .from('business_ideas')
     .select('*')
     .eq('slug', params.slug)
     .single();
 
-  if (!idea) {
+  if (fetchError || !idea) {
     notFound();
   }
 
-  // Increment view count in background (fire and forget)
-  supabaseAdmin
+  // Increment view count (await to prevent Vercel lambda termination)
+  await supabaseAdmin
     .from('business_ideas')
     .update({ view_count: (idea.view_count || 0) + 1 })
-    .eq('id', idea.id)
-    .then();
+    .eq('id', idea.id);
 
   const formatINR = (amount: number) =>
     new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(amount);

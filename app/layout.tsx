@@ -5,6 +5,8 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 import BottomNav from "@/components/layout/bottom-nav";
+import LoginHandler from "@/components/auth/login-handler";
+import { Suspense } from "react";
 
 export const viewport: Viewport = {
   themeColor: "#0F766E",
@@ -36,6 +38,9 @@ export default function RootLayout({
       <body className={`${inter.className} bg-slate-50 text-slate-800 antialiased pb-20`}>
         {children}
         <BottomNav />
+        <Suspense fallback={null}>
+          <LoginHandler />
+        </Suspense>
       </body>
     </html>
   );

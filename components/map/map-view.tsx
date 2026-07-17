@@ -6,7 +6,7 @@ import L from 'leaflet';
 import { ResourceLocation } from '@/types/database';
 
 // Fix leaflet default icons which break in Next.js
-const icon = L.icon({
+const icon = typeof window !== 'undefined' ? L.icon({
   iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
   iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
   shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
@@ -15,7 +15,7 @@ const icon = L.icon({
   popupAnchor: [1, -34],
   tooltipAnchor: [16, -28],
   shadowSize: [41, 41]
-});
+}) : undefined;
 
 export default function MapView({ locations, centerOverride }: { locations: ResourceLocation[], centerOverride?: [number, number] }) {
   // Default center to India if no locations, else first location, or override
