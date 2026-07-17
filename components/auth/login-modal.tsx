@@ -1,13 +1,15 @@
 'use client';
 import { useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { X, Mail, CheckCircle2 } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 
 export default function LoginModal({ isOpen, onClose }: { isOpen: boolean, onClose: () => void }) {
+  const searchParams = useSearchParams();
   const [email, setEmail] = useState('');
   const [step, setStep] = useState<'email' | 'success'>('email');
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState(searchParams.get('error') || '');
 
   if (!isOpen) return null;
 

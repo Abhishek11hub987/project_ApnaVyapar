@@ -33,6 +33,9 @@ export async function GET(request: NextRequest) {
 
     if (!error) {
       return NextResponse.redirect(new URL(next, request.url))
+    } else {
+      console.error('Code exchange error:', error.message)
+      return NextResponse.redirect(new URL(`/?login=true&error=${encodeURIComponent(error.message)}`, request.url))
     }
   }
 
