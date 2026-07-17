@@ -6,7 +6,7 @@ import { useAuth } from '@/hooks/use-auth';
 import { Checklist, ChecklistTask, BusinessIdea } from '@/types/database';
 import TaskItem from '@/components/tasks/task-item';
 import ProgressBar from '@/components/tasks/progress-bar';
-import { FileText, Bot } from 'lucide-react';
+import { FileText, Bot, Trash2 } from 'lucide-react';
 import Link from 'next/link';
 import { useLanguage } from '@/lib/language-context';
 
@@ -226,6 +226,19 @@ function TasksContent() {
       .eq('id', taskId);
   };
 
+  const handleDeleteChecklist = async () => {
+    if (!checklist) return;
+    if (confirm('Are you sure you want to delete this task list?')) {
+      // Because of foreign keys, you may need to delete tasks first or rely on CASCADE. 
+      // Supabase handles cascade if configured, but let's delete tasks manually just in case.
+      await supabase.from('checklist_tasks').delete().eq('checklist_id', checklist.id);
+      await supabase.from('checklists').delete().eq('id', checklist.id);
+      setChecklist(null);
+      setTasks([]);
+      router.push('/ideas');
+    }
+  };
+
   if (loading || authLoading) {
     return (
       <div className="flex flex-col h-[60vh] items-center justify-center">
@@ -264,7 +277,16 @@ function TasksContent() {
   return (
     <div className="max-w-3xl mx-auto py-8 px-4">
       <div className="mb-8">
-        <h1 className="text-2xl md:text-3xl font-extrabold text-slate-900 dark:text-slate-100 mb-2">{checklist.title}</h1>
+        <div className="flex justify-between items-start mb-2">
+          <h1 className="text-2xl md:text-3xl font-extrabold text-slate-900 dark:text-slate-100">{checklist.title}</h1>
+          <button 
+            onClick={handleDeleteChecklist}
+            className="text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/30 p-2 rounded-full transition-colors flex items-center gap-1"
+            title="Delete Tasks"
+          >
+            <Trash2 size={20} />
+          </button>
+        </div>
         <p className="text-slate-500 dark:text-slate-400 mb-6 font-medium">Track your steps from idea to launch.</p>
         
         <div className="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">

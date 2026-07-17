@@ -23,30 +23,42 @@ function ChatContent() {
     if (typeof window !== 'undefined') {
       const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
       if (SpeechRecognition) {
-        recognitionRef.current = new SpeechRecognition();
-        recognitionRef.current.continuous = false;
-        recognitionRef.current.interimResults = true;
-        recognitionRef.current.lang = language === 'english' ? 'en-IN' : 'hi-IN';
+        const recognition = new SpeechRecognition();
+        recognition.continuous = false;
+        recognition.interimResults = true;
+        recognition.lang = language === 'english' ? 'en-IN' : 'hi-IN';
 
-        recognitionRef.current.onresult = (event: any) => {
+        let startingInput = '';
+
+        recognition.onstart = () => {
+          setIsListening(true);
+          // Capture whatever was already typed before starting
+          startingInput = input;
+        };
+
+        recognition.onresult = (event: any) => {
           let currentTranscript = '';
-          for (let i = event.resultIndex; i < event.results.length; i++) {
+          for (let i = 0; i < event.results.length; i++) {
             currentTranscript += event.results[i][0].transcript;
           }
-          setInput(currentTranscript);
+          // Append the transcript to what was already typed
+          setInput(startingInput ? startingInput + ' ' + currentTranscript : currentTranscript);
         };
 
-        recognitionRef.current.onerror = (event: any) => {
-          console.error('Speech recognition error', event.error);
+        recognition.onerror = (event: any) => {
+          console.error('Speech recognition error:', event.error);
+          setIsListening(false);
+          alert('Speech recognition error: ' + event.error);
+        };
+
+        recognition.onend = () => {
           setIsListening(false);
         };
 
-        recognitionRef.current.onend = () => {
-          setIsListening(false);
-        };
+        recognitionRef.current = recognition;
       }
     }
-  }, [language]);
+  }, [language, input]); // Need input dependency to capture latest input on start, though it resets recognition
 
   const toggleListening = () => {
     if (isListening) {
@@ -54,10 +66,13 @@ function ChatContent() {
       setIsListening(false);
     } else {
       if (recognitionRef.current) {
-        recognitionRef.current.start();
-        setIsListening(true);
+        try {
+          recognitionRef.current.start();
+        } catch (e) {
+          console.error(e);
+        }
       } else {
-        alert('Speech recognition is not supported in this browser.');
+        alert('Speech recognition is not supported in this browser. Please use Chrome.');
       }
     }
   };
