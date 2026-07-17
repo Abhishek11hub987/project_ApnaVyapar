@@ -317,8 +317,6 @@ function TasksContent() {
   );
 }
 
-}
-
 export default function TasksPage() {
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 pb-32 transition-colors">
