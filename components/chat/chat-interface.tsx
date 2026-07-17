@@ -1,10 +1,11 @@
 'use client';
 import { useState, useRef, useEffect, Suspense } from 'react';
-import { Send, Globe, Bot, MapPin } from 'lucide-react';
+import { Send, Globe, Bot, MapPin, Mic, MicOff, History } from 'lucide-react';
 import { useChat } from '@/hooks/use-chat';
 import { useSearchParams } from 'next/navigation';
 import MessageBubble from './message-bubble';
 import QuickActions from './quick-actions';
+import ChatHistorySidebar from './chat-history-sidebar';
 
 function ChatContent() {
   const searchParams = useSearchParams();
@@ -12,7 +13,54 @@ function ChatContent() {
   const { messages, isLoading, language, sessionId, addMessage, updateLastMessage, setLanguage, setLoading, setSessionId } = useChat();
   const [input, setInput] = useState('');
   const [ideaTitle, setIdeaTitle] = useState('');
+  const [isListening, setIsListening] = useState(false);
+  const [showHistory, setShowHistory] = useState(false);
+  const recognitionRef = useRef<any>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    // Initialize speech recognition if supported
+    if (typeof window !== 'undefined') {
+      const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+      if (SpeechRecognition) {
+        recognitionRef.current = new SpeechRecognition();
+        recognitionRef.current.continuous = false;
+        recognitionRef.current.interimResults = true;
+        recognitionRef.current.lang = language === 'english' ? 'en-IN' : 'hi-IN';
+
+        recognitionRef.current.onresult = (event: any) => {
+          let currentTranscript = '';
+          for (let i = event.resultIndex; i < event.results.length; i++) {
+            currentTranscript += event.results[i][0].transcript;
+          }
+          setInput(currentTranscript);
+        };
+
+        recognitionRef.current.onerror = (event: any) => {
+          console.error('Speech recognition error', event.error);
+          setIsListening(false);
+        };
+
+        recognitionRef.current.onend = () => {
+          setIsListening(false);
+        };
+      }
+    }
+  }, [language]);
+
+  const toggleListening = () => {
+    if (isListening) {
+      recognitionRef.current?.stop();
+      setIsListening(false);
+    } else {
+      if (recognitionRef.current) {
+        recognitionRef.current.start();
+        setIsListening(true);
+      } else {
+        alert('Speech recognition is not supported in this browser.');
+      }
+    }
+  };
 
   useEffect(() => {
     if (businessIdeaId) {
@@ -110,14 +158,32 @@ function ChatContent() {
             <p className="text-xs text-slate-500 dark:text-slate-400">Your AI Business Advisor</p>
           </div>
         </div>
-        <button 
-          onClick={() => setLanguage(language === 'english' ? 'hinglish' : 'english')}
-          className="flex items-center gap-1.5 text-xs font-medium bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 px-3 py-1.5 rounded-full transition-colors"
-        >
-          <Globe size={14} />
-          {language === 'english' ? 'English' : 'Hinglish'}
-        </button>
+        <div className="flex items-center gap-2">
+          <button 
+            onClick={() => setShowHistory(true)}
+            className="p-2 text-slate-500 hover:text-teal-600 hover:bg-teal-50 dark:hover:bg-teal-900/30 rounded-full transition-colors"
+            title="Chat History"
+          >
+            <History size={18} />
+          </button>
+          <button 
+            onClick={() => setLanguage(language === 'english' ? 'hinglish' : 'english')}
+            className="flex items-center gap-1.5 text-xs font-medium bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 px-3 py-1.5 rounded-full transition-colors"
+          >
+            <Globe size={14} />
+            {language === 'english' ? 'English' : 'Hinglish'}
+          </button>
+        </div>
       </div>
+      
+      <ChatHistorySidebar 
+        isOpen={showHistory} 
+        onClose={() => setShowHistory(false)} 
+        onSelectSession={(id) => {
+          setSessionId(id || undefined);
+        }}
+        currentSessionId={sessionId || null}
+      />
       
       {ideaTitle && (
         <div className="bg-teal-50 dark:bg-teal-900/20 border-b border-teal-100 dark:border-teal-900/50 px-4 py-2 text-xs font-medium text-teal-800 dark:text-teal-300 flex items-center gap-2 animate-in slide-in-from-top-2">
@@ -175,16 +241,29 @@ function ChatContent() {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder="Type your message here..."
-            className="w-full bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-slate-100 rounded-full pl-5 pr-14 py-3.5 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 dark:focus:ring-teal-400 focus:border-transparent transition-all"
+            className="w-full bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-slate-100 rounded-full pl-5 pr-24 py-3.5 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 dark:focus:ring-teal-400 focus:border-transparent transition-all"
             disabled={isLoading}
           />
-          <button 
-            type="submit" 
-            disabled={!input.trim() || isLoading}
-            className="absolute right-2 w-10 h-10 flex items-center justify-center bg-teal-700 dark:bg-teal-600 text-white rounded-full disabled:opacity-50 disabled:bg-slate-300 dark:disabled:bg-slate-700 hover:bg-teal-600 dark:hover:bg-teal-500 transition-colors"
-          >
-            <Send size={18} className="-ml-0.5" />
-          </button>
+          <div className="absolute right-2 flex items-center gap-1">
+            <button
+              type="button"
+              onClick={toggleListening}
+              className={`w-10 h-10 flex items-center justify-center rounded-full transition-colors ${
+                isListening 
+                  ? 'bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400 animate-pulse' 
+                  : 'text-slate-500 hover:bg-slate-200 dark:text-slate-400 dark:hover:bg-slate-700'
+              }`}
+            >
+              {isListening ? <MicOff size={18} /> : <Mic size={18} />}
+            </button>
+            <button 
+              type="submit" 
+              disabled={!input.trim() || isLoading}
+              className="w-10 h-10 flex items-center justify-center bg-teal-700 dark:bg-teal-600 text-white rounded-full disabled:opacity-50 disabled:bg-slate-300 dark:disabled:bg-slate-700 hover:bg-teal-600 dark:hover:bg-teal-500 transition-colors"
+            >
+              <Send size={18} className="-ml-0.5" />
+            </button>
+          </div>
         </form>
       </div>
     </div>

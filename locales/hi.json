@@ -49,7 +49,7 @@
   "ideas.subtitle": "ऐसा बिज़नेस खोजें जो आपके बजट, कौशल और लक्ष्यों के बिल्कुल अनुकूल हो।",
   "ideas.searchPlaceholder": "बिज़नेस खोजें...",
   
-  "ideaDetail.generateChecklist": "लॉन्च चेकलिस्ट बनाएं",
+  "ideaDetail.generateChecklist": "टास्क लिस्ट बनाएं",
   "ideaDetail.goToTasks": "मेरे टास्क पर जाएं",
   "ideaDetail.askMitra": "इसके बारे में व्यापार मित्र से पूछें",
   "ideaDetail.quickFacts": "महत्वपूर्ण तथ्य",
@@ -77,9 +77,9 @@
   "auth.back": "लॉगिन पर वापस जाएं",
   "auth.loggingIn": "लॉग इन हो रहा है...",
   
-  "checklist.title": "लॉन्च चेकलिस्ट",
-  "checklist.noActive": "कोई सक्रिय चेकलिस्ट नहीं",
-  "checklist.noActiveDesc": "आपने अभी तक कोई चेकलिस्ट नहीं बनाई है। शुरू करने के लिए बिज़नेस आइडिया खोजें।",
+  "checklist.title": "मेरे टास्क",
+  "checklist.noActive": "कोई सक्रिय टास्क नहीं",
+  "checklist.noActiveDesc": "आपने अभी तक कोई टास्क लिस्ट नहीं बनाई है। शुरू करने के लिए बिज़नेस आइडिया खोजें。",
   "checklist.exploreIdeas": "आइडिया खोजें",
   "checklist.completed": "पूरा हुआ",
   "checklist.tasks": "टास्क",

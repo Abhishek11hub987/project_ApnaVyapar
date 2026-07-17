@@ -21,7 +21,7 @@ export default function BottomNav() {
     { name: t('nav.home'), href: '/', icon: Home, showAlways: true },
     { name: t('nav.ideas'), href: '/ideas', icon: Lightbulb, showAlways: true },
     { name: t('nav.mitra'), href: '/chat', icon: MessageSquare, showAlways: true },
-    { name: t('nav.tasks'), href: '/checklist', icon: CheckSquare, showAlways: false },
+    { name: t('nav.tasks'), href: '/tasks', icon: CheckSquare, showAlways: false },
     { name: t('nav.profile'), href: '/profile', icon: User, showAlways: false },
   ];
 

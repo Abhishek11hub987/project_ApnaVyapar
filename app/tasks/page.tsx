@@ -4,13 +4,13 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/hooks/use-auth';
 import { Checklist, ChecklistTask, BusinessIdea } from '@/types/database';
-import TaskItem from '@/components/checklist/task-item';
-import ProgressBar from '@/components/checklist/progress-bar';
+import TaskItem from '@/components/tasks/task-item';
+import ProgressBar from '@/components/tasks/progress-bar';
 import { FileText, Bot } from 'lucide-react';
 import Link from 'next/link';
 import { useLanguage } from '@/lib/language-context';
 
-function ChecklistContent() {
+function TasksContent() {
   const { user, isAuthenticated, isLoading: authLoading } = useAuth();
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -305,11 +305,13 @@ function ChecklistContent() {
   );
 }
 
-export default function ChecklistPage() {
+}
+
+export default function TasksPage() {
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 pb-32 transition-colors">
       <Suspense fallback={<div className="p-8 text-center text-slate-500 dark:text-slate-400">Loading...</div>}>
-        <ChecklistContent />
+        <TasksContent />
       </Suspense>
     </div>
   );

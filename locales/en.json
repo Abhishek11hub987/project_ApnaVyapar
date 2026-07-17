@@ -49,8 +49,7 @@
   "ideas.subtitle": "Find the perfect business that matches your budget, skills, and goals.",
   "ideas.searchPlaceholder": "Search businesses...",
   
-  "ideaDetail.generateChecklist": "Generate Launch Checklist",
-  "ideaDetail.generateChecklist": "Generate Full Checklist",
+  "ideaDetail.generateChecklist": "Generate Task List",
   "ideaDetail.goToTasks": "Go to My Tasks",
   "ideaDetail.askMitra": "Ask Vyapar Mitra",
   "ideaDetail.quickFacts": "Quick Facts",
@@ -78,9 +77,9 @@
   "auth.back": "Back to login",
   "auth.loggingIn": "Logging in...",
   
-  "checklist.title": "Launch Checklist",
-  "checklist.noActive": "No Active Checklist",
-  "checklist.noActiveDesc": "You haven't generated a checklist yet. Explore business ideas to get started.",
+  "checklist.title": "My Tasks",
+  "checklist.noActive": "No Active Tasks",
+  "checklist.noActiveDesc": "You haven't generated a task list yet. Explore business ideas to get started.",
   "checklist.exploreIdeas": "Explore Ideas",
   "checklist.completed": "Completed",
   "checklist.tasks": "Tasks",

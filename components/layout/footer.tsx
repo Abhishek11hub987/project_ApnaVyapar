@@ -23,7 +23,7 @@ export default function Footer() {
             <li><Link href="/" className="hover:text-teal-400 transition-colors">Home</Link></li>
             <li><Link href="/ideas" className="hover:text-teal-400 transition-colors">Business Ideas</Link></li>
             <li><Link href="/chat" className="hover:text-teal-400 transition-colors">Vyapar Mitra AI</Link></li>
-            <li><Link href="/checklist" className="hover:text-teal-400 transition-colors">My Tasks</Link></li>
+            <li><Link href="/tasks" className="hover:text-teal-400 transition-colors">My Tasks</Link></li>
           </ul>
         </div>
 
