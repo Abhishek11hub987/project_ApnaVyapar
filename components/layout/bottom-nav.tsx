@@ -28,7 +28,7 @@ export default function BottomNav() {
   if (!mounted) return null; // Avoid hydration mismatch on auth state
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-t border-slate-200 dark:border-slate-800 pb-safe z-50 shadow-[0_-4px_20px_rgba(0,0,0,0.06)] transition-colors">
+    <div className="fixed bottom-0 left-0 right-0 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-t border-slate-200 dark:border-slate-800 pb-safe z-50 shadow-[0_-4px_20px_rgba(0,0,0,0.06)] transition-colors md:hidden">
       <div className="flex justify-around items-center px-2 py-2.5 max-w-md mx-auto">
         {navItems.map((item) => {
           if (!item.showAlways && !isAuthenticated) return null;

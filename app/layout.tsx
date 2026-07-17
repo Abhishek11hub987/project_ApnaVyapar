@@ -39,7 +39,7 @@ export default function RootLayout({
       <head>
         <meta httpEquiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' https://*.supabase.co https://api.groq.com" />
       </head>
-      <body className={`${inter.className} ${hind.variable} bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-200 antialiased pb-20 transition-colors`}>
+      <body className={`${inter.className} ${hind.variable} bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-200 antialiased pb-20 md:pb-0 transition-colors`}>
         <ClientProviders>
           <div className="flex flex-col min-h-screen">
             <Header />

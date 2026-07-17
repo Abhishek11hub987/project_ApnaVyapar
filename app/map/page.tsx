@@ -48,7 +48,7 @@ export default function MapPage() {
   };
 
   return (
-    <main className="min-h-screen bg-slate-50 pb-32 flex flex-col h-screen">
+    <main className="bg-slate-50 flex flex-col h-[calc(100vh-140px)] md:h-[calc(100vh-64px)]">
       <div className="bg-white border-b border-slate-200 px-4 py-4 z-10 shadow-sm shrink-0">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>

@@ -4,10 +4,14 @@ import { useTheme } from 'next-themes';
 import { useLanguage } from '@/lib/language-context';
 import { Sun, Moon, Globe } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { usePathname } from 'next/navigation';
+import { useAuth } from '@/hooks/use-auth';
 
 export default function Header() {
   const { theme, setTheme } = useTheme();
-  const { language, setLanguage } = useLanguage();
+  const { language, setLanguage, t } = useLanguage();
+  const pathname = usePathname();
+  const { isAuthenticated } = useAuth();
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -21,10 +25,30 @@ export default function Header() {
       <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
         <Link href="/" className="font-extrabold text-xl tracking-tight text-teal-700 dark:text-teal-400 flex items-center gap-2">
           <span className="w-8 h-8 rounded-lg bg-teal-700 text-white flex items-center justify-center text-sm">AV</span>
-          Apna Vyapar
+          <span className="hidden sm:inline">Apna Vyapar</span>
         </Link>
         
-        <div className="flex items-center gap-3">
+        {/* Desktop Navigation */}
+        <nav className="hidden md:flex items-center gap-6">
+          <Link href="/ideas" className={`font-semibold text-sm transition-colors hover:text-teal-600 dark:hover:text-teal-400 ${pathname.startsWith('/ideas') ? 'text-teal-600 dark:text-teal-400' : 'text-slate-600 dark:text-slate-300'}`}>
+            {t('nav.ideas')}
+          </Link>
+          <Link href="/chat" className={`font-semibold text-sm transition-colors hover:text-teal-600 dark:hover:text-teal-400 ${pathname.startsWith('/chat') ? 'text-teal-600 dark:text-teal-400' : 'text-slate-600 dark:text-slate-300'}`}>
+            {t('nav.mitra')}
+          </Link>
+          {isAuthenticated && (
+            <>
+              <Link href="/tasks" className={`font-semibold text-sm transition-colors hover:text-teal-600 dark:hover:text-teal-400 ${pathname.startsWith('/tasks') ? 'text-teal-600 dark:text-teal-400' : 'text-slate-600 dark:text-slate-300'}`}>
+                {t('nav.tasks')}
+              </Link>
+              <Link href="/profile" className={`font-semibold text-sm transition-colors hover:text-teal-600 dark:hover:text-teal-400 ${pathname.startsWith('/profile') ? 'text-teal-600 dark:text-teal-400' : 'text-slate-600 dark:text-slate-300'}`}>
+                {t('nav.profile')}
+              </Link>
+            </>
+          )}
+        </nav>
+
+        <div className="flex items-center gap-2 sm:gap-3">
           <button
             onClick={() => setLanguage(language === 'en' ? 'hi' : 'en')}
             className="flex items-center gap-1.5 text-xs font-bold bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 px-3 py-2 rounded-full transition-colors"
