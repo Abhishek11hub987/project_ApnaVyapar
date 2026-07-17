@@ -1,10 +1,9 @@
 import { notFound } from 'next/navigation';
 import { supabaseAdmin } from '@/lib/supabase-admin';
-import { BusinessIdea } from '@/types/database';
 import { Bot, CheckCircle, FileText, MapPin, Briefcase, Clock, IndianRupee, ShieldAlert, ArrowLeft, Target, TrendingUp } from 'lucide-react';
 import Link from 'next/link';
 
-export const revalidate = 60; // ISR cache for 60 seconds
+export const revalidate = 60;
 
 export default async function IdeaDetailPage({ params }: { params: { slug: string } }) {
   const { data: idea, error: fetchError } = await supabaseAdmin
@@ -17,7 +16,7 @@ export default async function IdeaDetailPage({ params }: { params: { slug: strin
     notFound();
   }
 
-  // Increment view count (await to prevent Vercel lambda termination)
+  // Increment view count
   await supabaseAdmin
     .from('business_ideas')
     .update({ view_count: (idea.view_count || 0) + 1 })
@@ -25,6 +24,14 @@ export default async function IdeaDetailPage({ params }: { params: { slug: strin
 
   const formatINR = (amount: number) =>
     new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(amount);
+
+  // NULL-SAFE: Fallback to empty arrays/strings
+  const pros = idea.pros || [];
+  const cons = idea.cons || [];
+  const requiredLicenses = idea.required_licenses || [];
+  const locationType = idea.location_type || '';
+  const timeCommitment = idea.time_commitment || 'Flexible';
+  const skillLevel = idea.skill_level || 'Beginner';
 
   return (
     <main className="min-h-screen bg-slate-50 pb-32 font-sans">
@@ -89,7 +96,7 @@ export default async function IdeaDetailPage({ params }: { params: { slug: strin
                   <div className="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center"><MapPin size={16} className="text-blue-600" /></div>
                   <span className="text-sm font-bold">Location Setup</span>
                 </div>
-                <div className="text-lg font-bold text-slate-900 ml-10 capitalize">{idea.location_type.replace('-', ' ')}</div>
+                <div className="text-lg font-bold text-slate-900 ml-10 capitalize">{locationType.replace('-', ' ')}</div>
               </div>
 
               <div className="w-full h-px bg-slate-100"></div>
@@ -99,7 +106,7 @@ export default async function IdeaDetailPage({ params }: { params: { slug: strin
                   <div className="w-8 h-8 rounded-full bg-purple-50 flex items-center justify-center"><Clock size={16} className="text-purple-600" /></div>
                   <span className="text-sm font-bold">Time Commitment</span>
                 </div>
-                <div className="text-lg font-bold text-slate-900 ml-10 capitalize">{idea.time_commitment?.replace('-', ' ') || 'Flexible'}</div>
+                <div className="text-lg font-bold text-slate-900 ml-10 capitalize">{timeCommitment.replace('-', ' ')}</div>
               </div>
 
               <div className="w-full h-px bg-slate-100"></div>
@@ -109,7 +116,7 @@ export default async function IdeaDetailPage({ params }: { params: { slug: strin
                   <div className="w-8 h-8 rounded-full bg-teal-50 flex items-center justify-center"><Target size={16} className="text-teal-600" /></div>
                   <span className="text-sm font-bold">Skill Level</span>
                 </div>
-                <div className="text-lg font-bold text-slate-900 ml-10 capitalize">{idea.skill_level || 'Beginner'}</div>
+                <div className="text-lg font-bold text-slate-900 ml-10 capitalize">{skillLevel}</div>
               </div>
             </div>
           </div>
@@ -124,26 +131,34 @@ export default async function IdeaDetailPage({ params }: { params: { slug: strin
               <h3 className="text-emerald-900 font-extrabold flex items-center gap-2.5 mb-5 text-lg">
                 <CheckCircle size={22} className="text-emerald-600" /> Why it's great
               </h3>
-              <ul className="space-y-4">
-                {idea.pros.map((pro: string, i: number) => (
-                  <li key={i} className="flex items-start gap-3 text-[15px] font-medium text-emerald-950 leading-snug">
-                    <span className="text-emerald-500 mt-0.5 font-bold">•</span> {pro}
-                  </li>
-                ))}
-              </ul>
+              {pros.length > 0 ? (
+                <ul className="space-y-4">
+                  {pros.map((pro: string, i: number) => (
+                    <li key={i} className="flex items-start gap-3 text-[15px] font-medium text-emerald-950 leading-snug">
+                      <span className="text-emerald-500 mt-0.5 font-bold">•</span> {pro}
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="text-sm text-emerald-700 font-medium">No pros listed.</p>
+              )}
             </div>
 
             <div className="bg-red-50 p-6 rounded-2xl border border-red-100 shadow-sm">
               <h3 className="text-red-900 font-extrabold flex items-center gap-2.5 mb-5 text-lg">
                 <ShieldAlert size={22} className="text-red-600" /> Challenges
               </h3>
-              <ul className="space-y-4">
-                {idea.cons.map((con: string, i: number) => (
-                  <li key={i} className="flex items-start gap-3 text-[15px] font-medium text-red-950 leading-snug">
-                    <span className="text-red-500 mt-0.5 font-bold">•</span> {con}
-                  </li>
-                ))}
-              </ul>
+              {cons.length > 0 ? (
+                <ul className="space-y-4">
+                  {cons.map((con: string, i: number) => (
+                    <li key={i} className="flex items-start gap-3 text-[15px] font-medium text-red-950 leading-snug">
+                      <span className="text-red-500 mt-0.5 font-bold">•</span> {con}
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="text-sm text-red-700 font-medium">No challenges listed.</p>
+              )}
             </div>
           </div>
 
@@ -154,15 +169,16 @@ export default async function IdeaDetailPage({ params }: { params: { slug: strin
               Required Licenses
             </h3>
             <div className="space-y-3">
-              {idea.required_licenses.map((license: string, i: number) => (
-                <div key={i} className="flex items-center justify-between p-4 rounded-xl bg-slate-50 border border-slate-100 hover:border-teal-200 transition-colors group">
-                  <div className="flex items-center gap-3">
-                    <div className="w-2 h-2 rounded-full bg-teal-500" />
-                    <span className="font-bold text-slate-700">{license}</span>
+              {requiredLicenses.length > 0 ? (
+                requiredLicenses.map((license: string, i: number) => (
+                  <div key={i} className="flex items-center justify-between p-4 rounded-xl bg-slate-50 border border-slate-100 hover:border-teal-200 transition-colors group">
+                    <div className="flex items-center gap-3">
+                      <div className="w-2 h-2 rounded-full bg-teal-500" />
+                      <span className="font-bold text-slate-700">{license}</span>
+                    </div>
                   </div>
-                </div>
-              ))}
-              {idea.required_licenses.length === 0 && (
+                ))
+              ) : (
                 <div className="p-6 text-center bg-slate-50 rounded-xl border border-slate-100">
                   <p className="font-medium text-slate-500">No special licenses required to start basic operations.</p>
                 </div>

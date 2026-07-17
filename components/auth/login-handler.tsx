@@ -9,13 +9,18 @@ export default function LoginHandler() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
-  const { isAuthenticated, isLoading } = useAuth();
+  const { isAuthenticated, isLoading, initialize } = useAuth();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  // Initialize auth state on mount
+  useEffect(() => {
+    initialize();
+  }, [initialize]);
+
+  // Open modal when ?login=true AND auth is done loading AND user is not logged in
   useEffect(() => {
     if (isLoading) return;
 
-    // Check if ?login=true is in the URL
     if (searchParams.get('login') === 'true' && !isAuthenticated) {
       setIsModalOpen(true);
     }
@@ -23,8 +28,8 @@ export default function LoginHandler() {
 
   const handleClose = () => {
     setIsModalOpen(false);
-    
-    // Remove the ?login=true from the URL without triggering a page reload
+
+    // Remove ?login=true from URL without reload
     if (searchParams.get('login') === 'true') {
       const newSearchParams = new URLSearchParams(searchParams.toString());
       newSearchParams.delete('login');
