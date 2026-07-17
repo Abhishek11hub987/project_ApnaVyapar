@@ -10,7 +10,7 @@ import ChatHistorySidebar from './chat-history-sidebar';
 function ChatContent() {
   const searchParams = useSearchParams();
   const businessIdeaId = searchParams.get('idea');
-  const { messages, isLoading, language, sessionId, addMessage, updateLastMessage, setLanguage, setLoading, setSessionId } = useChat();
+  const { messages, isLoading, language, sessionId, addMessage, updateLastMessage, setLanguage, setLoading, setSessionId, setMessages } = useChat();
   const [input, setInput] = useState('');
   const [ideaTitle, setIdeaTitle] = useState('');
   const [isListening, setIsListening] = useState(false);
