@@ -5,7 +5,9 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 import BottomNav from "@/components/layout/bottom-nav";
+import Header from "@/components/layout/header";
 import LoginHandler from "@/components/auth/login-handler";
+import { ClientProviders } from "@/components/providers/client-providers";
 import { Suspense } from "react";
 
 export const viewport: Viewport = {
@@ -31,16 +33,19 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         <meta httpEquiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' https://*.supabase.co https://api.groq.com" />
       </head>
-      <body className={`${inter.className} bg-slate-50 text-slate-800 antialiased pb-20`}>
-        {children}
-        <BottomNav />
-        <Suspense fallback={null}>
-          <LoginHandler />
-        </Suspense>
+      <body className={`${inter.className} bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-200 antialiased pb-20 transition-colors`}>
+        <ClientProviders>
+          <Header />
+          {children}
+          <BottomNav />
+          <Suspense fallback={null}>
+            <LoginHandler />
+          </Suspense>
+        </ClientProviders>
       </body>
     </html>
   );

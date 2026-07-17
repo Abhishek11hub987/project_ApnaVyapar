@@ -1,0 +1,46 @@
+{
+  "hero.badge": "AI-Powered Business Guide for India",
+  "hero.title1": "Start Your First",
+  "hero.title2": "Business in India",
+  "hero.subtitle": "Get AI-powered guidance, curated business ideas, and step-by-step roadmaps to launch your dream — all for free.",
+  "hero.cta.ideas": "Explore Business Ideas",
+  "hero.cta.chat": "Talk to Vyapar Mitra",
+  
+  "trust.free": "Free Forever",
+  "trust.ai": "AI Powered",
+  "trust.india": "Made for India",
+  
+  "how.title": "How it works",
+  "how.step1.label": "Step 1",
+  "how.step1.title": "Discover",
+  "how.step1.desc": "Find ideas matching your budget and skills",
+  "how.step2.label": "Step 2",
+  "how.step2.title": "Validate",
+  "how.step2.desc": "Chat with AI to check market feasibility",
+  "how.step3.label": "Step 3",
+  "how.step3.title": "Launch",
+  "how.step3.desc": "Get step-by-step legal and setup roadmap",
+  
+  "featured.title": "Featured Ideas",
+  "featured.viewAll": "View All",
+  
+  "card.investment": "Investment",
+  "card.profit": "Est. Profit",
+  "card.perMonth": "/mo",
+  
+  "footer.title": "Ready to become your own boss?",
+  "footer.desc": "Join thousands of first-time Indian entrepreneurs launching their dreams today.",
+  "footer.cta": "Find My Business Idea",
+
+  "nav.home": "Home",
+  "nav.ideas": "Ideas",
+  "nav.mitra": "Mitra",
+  "nav.tasks": "Tasks",
+  "nav.profile": "Profile",
+
+  "filter.all": "All Ideas",
+  "filter.lowInvestment": "Low Investment (< ₹50K)",
+  "filter.highProfit": "High Profit",
+  "filter.homeBased": "Home Based",
+  "filter.online": "Online"
+}
