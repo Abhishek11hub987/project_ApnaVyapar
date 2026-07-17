@@ -7,10 +7,14 @@
     --background: #F8FAFC;
     --foreground: #1E293B;
   }
+  .dark {
+    --background: #020617; /* slate-950 */
+    --foreground: #F8FAFC; /* slate-50 */
+  }
 }
 
 body {
-  @apply bg-slate-50 text-slate-800 antialiased;
+  @apply bg-slate-50 text-slate-800 antialiased dark:bg-slate-950 dark:text-slate-200;
   color: var(--foreground);
   background: var(--background);
 }
@@ -65,6 +69,9 @@ body {
 .hero-gradient {
   background: linear-gradient(135deg, #f0fdfa 0%, #f8fafc 40%, #eff6ff 100%);
 }
+.dark .hero-gradient {
+  background: linear-gradient(135deg, #022c22 0%, #0f172a 40%, #1e1b4b 100%);
+}
 
 /* Loading skeleton shimmer */
 @keyframes shimmer {
@@ -77,6 +84,9 @@ body {
   background-size: 200% 100%;
   animation: shimmer 1.5s ease-in-out infinite;
   border-radius: 1rem;
+}
+.dark .skeleton {
+  background: linear-gradient(90deg, #1e293b 25%, #334155 50%, #1e293b 75%);
 }
 
 /* Responsive text clamp for very small screens */
