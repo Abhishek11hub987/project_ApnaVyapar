@@ -180,7 +180,7 @@ function ChatContent() {
         isOpen={showHistory} 
         onClose={() => setShowHistory(false)} 
         onSelectSession={(id) => {
-          setSessionId(id || undefined);
+          setSessionId(id || null);
         }}
         currentSessionId={sessionId || null}
       />

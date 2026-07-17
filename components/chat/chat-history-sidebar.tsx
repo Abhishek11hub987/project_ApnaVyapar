@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
-import { MessageSquare, X, Trash2 } from 'lucide-react';
+import { MessageSquare, X, Trash2, History } from 'lucide-react';
 import { useLanguage } from '@/lib/language-context';
 
 interface ChatSession {
