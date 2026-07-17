@@ -214,8 +214,8 @@ export default async function IdeaDetailPage({ params }: { params: { slug: strin
         </div>
       </div>
 
-      {/* Sticky Bottom Bar */}
-      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 p-4 shadow-[0_-10px_30px_rgba(0,0,0,0.05)] z-40 pb-safe">
+      {/* Sticky Bottom Bar (Lifted above bottom-nav) */}
+      <div className="fixed bottom-[70px] left-0 right-0 bg-white/90 backdrop-blur-md border-t border-slate-200 p-3 md:p-4 shadow-[0_-10px_30px_rgba(0,0,0,0.05)] z-40">
         <div className="max-w-5xl mx-auto flex gap-4">
           <Link
             href={`/chat?idea=${idea.id}`}
