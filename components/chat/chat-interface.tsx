@@ -17,6 +17,7 @@ function ChatContent() {
   const [showHistory, setShowHistory] = useState(false);
   const recognitionRef = useRef<any>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const isSubmittingRef = useRef(false);
 
   useEffect(() => {
     // Initialize speech recognition if supported
@@ -87,6 +88,14 @@ function ChatContent() {
   }, [businessIdeaId]);
 
   useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages, isLoading]);
+
+  useEffect(() => {
+    // If we are in the middle of submitting a message and setting a new session ID, 
+    // don't fetch from DB because it will overwrite the AI's streaming response
+    if (isSubmittingRef.current) return;
+
     if (sessionId) {
       import('@/lib/supabase').then(({ supabase }) => {
         supabase.from('chat_sessions').select('messages').eq('id', sessionId).single()
@@ -101,14 +110,6 @@ function ChatContent() {
     }
   }, [sessionId, setMessages]);
 
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  };
-
-  useEffect(() => {
-    scrollToBottom();
-  }, [messages, isLoading]);
-
   const handleSubmit = async (e?: React.FormEvent, overrideInput?: string) => {
     e?.preventDefault();
     const text = overrideInput || input;
@@ -117,6 +118,7 @@ function ChatContent() {
     setInput('');
     addMessage({ role: 'user', content: text });
     setLoading(true);
+    isSubmittingRef.current = true;
 
     try {
       const res = await fetch('/api/chat', {
@@ -172,6 +174,7 @@ function ChatContent() {
       addMessage({ role: 'assistant', content: 'Sorry, I encountered an error connecting to Vyapar Mitra. Please try again.' });
     } finally {
       setLoading(false);
+      isSubmittingRef.current = false;
     }
   };
 
