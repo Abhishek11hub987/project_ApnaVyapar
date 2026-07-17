@@ -84,11 +84,24 @@ export default function IdeasCatalog() {
         {loading ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {[1,2,3,4,5,6].map(i => (
-              <div key={i} className="h-96 bg-slate-200 rounded-2xl animate-pulse"></div>
+              <div key={i} className="bg-white rounded-2xl border border-slate-100 overflow-hidden">
+                <div className="h-40 skeleton" />
+                <div className="p-5 space-y-4">
+                  <div className="h-5 w-20 skeleton rounded-full" />
+                  <div className="h-6 w-4/5 skeleton" />
+                  <div className="h-4 w-3/5 skeleton" />
+                  <div className="space-y-2 pt-2">
+                    <div className="h-10 skeleton rounded-lg" />
+                    <div className="h-4 w-2/3 skeleton" />
+                    <div className="h-4 w-1/2 skeleton" />
+                  </div>
+                  <div className="h-12 skeleton rounded-xl mt-2" />
+                </div>
+              </div>
             ))}
           </div>
         ) : filteredIdeas.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 animate-in fade-in duration-500">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 animate-stagger">
             {filteredIdeas.map(idea => (
               <IdeaCard key={idea.id} idea={idea} />
             ))}

@@ -135,7 +135,7 @@ export default async function IdeaDetailPage({ params }: { params: { slug: strin
                 <ul className="space-y-4">
                   {pros.map((pro: string, i: number) => (
                     <li key={i} className="flex items-start gap-3 text-[15px] font-medium text-emerald-950 leading-snug">
-                      <span className="text-emerald-500 mt-0.5 font-bold">•</span> {pro}
+                      <span className="text-emerald-500 mt-0.5 font-bold">{"\u2022"}</span> {pro}
                     </li>
                   ))}
                 </ul>
@@ -152,7 +152,7 @@ export default async function IdeaDetailPage({ params }: { params: { slug: strin
                 <ul className="space-y-4">
                   {cons.map((con: string, i: number) => (
                     <li key={i} className="flex items-start gap-3 text-[15px] font-medium text-red-950 leading-snug">
-                      <span className="text-red-500 mt-0.5 font-bold">•</span> {con}
+                      <span className="text-red-500 mt-0.5 font-bold">{"\u2022"}</span> {con}
                     </li>
                   ))}
                 </ul>
@@ -197,10 +197,14 @@ export default async function IdeaDetailPage({ params }: { params: { slug: strin
               </h3>
               <div className="relative z-10">
                 <h4 className="font-extrabold text-3xl mb-2">{idea.real_example_name}</h4>
-                <p className="text-slate-400 font-medium mb-6 flex items-center gap-1.5"><MapPin size={16} /> {idea.real_example_location}</p>
+                {idea.real_example_location && (
+                  <p className="text-slate-400 font-medium mb-6 flex items-center gap-1.5"><MapPin size={16} /> {idea.real_example_location}</p>
+                )}
                 <div className="bg-slate-800/50 p-6 rounded-xl border border-slate-700 backdrop-blur-sm">
                   <p className="text-slate-200 text-lg leading-relaxed italic font-medium">
-                    "{idea.real_example_description}"
+                    {idea.real_example_description
+                      ? `\u201C${idea.real_example_description}\u201D`
+                      : 'A successful real-world business following this model.'}
                   </p>
                 </div>
               </div>

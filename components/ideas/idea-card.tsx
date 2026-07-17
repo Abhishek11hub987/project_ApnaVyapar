@@ -6,7 +6,7 @@ export default function IdeaCard({ idea }: { idea: BusinessIdea }) {
     new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(amount);
 
   return (
-    <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col group hover:shadow-md transition-all hover:border-teal-300">
+    <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col group hover:shadow-lg hover:-translate-y-1 hover:border-teal-300 transition-all duration-300">
       {/* Image Placeholder */}
       <div className="h-40 bg-slate-100 flex items-center justify-center text-5xl relative overflow-hidden">
         {idea.image_url ? (
