@@ -333,3 +333,35 @@ create trigger checklists_updated_at before update on checklists
   for each row execute procedure public.update_updated_at();
 create trigger checklist_tasks_updated_at before update on checklist_tasks
   for each row execute procedure public.update_updated_at();
+
+-- =========================================================================================
+-- SEED DATA (RESOURCE LOCATIONS)
+-- =========================================================================================
+
+insert into resource_locations (
+  name, type, address, city, state, pincode, phone, email, website, latitude, longitude, services
+) values 
+(
+  'MSME Development Institute, New Delhi', 'MSME-DI', 'Okhla Industrial Estate, New Delhi', 'New Delhi', 'Delhi', '110020', '011-26838068', 'dcdi-ndelhi@dcmsme.gov.in', 'https://msmedi-newdelhi.gov.in', 28.5492, 77.2736, ARRAY['Udyam Registration Assistance', 'Scheme Consultation', 'Export Guidance']
+),
+(
+  'District Industries Centre (DIC) - North Delhi', 'DIC', 'GT Karnal Road, Industrial Area, New Delhi', 'New Delhi', 'Delhi', '110033', '011-27694464', 'dic-north@nic.in', null, 28.7188, 77.1656, ARRAY['PMEGP Loan Approval', 'Subsidies']
+),
+(
+  'FSSAI Northern Regional Office', 'MSME-DI', 'FDA Bhawan, Kotla Road, New Delhi', 'New Delhi', 'Delhi', '110002', '1800112100', 'fssai-nr@fssai.gov.in', 'https://fssai.gov.in', 28.6321, 77.2372, ARRAY['Food Licenses', 'Hygiene Audits']
+),
+(
+  'State Bank of India (SME Branch)', 'Bank Branch', 'Connaught Place, New Delhi', 'New Delhi', 'Delhi', '110001', '011-23456789', 'sme.cp@sbi.co.in', null, 28.6315, 77.2167, ARRAY['Mudra Loans', 'CGTMSE Loans', 'Business Accounts']
+),
+(
+  'MSME Development Institute, Mumbai', 'MSME-DI', 'Kurla Andheri Road, Sakinaka, Mumbai', 'Mumbai', 'Maharashtra', '400072', '022-28570535', 'dcdi-mumbai@dcmsme.gov.in', 'https://msmedimumbai.gov.in', 19.1009, 72.8885, ARRAY['Startup India Assistance', 'Technology Upgradation']
+),
+(
+  'District Industries Centre (DIC) - Mumbai', 'DIC', 'Bandra Kurla Complex, Mumbai', 'Mumbai', 'Maharashtra', '400051', '022-26590001', 'dic-mumbai@nic.in', null, 19.0653, 72.8659, ARRAY['Industrial Permissions', 'State Subsidies']
+),
+(
+  'Startup Incubator - T-Hub', 'Incubator', 'Knowledge City, Madhapur, Hyderabad', 'Hyderabad', 'Telangana', '500081', '040-45678901', 'info@t-hub.co', 'https://t-hub.co', 17.4399, 78.3800, ARRAY['Mentorship', 'Funding Connections', 'Office Space']
+),
+(
+  'Common Service Centre (CSC) - HSR Layout', 'CSC', '27th Main, Sector 1, HSR Layout, Bangalore', 'Bangalore', 'Karnataka', '560102', '080-12345678', null, null, 12.9121, 77.6446, ARRAY['Aadhaar Updates', 'GST Filing', 'Trade License']
+);
