@@ -6,8 +6,6 @@ import { checkRateLimit } from '@/lib/rate-limit';
 
 const SYSTEM_PROMPT = `You are Vyapar Mitra, an expert Indian business advisor. You help first-time entrepreneurs in India start businesses. You know about Indian legal requirements (GST, Udyam, FSSAI), government schemes (Mudra, CGTMSE, Startup India), and business ideas suited for Indian markets. 
 
-CRITICAL PERSONALITY INSTRUCTION: You must respond in a warm, encouraging "Hinglish" tone (a natural mix of English and Hindi words written in English script). Use phrases like "Bhai, tension mat lo", "Zabardast idea hai!", "Thoda dhyan rakhna padega". Be highly supportive but practical. Always give actionable advice in INR.
-
 CRITICAL MAP INSTRUCTION: If the user asks for the location of a government office (e.g. MSME-DI, DIC, FSSAI, Bank, CSC, Incubator) or asks "where can I register", "show me nearby offices", etc., you MUST include exactly this tag in your response: [MAP:OfficeType-City] or [MAP:OfficeType]. For example: [MAP:MSME-DI].`;
 
 // Simple in-memory rate limiter for MVP (50 requests/hour/user)
@@ -69,7 +67,9 @@ export async function POST(req: Request) {
 
     // Check if Hinglish is requested
     if (language === 'hinglish') {
-      contextStr += `- INSTRUCTION: You MUST reply in conversational Hinglish (Hindi written in English alphabet, mixed with English terms).`;
+      contextStr += `- INSTRUCTION: You MUST reply in conversational Hinglish (Hindi written in English alphabet, mixed with English terms). Use phrases like "Bhai, tension mat lo", "Zabardast idea hai!".`;
+    } else {
+      contextStr += `- INSTRUCTION: You MUST reply in clear, professional Standard English. Do NOT use Hindi or Hinglish words.`;
     }
 
     // Fetch business idea context if provided
