@@ -65,11 +65,11 @@ function IdeaCard({
     >
       {/* Card */}
       <div
-        className={`w-full h-full rounded-[20px] overflow-hidden relative shadow-2xl border border-white/10 ${!idea.image_url ? `bg-gradient-to-br ${gradClass}` : ''}`}
+        className={`w-full h-full rounded-[20px] overflow-hidden relative shadow-2xl border border-white/10 bg-slate-900 ${!idea.image_url ? `bg-gradient-to-br ${gradClass}` : ''}`}
         style={bgStyle}
       >
         {/* Overlay gradient */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
 
         {/* Swipe LEFT overlay */}
         <motion.div
