@@ -1,3 +1,5 @@
+'use client';
+import { useState } from 'react';
 import Link from 'next/link';
 import { BusinessIdea } from '@/types/database';
 import { useLanguage } from '@/lib/language-context';
@@ -20,6 +22,7 @@ export const DEFAULT_IMAGE = 'https://images.unsplash.com/photo-1486406146926-c6
 
 export default function IdeaCard({ idea }: { idea: BusinessIdea }) {
   const { t } = useLanguage();
+  const [imgError, setImgError] = useState(false);
   
   const formatINR = (amount: number) => 
     new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(amount);
@@ -28,17 +31,24 @@ export default function IdeaCard({ idea }: { idea: BusinessIdea }) {
     <div className="h-full">
     <GlassCard className="h-full !p-0 overflow-hidden flex flex-col group relative">
       <div className="h-48 bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-5xl relative overflow-hidden">
-        <img 
-          src={idea.image_url || CATEGORY_IMAGES[idea.category] || DEFAULT_IMAGE} 
-          alt={idea.title} 
-          loading="lazy"
-          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" 
-        />
+        {!imgError ? (
+          <img 
+            src={idea.image_url || CATEGORY_IMAGES[idea.category] || DEFAULT_IMAGE} 
+            alt={idea.title} 
+            loading="lazy"
+            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" 
+            onError={() => setImgError(true)}
+          />
+        ) : (
+          <div className="w-full h-full bg-gradient-to-br from-teal-500/20 to-emerald-500/20 dark:from-teal-900/40 dark:to-emerald-900/40 flex items-center justify-center text-teal-700 dark:text-teal-400 font-bold text-4xl group-hover:scale-105 transition-transform duration-500">
+            {idea.title.substring(0, 2).toUpperCase()}
+          </div>
+        )}
         {/* Gradient Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-slate-900/20 to-transparent"></div>
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-slate-900/20 to-transparent pointer-events-none"></div>
         
         {idea.is_trending && (
-          <div className="absolute top-3 right-3 bg-amber-500 text-white text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full shadow-sm z-10">
+          <div className="absolute top-3 right-3 bg-amber-500 text-white text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full shadow-sm z-10 pointer-events-none">
             Trending
           </div>
         )}
