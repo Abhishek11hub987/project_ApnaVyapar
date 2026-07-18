@@ -25,15 +25,19 @@ export default function IdeaCard({ idea }: { idea: BusinessIdea }) {
 
   return (
     <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden flex flex-col group hover:shadow-lg hover:-translate-y-1 hover:border-teal-300 dark:hover:border-teal-700 transition-all duration-300">
-      {/* Image Placeholder */}
-      <div className="h-40 bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-5xl relative overflow-hidden">
+      {/* Image Header */}
+      <div className="h-48 bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-5xl relative overflow-hidden">
         <img 
           src={idea.image_url || CATEGORY_IMAGES[idea.category] || DEFAULT_IMAGE} 
           alt={idea.title} 
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
+          loading="lazy"
+          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" 
         />
+        {/* Gradient Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-slate-900/20 to-transparent"></div>
+        
         {idea.is_trending && (
-          <div className="absolute top-3 right-3 bg-amber-500 dark:bg-amber-600 text-white text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded-full shadow-sm">
+          <div className="absolute top-3 right-3 bg-amber-500 text-white text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full shadow-sm z-10">
             Trending
           </div>
         )}
