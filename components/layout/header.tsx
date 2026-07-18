@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { useAuth } from '@/hooks/use-auth';
 import Logo from '@/components/logo';
+import ProtectedLink from '@/components/auth/protected-link';
 
 export default function Header() {
   const { theme, setTheme } = useTheme();
@@ -36,19 +37,15 @@ export default function Header() {
           <Link href="/ideas" className={`font-semibold text-sm transition-colors hover:text-teal-600 dark:hover:text-teal-400 ${pathname.startsWith('/ideas') ? 'text-teal-600 dark:text-teal-400' : 'text-slate-600 dark:text-slate-300'}`}>
             Ideas
           </Link>
-          <Link href="/chat" className={`font-semibold text-sm transition-colors hover:text-teal-600 dark:hover:text-teal-400 ${pathname.startsWith('/chat') ? 'text-teal-600 dark:text-teal-400' : 'text-slate-600 dark:text-slate-300'}`}>
+          <ProtectedLink href="/chat" className={`font-semibold text-sm transition-colors hover:text-teal-600 dark:hover:text-teal-400 ${pathname.startsWith('/chat') ? 'text-teal-600 dark:text-teal-400' : 'text-slate-600 dark:text-slate-300'}`}>
             Mitra
-          </Link>
-          {isAuthenticated && (
-            <>
-              <Link href="/tasks" className={`font-semibold text-sm transition-colors hover:text-teal-600 dark:hover:text-teal-400 ${pathname.startsWith('/tasks') ? 'text-teal-600 dark:text-teal-400' : 'text-slate-600 dark:text-slate-300'}`}>
-                Tasks
-              </Link>
-              <Link href="/profile" className={`font-semibold text-sm transition-colors hover:text-teal-600 dark:hover:text-teal-400 ${pathname.startsWith('/profile') ? 'text-teal-600 dark:text-teal-400' : 'text-slate-600 dark:text-slate-300'}`}>
-                Profile
-              </Link>
-            </>
-          )}
+          </ProtectedLink>
+          <ProtectedLink href="/tasks" className={`font-semibold text-sm transition-colors hover:text-teal-600 dark:hover:text-teal-400 ${pathname.startsWith('/tasks') ? 'text-teal-600 dark:text-teal-400' : 'text-slate-600 dark:text-slate-300'}`}>
+            Tasks
+          </ProtectedLink>
+          <ProtectedLink href="/profile" className={`font-semibold text-sm transition-colors hover:text-teal-600 dark:hover:text-teal-400 ${pathname.startsWith('/profile') ? 'text-teal-600 dark:text-teal-400' : 'text-slate-600 dark:text-slate-300'}`}>
+            Profile
+          </ProtectedLink>
         </nav>
 
         <div className="flex items-center gap-2 sm:gap-3">
