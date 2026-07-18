@@ -24,13 +24,13 @@ export default function Header() {
 
   return (
     <header className="sticky top-0 z-50 w-full bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800">
-      <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
-        <Link href="/" className="hover:opacity-90 transition-opacity">
+      <div className="max-w-7xl mx-auto px-4 h-16 grid grid-cols-3 items-center">
+        <Link href="/" className="hover:opacity-90 transition-opacity justify-self-start">
           <Logo iconSize={28} />
         </Link>
         
-        {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center gap-6">
+        {/* Desktop Navigation — always centered */}
+        <nav className="hidden md:flex items-center justify-center gap-6">
           <Link href="/" className={`font-semibold text-sm transition-colors hover:text-teal-600 dark:hover:text-teal-400 ${pathname === '/' ? 'text-teal-600 dark:text-teal-400' : 'text-slate-600 dark:text-slate-300'}`}>
             Home
           </Link>
@@ -48,7 +48,7 @@ export default function Header() {
           </ProtectedLink>
         </nav>
 
-        <div className="flex items-center gap-2 sm:gap-3">
+        <div className="flex items-center gap-2 sm:gap-3 justify-self-end">
           {isAuthenticated && (
             <>
               <button
