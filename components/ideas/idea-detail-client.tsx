@@ -10,6 +10,9 @@ import FinancialProjections from './financial-projections';
 import RiskAnalysis from './risk-analysis';
 import SuccessStories from './success-stories';
 import ResourcesNeeded from './resources-needed';
+import { GlassCard } from '@/components/ui/glass-card';
+import { NeonButton } from '@/components/ui/neon-button';
+import { GuruGyaan } from '@/components/guru-gyaan';
 
 export default function IdeaDetailClient({ idea }: { idea: BusinessIdea }) {
   const { t } = useLanguage();
@@ -45,6 +48,10 @@ export default function IdeaDetailClient({ idea }: { idea: BusinessIdea }) {
             <Link href="/ideas" className={`inline-flex items-center gap-2 text-sm font-bold mb-8 transition-colors ${imageUrl ? 'text-slate-300 hover:text-white' : 'text-slate-500 dark:text-slate-400 hover:text-teal-700 dark:hover:text-teal-400'}`}>
               <ArrowLeft size={18} /> Back to Catalog
             </Link>
+            
+            <div className="mb-8">
+              <GuruGyaan context={idea.category.toLowerCase()} />
+            </div>
 
             <div className="flex flex-wrap items-center gap-3 mb-5">
               <span className={`px-4 py-1.5 rounded-full text-xs font-black tracking-widest uppercase border ${imageUrl ? 'bg-teal-500/20 text-teal-300 border-teal-500/30' : 'bg-teal-100 dark:bg-teal-900/40 text-teal-800 dark:text-teal-300 border-teal-200 dark:border-teal-800/50'}`}>
@@ -228,23 +235,21 @@ export default function IdeaDetailClient({ idea }: { idea: BusinessIdea }) {
       </div>
 
       {/* Sticky Bottom Bar */}
-      <div className="fixed bottom-[70px] left-0 right-0 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-t border-slate-200 dark:border-slate-800 p-3 md:p-4 shadow-[0_-10px_30px_rgba(0,0,0,0.05)] dark:shadow-[0_-10px_30px_rgba(0,0,0,0.3)] z-40">
-        <div className="max-w-5xl mx-auto flex gap-4">
-          <Link
-            href={`/chat?idea=${idea.id}`}
-            className="flex-1 flex items-center justify-center gap-2.5 bg-teal-50 dark:bg-teal-900/30 text-teal-800 dark:text-teal-300 font-extrabold py-4 px-4 rounded-xl border-2 border-teal-200 dark:border-teal-700 hover:bg-teal-100 dark:hover:bg-teal-900/50 hover:border-teal-300 dark:hover:border-teal-600 transition-all"
-          >
-            <Bot size={22} className="text-teal-600 dark:text-teal-400" />
-            <span className="hidden sm:inline">{t('ideaDetail.askMitra')}</span>
-            <span className="sm:hidden">Ask AI</span>
+      <div className="fixed bottom-[70px] left-0 right-0 glass-panel border-b-0 rounded-b-none p-3 md:p-4 z-40 mx-4 md:mx-auto max-w-5xl">
+        <div className="flex gap-4">
+          <Link href={`/chat?idea=${idea.id}`} className="flex-1">
+            <NeonButton variant="teal" className="w-full">
+              <Bot size={22} className="mr-2" />
+              <span className="hidden sm:inline">{t('ideaDetail.askMitra')}</span>
+              <span className="sm:hidden">Ask AI</span>
+            </NeonButton>
           </Link>
-          <Link
-            href={`/tasks?idea=${idea.id}`}
-            className="flex-1 flex items-center justify-center gap-2.5 bg-amber-500 text-white font-extrabold py-4 px-4 rounded-xl hover:bg-amber-600 hover:shadow-lg hover:-translate-y-0.5 transition-all shadow-sm"
-          >
-            <CheckCircle size={22} />
-            <span className="hidden sm:inline">{t('ideaDetail.generateChecklist')}</span>
-            <span className="sm:hidden">Get Tasks</span>
+          <Link href={`/tasks?idea=${idea.id}`} className="flex-1">
+            <NeonButton variant="amber" className="w-full">
+              <CheckCircle size={22} className="mr-2" />
+              <span className="hidden sm:inline">{t('ideaDetail.generateChecklist')}</span>
+              <span className="sm:hidden">Get Tasks</span>
+            </NeonButton>
           </Link>
         </div>
       </div>

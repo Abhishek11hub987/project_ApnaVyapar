@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { BusinessIdea } from '@/types/database';
 import { useLanguage } from '@/lib/language-context';
+import { GlassCard } from '@/components/ui/glass-card';
 
 export const CATEGORY_IMAGES: Record<string, string> = {
   'Food': 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=800&q=80',
@@ -24,8 +25,8 @@ export default function IdeaCard({ idea }: { idea: BusinessIdea }) {
     new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(amount);
 
   return (
-    <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden flex flex-col group hover:shadow-lg hover:-translate-y-1 hover:border-teal-300 dark:hover:border-teal-700 transition-all duration-300">
-      {/* Image Header */}
+    <div className="h-full">
+    <GlassCard className="h-full !p-0 overflow-hidden flex flex-col group relative">
       <div className="h-48 bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-5xl relative overflow-hidden">
         <img 
           src={idea.image_url || CATEGORY_IMAGES[idea.category] || DEFAULT_IMAGE} 
@@ -77,6 +78,7 @@ export default function IdeaCard({ idea }: { idea: BusinessIdea }) {
           View Details
         </Link>
       </div>
+    </GlassCard>
     </div>
   );
 }

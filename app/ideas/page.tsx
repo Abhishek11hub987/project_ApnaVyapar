@@ -6,6 +6,7 @@ import IdeaCard from '@/components/ideas/idea-card';
 import IdeaFilters from '@/components/ideas/idea-filters';
 import { Search } from 'lucide-react';
 import { useLanguage } from '@/lib/language-context';
+import { GuruGyaan } from '@/components/guru-gyaan';
 
 export default function IdeasCatalog() {
   const [ideas, setIdeas] = useState<BusinessIdea[]>([]);
@@ -51,20 +52,23 @@ export default function IdeasCatalog() {
   return (
     <main className="min-h-screen bg-slate-50 dark:bg-slate-950 pb-24 font-sans transition-colors">
       {/* Header */}
-      <div className="bg-teal-800 dark:bg-slate-900 pt-12 pb-28 px-4 relative overflow-hidden dark:border-b dark:border-slate-800">
+      <div className="pt-12 pb-20 px-4 relative overflow-hidden">
         {/* Abstract background shapes */}
         <div className="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none">
-          <div className="absolute -top-24 -right-24 w-96 h-96 bg-white dark:bg-teal-500 rounded-full blur-3xl"></div>
+          <div className="absolute -top-24 -right-24 w-96 h-96 bg-teal-500 rounded-full blur-3xl"></div>
           <div className="absolute top-24 -left-24 w-64 h-64 bg-amber-500 rounded-full blur-3xl"></div>
         </div>
 
-        <div className="max-w-7xl mx-auto relative z-10">
-          <h1 className="text-3xl md:text-5xl font-extrabold text-white mb-4 tracking-tight">{t('ideas.title')}</h1>
-          <p className="text-teal-100 dark:text-slate-400 max-w-2xl text-lg mb-8 font-medium">
-            {t('ideas.subtitle')}
+        <div className="max-w-7xl mx-auto relative z-10 flex flex-col items-center">
+          <GuruGyaan context="general" />
+          <h1 className="text-3xl md:text-5xl font-extrabold text-slate-900 dark:text-white mt-8 mb-4">
+            {t('catalog.title')}
+          </h1>
+          <p className="text-slate-600 dark:text-slate-400 text-lg md:text-xl max-w-2xl mx-auto font-medium text-center">
+            {t('catalog.subtitle')}
           </p>
           
-          <div className="relative max-w-2xl shadow-xl rounded-2xl">
+          <div className="relative max-w-2xl w-full mt-8 shadow-xl rounded-2xl">
             <Search className="absolute left-4 top-4 text-slate-400" size={22} />
             <input 
               type="text" 
