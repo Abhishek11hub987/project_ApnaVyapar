@@ -1,36 +1,76 @@
-<div align="center">
-  <img src="https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/briefcase.svg" alt="Apna Vyapar Logo" width="80" height="80">
+# Apna Vyapar - AI-Powered Business Idea Navigator 🚀
 
-  <h1 align="center">Apna Vyapar</h1>
+Apna Vyapar is a modern, Next.js-based web application designed to empower aspiring entrepreneurs in India. It provides an enriched catalog of deeply researched business ideas, complete with localized market analysis, financial projections, interactive roadmaps, and an AI-powered assistant (Mitra) to guide users step-by-step from idea to execution.
 
-  <p align="center">
-    <strong>Empowering India's Next Generation of Entrepreneurs</strong>
-    <br />
-    An AI-powered platform designed to help first-time entrepreneurs in India discover business ideas, understand compliance, and launch successfully.
-  </p>
+## 🌟 Key Features
 
-</div>
+- **Comprehensive Business Catalog:** 25+ meticulously detailed business ideas tailored for the Indian market, covering categories like Food, Retail, Technology, Services, and Agriculture.
+- **Deep Data & Analytics:** Every business idea includes:
+  - Market Size & Demand Analysis
+  - Step-by-Step Execution Roadmaps
+  - Financial Projections & Break-Even Timelines
+  - Real-World Success Stories in India
+  - Risk Analysis & Mitigation Strategies
+- **Mitra AI Assistant:** An integrated chatbot powered by Gemini, allowing users to ask context-aware questions about any business idea, calculate custom budgets, and seek localized advice.
+- **Task Management:** Automatically generate actionable, step-by-step checklists for any selected business idea to track progress.
+- **Progressive Web App (PWA):** fully installable on mobile and desktop for a native-like experience.
+- **Multi-Language Support:** Seamlessly switch between English and Hindi.
+- **Secure Admin Dashboard:** A dedicated, hidden `/admin` panel to track user signups and analytics, protected by a 5-layer enterprise-grade security architecture.
 
-<hr />
+## 🛠️ Technology Stack
 
-## ✨ Features
+- **Frontend:** [Next.js 14](https://nextjs.org/) (App Router), React, TypeScript
+- **Styling:** [Tailwind CSS](https://tailwindcss.com/), Lucide Icons
+- **Backend/Database:** [Supabase](https://supabase.com/) (PostgreSQL, Authentication)
+- **AI Integration:** Google Gemini API
+- **PWA:** `next-pwa`
 
-- 🤖 **Vyapar Mitra (AI Advisor)**: An intelligent chatbot powered by advanced AI. Provides conversational, context-aware guidance in English and Hinglish about business ideas, government schemes, and legal requirements.
-- 💡 **Curated Business Ideas**: Browse a comprehensive catalog of tailored Indian business ideas with investment ranges, estimated profits, location requirements, and required licenses.
-- 📝 **Dynamic Launch Checklists**: Generate step-by-step launch plans customized to your selected business idea, tracking your progress along the way.
-- 🏛️ **Government Schemes Database**: Search and filter through various MSME government schemes, loans, subsidies, and tax benefits.
-- 🗺️ **Resource Map**: Find nearby government offices, District Industries Centers (DICs), MSME-DIs, and incubators on an interactive map.
+## 🔒 5-Layer Security Architecture
 
----
+Apna Vyapar implements rigorous security standards to protect both user data and admin routes:
 
-## 🚀 How to Use
+1. **Edge Middleware (Route Protection):** Intercepts requests before they hit the server. Verifies active sessions and enforces Role-Based Access Control (RBAC) to block non-admins from `/admin` routes entirely (Returns HTTP 403).
+2. **Server-Side Verification:** Server components perform a secondary check against the database to ensure the user hasn't spoofed their session data.
+3. **Database Row Level Security (RLS):** Policies are enforced at the PostgreSQL level. Non-admins cannot run `SELECT`, `UPDATE`, or `DELETE` queries on secure tables (like `profiles` or analytics tables).
+4. **Anti-Privilege Escalation Triggers:** A custom SQL trigger (`prevent_role_modification()`) monitors the `profiles` table. It ensures that regular authenticated users cannot maliciously update their own profile to assign themselves the `admin` role via the client API.
+5. **Strict Security Headers (CSP & HSTS):** The `next.config.js` enforces `Strict-Transport-Security`, `X-Frame-Options (DENY)`, `X-Content-Type-Options (nosniff)`, and a robust Content Security Policy (CSP) to prevent XSS, clickjacking, and packet sniffing.
 
-Apna Vyapar is designed to be completely user-friendly. Simply visit our live website, sign in with your phone number or Google account, and start exploring business ideas tailored to your budget and interests!
+## 🚀 Getting Started
 
-*(Deployment URL coming soon)*
+### Prerequisites
+- Node.js 18+
+- A Supabase Project
+- A Gemini API Key
 
----
+### Installation
 
-## 🔒 Security & Privacy
+1. **Clone the repository & Install Dependencies:**
+   ```bash
+   npm install
+   ```
 
-Your data and interactions with Vyapar Mitra are secure. We use strict industry-standard security protocols to ensure your business plans and queries remain private.
+2. **Environment Variables:**
+   Create a `.env.local` file in the root directory and add the following:
+   ```env
+   NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+   GEMINI_API_KEY=your_gemini_api_key
+   ```
+
+3. **Database Setup:**
+   Run the provided SQL migrations in your Supabase SQL Editor:
+   - `supabase/schema.sql` (Creates tables, RLS policies, and seed data)
+   - `supabase-secure-role.sql` (Creates the security trigger)
+   - `supabase/migrations/003_enrich_all_ideas.sql` (Populates the 25 in-depth business ideas)
+
+4. **Run the Development Server:**
+   ```bash
+   npm run dev
+   ```
+   Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+## 📱 PWA Configuration
+The app is configured as a Progressive Web App. To test it, build the application for production (`npm run build` & `npm run start`). You will see an install icon in the URL bar in supported browsers (like Chrome).
+
+## 📄 License
+This project is proprietary and confidential.
