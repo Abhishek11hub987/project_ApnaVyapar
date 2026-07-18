@@ -1,5 +1,6 @@
 import Footer from "@/components/layout/footer";
 import MarketingHeader from "@/components/layout/marketing-header";
+import BottomNav from "@/components/layout/bottom-nav";
 
 export default function MarketingLayout({
   children,
@@ -15,6 +16,7 @@ export default function MarketingLayout({
       </div>
       
       <Footer />
+      <BottomNav />
     </div>
   );
 }
