@@ -67,11 +67,11 @@ const HOW = [
 ];
 
 // ─── Animation ───────────────────────────────────────────────────────
-const fadeUp: Variants = {
+const fadeUp: any = {
   hidden: { opacity: 0, y: 24 },
   show:   { opacity: 1, y: 0, transition: { duration: 0.5, ease: 'easeOut' } },
 };
-const stagger: Variants = { show: { transition: { staggerChildren: 0.1 } } };
+const stagger: any = { show: { transition: { staggerChildren: 0.1 } } };
 
 // ─── Card shell — works in light AND dark ────────────────────────────
 function Card({ children, className = '' }: { children: React.ReactNode; className?: string }) {
