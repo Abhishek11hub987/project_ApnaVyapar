@@ -56,6 +56,29 @@ export async function middleware(request: NextRequest) {
 
   const { data: { user } } = await supabase.auth.getUser()
 
+  const isAdminRoute = request.nextUrl.pathname.startsWith('/admin');
+  const isAdminApiRoute = request.nextUrl.pathname.startsWith('/api/admin');
+
+  if (isAdminRoute || isAdminApiRoute) {
+    if (!user) {
+      if (isAdminApiRoute) {
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      }
+      return NextResponse.redirect(new URL('/?login=true', request.url));
+    }
+    
+    // Check if user is admin
+    const { data: profile } = await supabase.from('profiles').select('role').eq('id', user.id).single();
+    if (!profile || profile.role !== 'admin') {
+      console.warn(`[SECURITY] Blocked non-admin access attempt to ${request.nextUrl.pathname} by user ${user.id}`);
+      if (isAdminApiRoute) {
+        return NextResponse.json({ error: 'Forbidden', message: 'Admin access required' }, { status: 403 });
+      }
+      // Return 403 Forbidden for UI routes as requested to block scrapers
+      return new NextResponse('403 Forbidden - Admin Access Required', { status: 403 });
+    }
+  }
+
   const protectedRoutes = ['/chat', '/checklist', '/profile', '/saved']
   const isProtectedRoute = protectedRoutes.some(route => 
     request.nextUrl.pathname.startsWith(route)
@@ -69,5 +92,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/chat/:path*', '/checklist/:path*', '/profile/:path*', '/saved/:path*'],
+  matcher: ['/chat/:path*', '/checklist/:path*', '/profile/:path*', '/saved/:path*', '/admin/:path*', '/api/admin/:path*'],
 }
