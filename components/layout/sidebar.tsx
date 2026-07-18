@@ -52,17 +52,18 @@ export default function Sidebar({ isOpen, onClose, onLogout }: SidebarProps) {
   ];
 
   return (
-    <AnimatePresence>
-      {isOpen && (
-        <>
-          {/* Backdrop overlay */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={onClose}
-            className="fixed inset-0 z-40 bg-slate-900/40 backdrop-blur-sm lg:hidden"
-          />
+    <>
+      <AnimatePresence>
+        {isOpen && (
+          <div className="fixed inset-0 z-50 pointer-events-none">
+            {/* Backdrop overlay */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={onClose}
+              className="absolute inset-0 -z-10 bg-slate-900/40 backdrop-blur-sm lg:hidden pointer-events-auto"
+            />
 
           {/* Sidebar */}
           <motion.aside
@@ -70,7 +71,7 @@ export default function Sidebar({ isOpen, onClose, onLogout }: SidebarProps) {
             animate={{ x: 0 }}
             exit={{ x: '-100%' }}
             transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-            className="fixed top-0 left-0 z-50 h-screen w-[280px] bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl border-r border-slate-200 dark:border-slate-800 flex flex-col shadow-2xl"
+            className="fixed top-0 left-0 z-50 h-screen w-[280px] bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl border-r border-slate-200 dark:border-slate-800 flex flex-col shadow-2xl pointer-events-auto"
           >
             <div className="flex items-center justify-between p-6 border-b border-slate-200/50 dark:border-slate-800/50">
               <Link href="/ideas" className="flex items-center gap-2" onClick={onClose}>
@@ -131,12 +132,12 @@ export default function Sidebar({ isOpen, onClose, onLogout }: SidebarProps) {
                 className="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/10 font-medium text-sm transition-all mt-2"
               >
                 <LogOut size={18} />
-                Logout
-              </button>
-            </div>
-          </motion.aside>
-        </>
-      )}
-    </AnimatePresence>
+                </button>
+              </div>
+            </motion.aside>
+          </div>
+        )}
+      </AnimatePresence>
+    </>
   );
 }
