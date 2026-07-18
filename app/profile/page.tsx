@@ -3,12 +3,14 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/hooks/use-auth';
-import { LogOut, CheckCircle2, User, Mail, MapPin, Heart } from 'lucide-react';
+import { LogOut, CheckCircle2, User, Mail, MapPin } from 'lucide-react';
 import { useLanguage } from '@/lib/language-context';
 import { GlassCard } from '@/components/ui/glass-card';
 import { NeonButton } from '@/components/ui/neon-button';
 import { VyaparScore } from '@/components/vyapar-score';
 import { useTheme } from 'next-themes';
+import IdeaCard from '@/components/ideas/idea-card';
+import { BusinessIdea } from '@/types/database';
 
 export default function ProfilePage() {
   const { user, isAuthenticated, isLoading: authLoading, logout, initialize } = useAuth();
@@ -16,7 +18,7 @@ export default function ProfilePage() {
   const { t } = useLanguage();
   const [mounted, setMounted] = useState(false);
   const [stats, setStats] = useState({ chats: 0, checklists: 0, ideas: 12, locations: 3 });
-  const [savedIdeas, setSavedIdeas] = useState<any[]>([]);
+  const [savedIdeas, setSavedIdeas] = useState<BusinessIdea[]>([]);
 
   useEffect(() => {
     setMounted(true);
@@ -29,16 +31,24 @@ export default function ProfilePage() {
       router.push('/?login=true');
       return;
     }
-    const fetchStats = async () => {
-      const [{ count: chatsCount }, { count: checkCount }, { data: savedData }] = await Promise.all([
+    const fetchStatsAndIdeas = async () => {
+      const [{ count: chatsCount }, { count: checkCount }] = await Promise.all([
         supabase.from('chat_sessions').select('*', { count: 'exact', head: true }).eq('user_id', user.id),
-        supabase.from('checklists').select('*', { count: 'exact', head: true }).eq('user_id', user.id),
-        supabase.from('saved_ideas').select('*, business_ideas(*)').eq('user_id', user.id).order('created_at', { ascending: false })
+        supabase.from('checklists').select('*', { count: 'exact', head: true }).eq('user_id', user.id)
       ]);
       setStats(prev => ({ ...prev, chats: chatsCount || 0, checklists: checkCount || 0 }));
-      if (savedData) setSavedIdeas(savedData);
+
+      // Fetch saved ideas
+      const { data: savedData } = await supabase
+        .from('saved_ideas')
+        .select(`business_ideas (*)`)
+        .eq('user_id', user.id);
+      
+      if (savedData) {
+        setSavedIdeas(savedData.map((d: any) => d.business_ideas));
+      }
     };
-    fetchStats();
+    fetchStatsAndIdeas();
   }, [user, isAuthenticated, authLoading]);
 
   if (!mounted || authLoading || !user) return null;
@@ -60,8 +70,8 @@ export default function ProfilePage() {
             </div>
             <div className="grid grid-cols-2 divide-x divide-y divide-slate-200 dark:divide-slate-800/50">
               <div className="p-4 text-center hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                <span className="block text-2xl font-bold neon-text-teal text-teal-500">{savedIdeas.length}</span>
-                <span className="text-[10px] text-slate-500 uppercase tracking-wider font-bold">Saved Ideas</span>
+                <span className="block text-2xl font-bold neon-text-teal text-teal-500">{stats.ideas}</span>
+                <span className="text-[10px] text-slate-500 uppercase tracking-wider font-bold">Ideas</span>
               </div>
               <div className="p-4 text-center hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
                 <span className="block text-2xl font-bold neon-text-amber text-amber-500">{stats.chats}</span>
@@ -109,41 +119,6 @@ export default function ProfilePage() {
 
           <GlassCard>
             <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2 mb-6">
-              <Heart size={20} className="text-rose-500" /> My Saved Ideas
-            </h3>
-            
-            {savedIdeas.length === 0 ? (
-              <p className="text-slate-500 text-sm italic p-4 text-center bg-slate-50 dark:bg-slate-900/50 rounded-xl">
-                You haven't saved any ideas yet. Head over to Idea Roulette to swipe and save!
-              </p>
-            ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {savedIdeas.map((saved) => (
-                  <div key={saved.id} className="flex items-center gap-4 p-3 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800 hover:border-teal-500/30 transition-colors cursor-pointer" onClick={() => router.push(`/ideas/${saved.business_ideas?.slug}`)}>
-                    <div className="w-16 h-16 rounded-lg bg-slate-200 dark:bg-slate-700 overflow-hidden shrink-0 flex items-center justify-center relative">
-                      {saved.business_ideas?.image_url && !saved.business_ideas.image_url.startsWith('http') && !saved.business_ideas.image_url.startsWith('/') ? (
-                        <span className="text-3xl">{saved.business_ideas.image_url}</span>
-                      ) : (
-                        <img 
-                          src={saved.business_ideas?.image_url} 
-                          alt={saved.business_ideas?.title} 
-                          className="w-full h-full object-cover"
-                          onError={(e) => { e.currentTarget.style.display = 'none'; }}
-                        />
-                      )}
-                    </div>
-                    <div>
-                      <h4 className="font-bold text-slate-800 dark:text-slate-200 text-sm line-clamp-1">{saved.business_ideas?.title}</h4>
-                      <p className="text-xs text-teal-500 font-semibold">{saved.business_ideas?.category}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </GlassCard>
-
-          <GlassCard>
-            <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2 mb-6">
               <CheckCircle2 size={20} className="text-teal-500" /> Activity Timeline
             </h3>
             
@@ -162,6 +137,29 @@ export default function ProfilePage() {
               </div>
 
             </div>
+          </GlassCard>
+
+          {/* Saved Ideas Section */}
+          <GlassCard>
+            <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2 mb-6">
+              <CheckCircle2 size={20} className="text-teal-500" /> Liked Business Ideas
+            </h3>
+            
+            {savedIdeas.length > 0 ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                {savedIdeas.map(idea => (
+                  <IdeaCard key={idea.id} idea={idea} />
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-12 bg-slate-50/50 dark:bg-slate-800/50 rounded-xl border border-slate-200/50 dark:border-slate-700/50">
+                <div className="text-4xl mb-3 opacity-50">💡</div>
+                <p className="text-slate-500 dark:text-slate-400 font-medium">You haven't liked any ideas yet.</p>
+                <button onClick={() => router.push('/')} className="mt-4 text-teal-600 dark:text-teal-400 font-bold hover:underline">
+                  Go swipe some ideas!
+                </button>
+              </div>
+            )}
           </GlassCard>
         </div>
 
