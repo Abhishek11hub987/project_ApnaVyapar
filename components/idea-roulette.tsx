@@ -5,6 +5,8 @@ import { motion, useMotionValue, useTransform, AnimatePresence } from 'framer-mo
 import { useVyaparScore } from '@/hooks/use-vyapar-score';
 import { Check, X, Heart } from 'lucide-react';
 import Link from 'next/link';
+import { useAuth } from '@/hooks/use-auth';
+import { supabase } from '@/lib/supabase';
 
 interface Idea {
   id: number;
@@ -122,11 +124,28 @@ export function IdeaRoulette({ ideas }: { ideas: Idea[] }) {
   const [deck, setDeck] = useState<Idea[]>(ideas.slice(0, 5));
   const [lastAction, setLastAction] = useState<'left' | 'right' | null>(null);
   const { addPoints } = useVyaparScore();
+  const { user } = useAuth();
 
-  const handleSwipe = (dir: 'left' | 'right') => {
+  const handleSwipe = async (dir: 'left' | 'right') => {
     setLastAction(dir);
-    if (dir === 'right') addPoints(10);
-    else addPoints(2);
+    
+    // Get the current top idea before we pop it
+    const currentIdea = deck[deck.length - 1];
+
+    if (dir === 'right') {
+      addPoints(10);
+      if (user && currentIdea) {
+        // Save the idea to Supabase for the user
+        await supabase
+          .from('saved_ideas')
+          .upsert(
+            { user_id: user.id, business_idea_id: currentIdea.id },
+            { onConflict: 'user_id, business_idea_id' }
+          );
+      }
+    } else {
+      addPoints(2);
+    }
 
     setTimeout(() => {
       setDeck((prev) => prev.slice(0, -1));
