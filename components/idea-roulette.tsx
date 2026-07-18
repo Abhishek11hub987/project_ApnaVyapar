@@ -71,11 +71,9 @@ function IdeaCard({
         
         {/* Image Layer (will be transparent if URL is broken) */}
         {idea.image_url && !isEmoji && (
-          <img 
-            src={idea.image_url}
-            alt={idea.title}
-            className="absolute inset-0 w-full h-full object-cover z-0"
-            onError={(e) => { e.currentTarget.style.display = 'none'; }}
+          <div 
+            className="absolute inset-0" 
+            style={{ backgroundImage: `url('${idea.image_url}')`, backgroundSize: 'cover', backgroundPosition: 'center' }} 
           />
         )}
 
