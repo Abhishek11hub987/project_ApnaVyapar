@@ -72,7 +72,7 @@ export default function OnboardingPage() {
           full_name: formData.full_name,
           phone: formData.phone,
           city: formData.city,
-          investment_budget: parseInt(formData.budget) || 0,
+          investment_budget: formData.budget || null,
           business_interest: formData.interests.join(', '),
           work_experience: workExperienceData,
           onboarding_completed: true,
@@ -170,14 +170,28 @@ export default function OnboardingPage() {
             <h2 className="text-2xl font-extrabold text-slate-800 dark:text-white">Your Resources</h2>
             
             <div>
-              <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">Investment Budget (₹)</label>
-              <input 
-                type="number" 
-                value={formData.budget}
-                onChange={e => setFormData({...formData, budget: e.target.value})}
-                className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 px-4 py-3 outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20"
-                placeholder="e.g. 50000"
-              />
+              <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-3">Investment Budget</label>
+              <div className="flex flex-wrap gap-3">
+                {[
+                  { id: 'under-10k', label: 'Under ₹10,000' },
+                  { id: '10k-50k', label: '₹10K - ₹50K' },
+                  { id: '50k-2l', label: '₹50K - ₹2 Lakhs' },
+                  { id: '2l-10l', label: '₹2L - ₹10 Lakhs' },
+                  { id: 'above-10l', label: 'Above ₹10 Lakhs' }
+                ].map(b => (
+                  <button
+                    key={b.id}
+                    onClick={() => setFormData({...formData, budget: b.id})}
+                    className={`px-4 py-2.5 rounded-xl border-2 text-sm font-bold transition-all ${
+                      formData.budget === b.id 
+                        ? 'border-teal-500 bg-teal-50 dark:bg-teal-900/30 text-teal-700 dark:text-teal-400' 
+                        : 'border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:border-teal-200'
+                    }`}
+                  >
+                    {b.label}
+                  </button>
+                ))}
+              </div>
             </div>
             
             <div>

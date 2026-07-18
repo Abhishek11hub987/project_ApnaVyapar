@@ -7,7 +7,15 @@ export function getRecommendedIdeas(ideas: BusinessIdea[], user: any): BusinessI
     ? user.business_interest.split(',').map((i: string) => i.trim().toLowerCase()) 
     : [];
   
-  const userBudget = user.investment_budget || 0;
+  const budgetRanges: Record<string, { min: number, max: number }> = {
+    'under-10k': { min: 0, max: 10000 },
+    '10k-50k': { min: 10000, max: 50000 },
+    '50k-2l': { min: 50000, max: 200000 },
+    '2l-10l': { min: 200000, max: 1000000 },
+    'above-10l': { min: 1000000, max: 99999999 },
+  };
+
+  const userBudgetRange = user.investment_budget ? budgetRanges[user.investment_budget] : null;
 
   // We score each idea based on how well it matches the user's profile
   const scoredIdeas = ideas.map(idea => {
@@ -19,13 +27,14 @@ export function getRecommendedIdeas(ideas: BusinessIdea[], user: any): BusinessI
     }
     
     // 2. Budget match (+5 points)
-    // If the idea's min investment is less than or equal to user's budget (and user has a budget)
-    if (userBudget > 0 && idea.investment_min <= userBudget) {
-      score += 5;
-      
-      // Bonus if it's very close to their budget (+3 points)
-      if (idea.investment_min >= userBudget * 0.5) {
-        score += 3;
+    if (userBudgetRange) {
+      if (idea.investment_min <= userBudgetRange.max) {
+        score += 5;
+        
+        // Bonus if it fits perfectly within their exact target range (+3 points)
+        if (idea.investment_min >= userBudgetRange.min) {
+          score += 3;
+        }
       }
     }
     
