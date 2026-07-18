@@ -125,10 +125,13 @@ We welcome all contributions! Please read our [**CONTRIBUTING.md**](CONTRIBUTING
 
 ## 📜 License
 
-Distributed under the MIT License. See `LICENSE` for more information.
+Distributed under the **Apna Vyapar Proprietary & Non-Commercial License**. 
+This project is strictly for educational and personal use. **Commercial use, monetization, or copying the core concept to build a competing product is strictly prohibited.** See the `LICENSE` file for full details.
 
 ---
 
 <div align="center">
-  <em>Built with ❤️ for Indian entrepreneurs.</em>
+  <em>"व्यापार में जोखिम ही सबसे बड़ा मुनाफा है।"</em><br>
+  (In business, taking risks is the biggest profit.)<br><br>
+  Built with ❤️ for Indian entrepreneurs.
 </div>
