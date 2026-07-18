@@ -79,7 +79,7 @@ export async function middleware(request: NextRequest) {
     }
   }
 
-  const protectedRoutes = ['/chat', '/checklist', '/profile', '/saved']
+  const protectedRoutes = ['/chat', '/checklist', '/profile', '/saved', '/ideas', '/tasks']
   const isProtectedRoute = protectedRoutes.some(route => 
     request.nextUrl.pathname.startsWith(route)
   )
@@ -88,9 +88,14 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL('/?login=true', request.url))
   }
 
+  // Redirect authenticated users away from the landing page
+  if (user && request.nextUrl.pathname === '/') {
+    return NextResponse.redirect(new URL('/ideas', request.url))
+  }
+
   return response
 }
 
 export const config = {
-  matcher: ['/chat/:path*', '/checklist/:path*', '/profile/:path*', '/saved/:path*', '/admin/:path*', '/api/admin/:path*'],
+  matcher: ['/', '/ideas/:path*', '/tasks/:path*', '/chat/:path*', '/checklist/:path*', '/profile/:path*', '/saved/:path*', '/admin/:path*', '/api/admin/:path*'],
 }

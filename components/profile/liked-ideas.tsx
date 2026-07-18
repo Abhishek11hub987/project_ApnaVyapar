@@ -4,6 +4,7 @@ import { GlassCard } from '@/components/ui/glass-card';
 import { CheckCircle2 } from 'lucide-react';
 import IdeaCard from '@/components/ideas/idea-card';
 import { BusinessIdea } from '@/types/database';
+import { useLanguage } from '@/lib/language-context';
 
 interface LikedIdeasProps {
   ideas: BusinessIdea[];
@@ -11,11 +12,12 @@ interface LikedIdeasProps {
 
 export default function LikedIdeas({ ideas }: LikedIdeasProps) {
   const router = useRouter();
+  const { t } = useLanguage();
 
   return (
     <GlassCard>
       <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2 mb-6">
-        <CheckCircle2 size={20} className="text-teal-500" /> Liked Business Ideas
+        <CheckCircle2 size={20} className="text-teal-500" /> {t('liked.title')}
       </h3>
       
       {ideas.length > 0 ? (
@@ -27,9 +29,9 @@ export default function LikedIdeas({ ideas }: LikedIdeasProps) {
       ) : (
         <div className="text-center py-12 bg-slate-50/50 dark:bg-slate-800/50 rounded-xl border border-slate-200/50 dark:border-slate-700/50">
           <div className="text-4xl mb-3 opacity-50">💡</div>
-          <p className="text-slate-500 dark:text-slate-400 font-medium">You haven't liked any ideas yet.</p>
+          <p className="text-slate-500 dark:text-slate-400 font-medium">{t('liked.emptyTitle')}</p>
           <button onClick={() => router.push('/')} className="mt-4 text-teal-600 dark:text-teal-400 font-bold hover:underline">
-            Go swipe some ideas!
+            {t('liked.emptyCta')}
           </button>
         </div>
       )}

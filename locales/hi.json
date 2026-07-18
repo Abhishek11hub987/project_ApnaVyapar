@@ -5,11 +5,9 @@
   "hero.subtitle": "AI-संचालित मार्गदर्शन, बेहतरीन बिज़नेस आइडिया, और अपना बिज़नेस शुरू करने का स्टेप-बाय-स्टेप रोडमैप पाएं — बिल्कुल मुफ्त।",
   "hero.cta.ideas": "बिज़नेस आइडिया खोजें",
   "hero.cta.chat": "व्यापार मित्र से बात करें",
-  
   "trust.free": "हमेशा के लिए फ्री",
   "trust.ai": "AI-संचालित",
   "trust.india": "भारत के लिए बना",
-  
   "how.title": "यह कैसे काम करता है",
   "how.step1.label": "पहला कदम",
   "how.step1.title": "खोजें",
@@ -20,38 +18,30 @@
   "how.step3.label": "तीसरा कदम",
   "how.step3.title": "लॉन्च करें",
   "how.step3.desc": "कानूनी और सेटअप का स्टेप-बाय-स्टेप रोडमैप पाएं",
-  
   "featured.title": "चुनिंदा आइडिया",
   "featured.viewAll": "सभी देखें",
-  
   "card.investment": "लागत",
   "card.profit": "अनुमानित मुनाफ़ा",
   "card.perMonth": "/महीना",
-  
   "footer.title": "क्या आप अपना खुद का बॉस बनने के लिए तैयार हैं?",
   "footer.desc": "उन हज़ारों नए भारतीय उद्यमियों से जुड़ें जो आज अपने सपनों की शुरुआत कर रहे हैं।",
   "footer.cta": "अपना बिज़नेस आइडिया खोजें",
-
   "nav.home": "होम",
   "nav.ideas": "आइडिया",
   "nav.mitra": "मित्र",
   "nav.tasks": "टास्क",
   "nav.profile": "प्रोफाइल",
-
   "filter.all": "सभी आइडिया",
   "filter.lowInvestment": "कम लागत (< ₹50K)",
   "filter.highProfit": "ज़्यादा मुनाफ़ा",
   "filter.homeBased": "घर से शुरू",
   "filter.online": "ऑनलाइन",
   "filter.offline": "ऑफलाइन",
-
   "ideas.title": "बिज़नेस आइडिया खोजें",
   "ideas.subtitle": "ऐसा बिज़नेस खोजें जो आपके बजट, कौशल और लक्ष्यों के बिल्कुल अनुकूल हो।",
   "ideas.searchPlaceholder": "बिज़नेस खोजें...",
-
   "catalog.title": "बिज़नेस आइडिया खोजें",
   "catalog.subtitle": "भारतीय बाज़ार के लिए चुने गए शानदार बिज़नेस आइडिया। आज ही अपना सफर शुरू करें।",
-  
   "ideaDetail.generateChecklist": "टास्क लिस्ट बनाएं",
   "ideaDetail.goToTasks": "मेरे टास्क पर जाएं",
   "ideaDetail.askMitra": "इसके बारे में व्यापार मित्र से पूछें",
@@ -68,7 +58,6 @@
   "ideaDetail.resourcesNeeded": "आवश्यक संसाधन",
   "ideaDetail.riskAnalysis": "जोखिम विश्लेषण",
   "ideaDetail.successStories": "सफलता की कहानियाँ",
-  
   "auth.signIn": "साइन इन करें",
   "auth.subtitle": "अपने सपनों को साकार करने वाले हज़ारों भारतीय उद्यमियों से जुड़ें।",
   "auth.emailPlaceholder": "अपना ईमेल एड्रेस डालें",
@@ -79,7 +68,6 @@
   "auth.clickToSign": "सुरक्षित रूप से साइन इन करने के लिए उस ईमेल में दिए गए लिंक पर क्लिक करें।",
   "auth.back": "लॉगिन पर वापस जाएं",
   "auth.loggingIn": "लॉग इन हो रहा है...",
-  
   "checklist.title": "मेरे टास्क",
   "checklist.noActive": "कोई सक्रिय टास्क नहीं",
   "checklist.noActiveDesc": "आपने अभी तक कोई टास्क लिस्ट नहीं बनाई है। शुरू करने के लिए बिज़नेस आइडिया खोजें。",
@@ -88,7 +76,6 @@
   "checklist.tasks": "टास्क",
   "checklist.ready": "आप लॉन्च के लिए तैयार हैं!",
   "checklist.readyDesc": "बधाई हो! आपने अपना बिज़नेस शुरू करने के सभी आवश्यक कदम पूरे कर लिए हैं।",
-  
   "profile.title": "आपकी प्रोफाइल",
   "profile.saved": "प्रोफाइल सेव हो गई!",
   "profile.name": "पूरा नाम",
@@ -103,7 +90,6 @@
   "profile.saveButton": "प्रोफाइल सेव करें",
   "profile.saving": "सेव हो रहा है...",
   "profile.signOut": "साइन आउट करें",
-
   "chat.inputPlaceholder": "अपना मैसेज टाइप करें...",
   "chat.thinking": "व्यापार मित्र सोच रहा है...",
   "chat.disclaimer": "AI गलतियाँ कर सकता है। महत्वपूर्ण कानूनी या वित्तीय जानकारी को सत्यापित करें।",
@@ -111,5 +97,34 @@
   "chat.quick1": "क्या इसमें मुनाफा है?",
   "chat.quick2": "मुझे कौन से लाइसेंस चाहिए?",
   "chat.quick3": "फंडिंग कैसे प्राप्त करें?",
-  "chat.quick4": "मुझे एक बिजनेस प्लान दिखाएं"
+  "chat.quick4": "मुझे एक बिजनेस प्लान दिखाएं",
+  "profile.memberSince": "सदस्यता",
+  "profile.editProfile": "प्रोफाइल एडिट करें",
+  "profile.entrepreneur": "उद्यमी",
+  "stats.vyaparScore": "व्यापार स्कोर",
+  "stats.activityStats": "गतिविधि आँकड़े",
+  "stats.ideas": "आइडिया",
+  "stats.chats": "चैट",
+  "stats.checklists": "चेकलिस्ट",
+  "stats.locations": "स्थान",
+  "timeline.title": "गतिविधि टाइमलाइन",
+  "timeline.joinedTitle": "अपना व्यापार से जुड़े",
+  "timeline.joinedDesc": "आपकी उद्यमिता यात्रा शुरू हुई!",
+  "liked.title": "पसंदीदा बिज़नेस आइडिया",
+  "liked.emptyTitle": "आपने अभी तक कोई आइडिया पसंद नहीं किया है।",
+  "liked.emptyCta": "जाओ और आइडिया स्वाइप करो!",
+  "settings.title": "ऐप सेटिंग्स",
+  "settings.theme": "थीम मोड",
+  "settings.system": "सिस्टम",
+  "settings.language": "भाषा",
+  "settings.logout": "लॉग आउट",
+  "editModal.title": "प्रोफाइल एडिट करें",
+  "editModal.phone": "फोन नंबर",
+  "editModal.save": "सेव करें",
+  "editModal.saving": "सेव हो रहा है...",
+  "roulette.ideasLeft": "आइडिया बचे हैं",
+  "roulette.dragOrUse": "खींचें या बटन का प्रयोग करें",
+  "card.trending": "ट्रेंडिंग",
+  "card.location": "स्थान",
+  "card.viewDetails": "विवरण देखें"
 }

@@ -7,6 +7,8 @@ import { Check, X, Heart } from 'lucide-react';
 import Link from 'next/link';
 import { useAuth } from '@/hooks/use-auth';
 import { supabase } from '@/lib/supabase';
+import { useLanguage } from '@/lib/language-context';
+import ideasHi from '@/locales/ideas_hi.json';
 
 interface Idea {
   id: number;
@@ -26,6 +28,7 @@ function IdeaCard({
   onSwipe: (dir: 'left' | 'right') => void;
   isTop: boolean;
 }) {
+  const { language, t } = useLanguage();
   const x = useMotionValue(0);
   const rotate = useTransform(x, [-200, 200], [-20, 20]);
   const opacity = useTransform(x, [-200, -120, 0, 120, 200], [0, 1, 1, 1, 0]);
@@ -106,11 +109,11 @@ function IdeaCard({
         {/* Info */}
         <div className="absolute bottom-0 w-full p-5 text-white">
           <span className="inline-block px-3 py-1 rounded-full bg-teal-500/30 border border-teal-400/50 text-teal-300 text-xs font-bold uppercase tracking-wider mb-2">
-            {idea.category}
+            {language === 'hi' ? ((ideasHi as any)[idea.id]?.category || idea.category) : idea.category}
           </span>
-          <h2 className="text-xl font-extrabold text-white mb-1 leading-tight">{idea.title}</h2>
+          <h2 className="text-xl font-extrabold text-white mb-1 leading-tight">{language === 'hi' ? ((ideasHi as any)[idea.id]?.title || idea.title) : idea.title}</h2>
           <p className="text-teal-200 text-sm font-semibold">
-            Est. ₹{(idea.investment_min ?? 0).toLocaleString('en-IN')} to start
+            {t('card.investment')} ₹{(idea.investment_min ?? 0).toLocaleString('en-IN')}
           </p>
         </div>
       </div>
@@ -123,6 +126,7 @@ export function IdeaRoulette({ ideas }: { ideas: Idea[] }) {
   const [lastAction, setLastAction] = useState<'left' | 'right' | null>(null);
   const { addPoints } = useVyaparScore();
   const { user } = useAuth();
+  const { t } = useLanguage();
 
   const handleSwipe = async (dir: 'left' | 'right') => {
     setLastAction(dir);
@@ -210,7 +214,7 @@ export function IdeaRoulette({ ideas }: { ideas: Idea[] }) {
       </div>
 
       <p className="text-xs text-slate-500 dark:text-slate-400">
-        {deck.length} idea{deck.length !== 1 ? 's' : ''} left • Drag or use buttons
+        {deck.length} {t('roulette.ideasLeft')} • {t('roulette.dragOrUse')}
       </p>
     </div>
   );

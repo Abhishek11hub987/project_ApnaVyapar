@@ -1,0 +1,152 @@
+[
+  {
+    "id": 8,
+    "title": "Online Reselling Business",
+    "description": "Buy wholesale goods (clothing, electronics) and resell them on platforms like Meesho or Amazon.",
+    "category": "Retail"
+  },
+  {
+    "id": 5,
+    "title": "Handmade Jewelry Store",
+    "description": "Design and sell custom terracotta, bead, or polymer clay jewelry online via Instagram/WhatsApp.",
+    "category": "Fashion"
+  },
+  {
+    "id": 4,
+    "title": "Mobile Repair Shop",
+    "description": "Offer smartphone screen replacements, battery fixes, and software troubleshooting.",
+    "category": "Technology"
+  },
+  {
+    "id": 9,
+    "title": "3D Printing Services",
+    "description": "Offer rapid prototyping and custom 3D printed parts for local engineering firms, students, and hobbyists.",
+    "category": "Manufacturing"
+  },
+  {
+    "id": 24,
+    "title": "DJ & Sound Rental",
+    "description": "Rent DJ equipment, speakers, and lights for events and parties.",
+    "category": "Services"
+  },
+  {
+    "id": 7,
+    "title": "Cloud Kitchen",
+    "description": "Operate a delivery-only commercial kitchen specifically optimized for Swiggy/Zomato orders.",
+    "category": "Food"
+  },
+  {
+    "id": 2,
+    "title": "Tuition Center",
+    "description": "Start an after-school tutoring center for local students (classes 1-10) focusing on core subjects.",
+    "category": "Education"
+  },
+  {
+    "id": 6,
+    "title": "Organic Fertilizer Production",
+    "description": "Produce vermicompost or organic manure from organic waste and sell to local farmers and nurseries.",
+    "category": "Agriculture"
+  },
+  {
+    "id": 10,
+    "title": "Yoga/Fitness Coaching",
+    "description": "Provide online and offline personal training or group yoga sessions.",
+    "category": "Health"
+  },
+  {
+    "id": 18,
+    "title": "Bike Rental Service",
+    "description": "Rent bikes to tourists, students, and daily commuters. Start with 3-5 bikes.",
+    "category": "Transportation"
+  },
+  {
+    "id": 19,
+    "title": "Home Cleaning Service",
+    "description": "Professional cleaning for homes, offices, and post-construction sites.",
+    "category": "Services"
+  },
+  {
+    "id": 20,
+    "title": "Packer & Mover Service",
+    "description": "Help families relocate within city or inter-city with packing and transport.",
+    "category": "Services"
+  },
+  {
+    "id": 22,
+    "title": "Event Planning Service",
+    "description": "Plan weddings, birthdays, and corporate events. Start small, scale to full coordination.",
+    "category": "Services"
+  },
+  {
+    "id": 25,
+    "title": "Food Truck Business",
+    "description": "Mobile kitchen serving street food, burgers, or regional cuisine.",
+    "category": "Food"
+  },
+  {
+    "id": 27,
+    "title": "Masala & Spice Grinding",
+    "description": "Grind and pack fresh spices for local markets and kirana stores.",
+    "category": "Food"
+  },
+  {
+    "id": 29,
+    "title": "Freelance Web Development",
+    "description": "Build websites for small businesses using WordPress, Next.js, or Shopify.",
+    "category": "Technology"
+  },
+  {
+    "id": 1,
+    "title": "Home-Based Tiffin Service",
+    "description": "Prepare and deliver home-cooked meals to working professionals and students in your area.",
+    "category": "Food"
+  },
+  {
+    "id": 31,
+    "title": "Mushroom Farming",
+    "description": "Grow oyster or button mushrooms in small space. High demand from hotels.",
+    "category": "Agriculture"
+  },
+  {
+    "id": 17,
+    "title": "Last-Mile Delivery Service",
+    "description": "Partner with Amazon/Flipkart or local e-commerce for package delivery in your area.",
+    "category": "Transportation"
+  },
+  {
+    "id": 21,
+    "title": "Interior Design Consultancy",
+    "description": "Design home and office interiors. Start with 3D renders, scale to full execution.",
+    "category": "Services"
+  },
+  {
+    "id": 3,
+    "title": "Digital Marketing Agency",
+    "description": "Provide SEO, social media management, and paid ads services to local small businesses.",
+    "category": "Services"
+  },
+  {
+    "id": 23,
+    "title": "Photography Business",
+    "description": "Cover weddings, portraits, product shoots, and real estate photography.",
+    "category": "Services"
+  },
+  {
+    "id": 28,
+    "title": "Dropshipping Store",
+    "description": "Sell products online without inventory. Supplier ships directly to customer.",
+    "category": "Technology"
+  },
+  {
+    "id": 26,
+    "title": "Bakery & Cake Shop",
+    "description": "Fresh bread, pastries, and custom birthday/wedding cakes.",
+    "category": "Food"
+  },
+  {
+    "id": 30,
+    "title": "Cyber Cafe & Printing",
+    "description": "Internet, printing, photocopy, and form filling. Still in demand in Tier 2/3 cities.",
+    "category": "Technology"
+  }
+]

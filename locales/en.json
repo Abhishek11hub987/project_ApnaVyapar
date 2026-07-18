@@ -5,11 +5,9 @@
   "hero.subtitle": "Get AI-powered guidance, curated business ideas, and step-by-step roadmaps to launch your dream — all for free.",
   "hero.cta.ideas": "Explore Business Ideas",
   "hero.cta.chat": "Talk to Vyapar Mitra",
-  
   "trust.free": "Free Forever",
   "trust.ai": "AI Powered",
   "trust.india": "Made for India",
-  
   "how.title": "How it works",
   "how.step1.label": "Step 1",
   "how.step1.title": "Discover",
@@ -20,38 +18,30 @@
   "how.step3.label": "Step 3",
   "how.step3.title": "Launch",
   "how.step3.desc": "Get step-by-step legal and setup roadmap",
-  
   "featured.title": "Featured Ideas",
   "featured.viewAll": "View All",
-  
   "card.investment": "Investment",
   "card.profit": "Est. Profit",
   "card.perMonth": "/mo",
-  
   "footer.title": "Ready to become your own boss?",
   "footer.desc": "Join thousands of first-time Indian entrepreneurs launching their dreams today.",
   "footer.cta": "Find My Business Idea",
-
   "nav.home": "Home",
   "nav.ideas": "Ideas",
   "nav.mitra": "Mitra",
   "nav.tasks": "Tasks",
   "nav.profile": "Profile",
-
   "filter.all": "All Ideas",
   "filter.lowInvestment": "Low Investment (< ₹50K)",
   "filter.highProfit": "High Profit",
   "filter.homeBased": "Home Based",
   "filter.online": "Online",
   "filter.offline": "Offline",
-
   "ideas.title": "Discover Business Ideas",
   "ideas.subtitle": "Find the perfect business that matches your budget, skills, and goals.",
   "ideas.searchPlaceholder": "Search businesses...",
-
   "catalog.title": "Discover Business Ideas",
   "catalog.subtitle": "Hand-picked, high-profit ideas curated for the Indian market. Find your perfect fit.",
-  
   "ideaDetail.generateChecklist": "Generate Task List",
   "ideaDetail.goToTasks": "Go to My Tasks",
   "ideaDetail.askMitra": "Ask Vyapar Mitra",
@@ -68,7 +58,6 @@
   "ideaDetail.resourcesNeeded": "Resources Needed",
   "ideaDetail.riskAnalysis": "Risk Analysis",
   "ideaDetail.successStories": "More Success Stories",
-  
   "auth.signIn": "Sign In",
   "auth.subtitle": "Join thousands of Indian entrepreneurs building their dreams.",
   "auth.emailPlaceholder": "Enter your email address",
@@ -79,7 +68,6 @@
   "auth.clickToSign": "Click the link in that email to sign in securely.",
   "auth.back": "Back to login",
   "auth.loggingIn": "Logging in...",
-  
   "checklist.title": "My Tasks",
   "checklist.noActive": "No Active Tasks",
   "checklist.noActiveDesc": "You haven't generated a task list yet. Explore business ideas to get started.",
@@ -88,7 +76,6 @@
   "checklist.tasks": "Tasks",
   "checklist.ready": "You're ready to launch!",
   "checklist.readyDesc": "Congratulations! You've completed all the essential steps to start your business.",
-  
   "profile.title": "Your Profile",
   "profile.saved": "Profile saved!",
   "profile.name": "Full Name",
@@ -103,7 +90,6 @@
   "profile.saveButton": "Save Profile",
   "profile.saving": "Saving...",
   "profile.signOut": "Sign Out",
-
   "chat.inputPlaceholder": "Type your message...",
   "chat.thinking": "Vyapar Mitra is thinking...",
   "chat.disclaimer": "AI can make mistakes. Verify important legal or financial information.",
@@ -111,5 +97,34 @@
   "chat.quick1": "Is this profitable?",
   "chat.quick2": "What licenses do I need?",
   "chat.quick3": "How to get funding?",
-  "chat.quick4": "Show me a business plan"
+  "chat.quick4": "Show me a business plan",
+  "profile.memberSince": "Member since",
+  "profile.editProfile": "Edit Profile",
+  "profile.entrepreneur": "Entrepreneur",
+  "stats.vyaparScore": "Vyapar Score",
+  "stats.activityStats": "Activity Stats",
+  "stats.ideas": "Ideas",
+  "stats.chats": "Chats",
+  "stats.checklists": "Checklists",
+  "stats.locations": "Locations",
+  "timeline.title": "Activity Timeline",
+  "timeline.joinedTitle": "Joined Apna Vyapar",
+  "timeline.joinedDesc": "Your entrepreneurial journey began!",
+  "liked.title": "Liked Business Ideas",
+  "liked.emptyTitle": "You haven't liked any ideas yet.",
+  "liked.emptyCta": "Go swipe some ideas!",
+  "settings.title": "App Settings",
+  "settings.theme": "Theme Mode",
+  "settings.system": "System",
+  "settings.language": "Language",
+  "settings.logout": "Logout",
+  "editModal.title": "Edit Profile",
+  "editModal.phone": "Phone Number",
+  "editModal.save": "Save Changes",
+  "editModal.saving": "Saving...",
+  "roulette.ideasLeft": "ideas left",
+  "roulette.dragOrUse": "Drag or use buttons",
+  "card.trending": "Trending",
+  "card.location": "Location",
+  "card.viewDetails": "View Details"
 }

@@ -20,12 +20,18 @@ export const CATEGORY_IMAGES: Record<string, string> = {
 
 export const DEFAULT_IMAGE = 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800&q=80';
 
+import ideasHi from '@/locales/ideas_hi.json';
+
 export default function IdeaCard({ idea }: { idea: BusinessIdea }) {
-  const { t } = useLanguage();
+  const { language, t } = useLanguage();
   const [imgError, setImgError] = useState(false);
   
   const formatINR = (amount: number) => 
     new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(amount);
+
+  // Dynamic Hindi translation lookup
+  const localizedTitle = language === 'hi' ? (ideasHi as any)[idea.id]?.title || idea.title : idea.title;
+  const localizedCategory = language === 'hi' ? (ideasHi as any)[idea.id]?.category || idea.category : idea.category;
 
   return (
     <div className="h-full">
@@ -34,14 +40,14 @@ export default function IdeaCard({ idea }: { idea: BusinessIdea }) {
         {!imgError ? (
           <img 
             src={idea.image_url || CATEGORY_IMAGES[idea.category] || DEFAULT_IMAGE} 
-            alt={idea.title} 
+            alt={localizedTitle} 
             loading="lazy"
             className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" 
             onError={() => setImgError(true)}
           />
         ) : (
           <div className="w-full h-full bg-gradient-to-br from-teal-500/20 to-emerald-500/20 dark:from-teal-900/40 dark:to-emerald-900/40 flex items-center justify-center text-teal-700 dark:text-teal-400 font-bold text-4xl group-hover:scale-105 transition-transform duration-500">
-            {idea.title.substring(0, 2).toUpperCase()}
+            {localizedTitle.substring(0, 2).toUpperCase()}
           </div>
         )}
         {/* Gradient Overlay */}
@@ -49,17 +55,17 @@ export default function IdeaCard({ idea }: { idea: BusinessIdea }) {
         
         {idea.is_trending && (
           <div className="absolute top-3 right-3 bg-amber-500 text-white text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full shadow-sm z-10 pointer-events-none">
-            Trending
+            {t('card.trending')}
           </div>
         )}
       </div>
       
       <div className="p-5 flex flex-col flex-1">
         <span className="text-xs font-bold text-teal-700 dark:text-teal-300 bg-teal-50 dark:bg-teal-900/40 border border-teal-100 dark:border-teal-800/50 px-2.5 py-1 rounded-full w-fit mb-3">
-          {idea.category}
+          {localizedCategory}
         </span>
         <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100 mb-4 line-clamp-2 leading-[1.3] group-hover:text-teal-700 dark:group-hover:text-teal-400 transition-colors">
-          {idea.title}
+          {localizedTitle}
         </h3>
         
         <div className="mt-auto space-y-3 text-sm text-slate-500 dark:text-slate-400 mb-5">
@@ -70,7 +76,7 @@ export default function IdeaCard({ idea }: { idea: BusinessIdea }) {
             </span>
           </div>
           <div className="flex justify-between items-center px-1">
-            <span className="font-medium">Location</span>
+            <span className="font-medium">{t('card.location')}</span>
             <span className="font-semibold text-slate-700 dark:text-slate-300 capitalize">{idea.location_type.replace('-', ' ')}</span>
           </div>
           <div className="flex justify-between items-center px-1">
@@ -85,7 +91,7 @@ export default function IdeaCard({ idea }: { idea: BusinessIdea }) {
           href={`/ideas/${idea.slug}`}
           className="w-full block text-center bg-white dark:bg-slate-900 hover:bg-teal-700 dark:hover:bg-teal-600 text-teal-700 dark:text-teal-400 hover:text-white border-2 border-teal-100 dark:border-teal-800 hover:border-teal-700 dark:hover:border-teal-600 font-bold py-3 rounded-xl transition-colors"
         >
-          View Details
+          {t('card.viewDetails')}
         </Link>
       </div>
     </GlassCard>

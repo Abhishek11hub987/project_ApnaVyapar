@@ -5,9 +5,6 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 const hind = Hind({ subsets: ["devanagari"], weight: ["400", "500", "600", "700"], variable: "--font-hind" });
 
-import BottomNav from "@/components/layout/bottom-nav";
-import Header from "@/components/layout/header";
-import Footer from "@/components/layout/footer";
 import LoginHandler from "@/components/auth/login-handler";
 import { ClientProviders } from "@/components/providers/client-providers";
 import { Suspense } from "react";
@@ -40,14 +37,7 @@ export default function RootLayout({
       </head>
       <body className={`${inter.className} ${hind.variable} bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-200 antialiased pb-20 md:pb-0 transition-colors`}>
         <ClientProviders>
-          <div className="flex flex-col min-h-screen">
-            <Header />
-            <div className="flex-grow">
-              {children}
-            </div>
-            <Footer />
-            <BottomNav />
-          </div>
+          {children}
           <Suspense fallback={null}>
             <LoginHandler />
           </Suspense>

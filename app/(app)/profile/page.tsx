@@ -13,6 +13,8 @@ import LikedIdeas from '@/components/profile/liked-ideas';
 import SettingsPanel from '@/components/profile/settings-panel';
 import EditProfileModal from '@/components/profile/edit-profile-modal';
 
+import RecommendedIdeas from '@/components/profile/recommended-ideas';
+
 export default function ProfilePage() {
   const { user, isAuthenticated, isLoading: authLoading, logout, initialize } = useAuth();
   const router = useRouter();
@@ -21,6 +23,7 @@ export default function ProfilePage() {
   const [isEditing, setIsEditing] = useState(false);
   const [stats, setStats] = useState({ chats: 0, checklists: 0, ideas: 12, locations: 3 });
   const [savedIdeas, setSavedIdeas] = useState<BusinessIdea[]>([]);
+  const [recommendedIdeas, setRecommendedIdeas] = useState<BusinessIdea[]>([]);
 
   useEffect(() => {
     setMounted(true);
@@ -45,6 +48,13 @@ export default function ProfilePage() {
     
     if (savedData) {
       setSavedIdeas(savedData.map((d: any) => d.business_ideas));
+    }
+
+    // Fetch all ideas for recommendations
+    const { data: allIdeas } = await supabase.from('business_ideas').select('*').eq('is_active', true);
+    if (allIdeas) {
+      const { getRecommendedIdeas } = await import('@/lib/recommendations');
+      setRecommendedIdeas(getRecommendedIdeas(allIdeas, user));
     }
   };
 
@@ -88,6 +98,11 @@ export default function ProfilePage() {
 
         {/* 4. Liked Business Ideas (Full Width) */}
         <LikedIdeas ideas={savedIdeas} />
+
+        {/* 6. Recommended For You */}
+        {recommendedIdeas.length > 0 && (
+          <RecommendedIdeas ideas={recommendedIdeas} />
+        )}
 
         {/* 5. Settings Panel (Full Width) */}
         <SettingsPanel onLogout={handleLogout} />
