@@ -60,7 +60,7 @@ UPDATE business_ideas SET
   resources_needed = '{"Smartphone with good camera", "Ring light", "Aesthetic packaging materials", "Reliable courier partner (Shiprocket)"}',
   risk_analysis = '[{"risk": "High RTO (Return to Origin) rate", "mitigation": "Encourage prepaid orders with a 10% discount; strictly verify COD addresses"}, {"risk": "Supplier stockouts", "mitigation": "Maintain relationships with at least 3 different suppliers"}]',
   success_stories = '[{"name": "Simran Kaur", "city": "Chandigarh", "story": "Started selling sourced ethnic wear on Instagram. Reached 50k followers in a year and now ships pan-India."}]'
-WHERE slug = 'online-reselling';
+WHERE slug = 'online-reselling-business';
 
 -- 6. Yoga/Fitness Coaching
 UPDATE business_ideas SET 
@@ -96,7 +96,7 @@ UPDATE business_ideas SET
   resources_needed = '{"Raw materials and jewelry tools", "Packaging boxes", "Ring light & styling props", "Shipping account"}',
   risk_analysis = '[{"risk": "Design copying", "mitigation": "Build a strong personal brand story so customers buy into YOU, not just the product"}, {"risk": "Fragile items breaking in transit", "mitigation": "Invest in sturdy, bubble-wrapped tin box packaging"}]',
   success_stories = '[{"name": "Kavya Menon", "city": "Chennai", "story": "Started making terracotta earrings as a hobby. Now employs 3 women and exports globally via Etsy."}]'
-WHERE slug = 'handmade-jewelry';
+WHERE slug = 'handmade-jewelry-store';
 
 -- 9. 3D Printing Services
 UPDATE business_ideas SET 
@@ -120,7 +120,7 @@ UPDATE business_ideas SET
   resources_needed = '{"Shaded land (500 sq ft+)", "Cow dung supply", "Earthworms", "Sieving machine", "Packaging materials"}',
   risk_analysis = '[{"risk": "Extreme heat killing worms", "mitigation": "Ensure proper shading, regular watering, and use gunny bags for cooling"}, {"risk": "Pests and ants", "mitigation": "Maintain proper pH and moisture; use natural deterrents around beds"}]',
   success_stories = '[{"name": "Ravi Kumar", "city": "Mysuru", "story": "Started in his backyard. Now processes 5 tons of waste monthly and supplies premium compost to organic farms."}]'
-WHERE slug = 'organic-fertilizer';
+WHERE slug = 'organic-fertilizer-production';
 -- ==============================================================================
 -- PART 2: INSERT NEW IDEAS (11 to 18)
 -- ==============================================================================
@@ -146,7 +146,7 @@ INSERT INTO business_ideas (
   'Bike Rental Service', 'bike-rental-service', 'Transportation',
   'Rent bikes to tourists, students, and daily commuters. Start with 3-5 bikes.',
   50000, 200000, 'physical-shop', 'full-time', 'intermediate', 30000, 80000, true,
-  'https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=800&q=80',
+  'https://images.unsplash.com/photo-1485965120184-e220f721d03e?w=800&q=80',
   '{"market_size": "₹2,500 Crores", "target_audience": "Tourists, college students, outstation employees", "growth_trends": "Growing steadily as micro-mobility gains traction", "demand_india": "High in tourist hubs (Goa, Manali) and student cities (Pune, Kota)"}',
   '{"competitors": ["Bounce", "Royal Brothers", "Local rental shops"], "differentiation": "Well-maintained fleet, transparent pricing with no hidden charges, easy digital booking", "pricing_strategy": "₹300-₹800/day depending on bike model"}',
   '[{"phase": "Week 1", "tasks": ["Obtain commercial registration for 3-5 second-hand bikes", "Get comprehensive insurance"]}, {"phase": "Week 2", "tasks": ["Rent a small parking space near transit hubs", "Print marketing flyers"]}, {"phase": "Month 1", "tasks": ["Tie up with local hostels and budget hotels", "Launch Google My Business page"]}, {"phase": "Month 3", "tasks": ["Launch a simple booking website", "Add 2 premium bikes (e.g., Royal Enfield)"]}]',
@@ -224,7 +224,7 @@ INSERT INTO business_ideas (
   'DJ & Sound Rental', 'dj-sound-rental', 'Services',
   'Rent DJ equipment, speakers, and lights for events and parties.',
   40000, 120000, 'physical-shop', 'part-time', 'intermediate', 20000, 50000, true,
-  'https://images.unsplash.com/photo-1571266028243-e4733b0f0bb0?w=800&q=80',
+  'https://images.unsplash.com/photo-1516873240891-4bf014598ab4?w=800&q=80',
   '{"market_size": "₹15,000 Crores", "target_audience": "Event planners, weddings, corporate parties, college fests", "growth_trends": "Spikes heavily during wedding season (Nov-Feb)", "demand_india": "High in all regions, especially North India"}',
   '{"competitors": ["Large event production companies", "Local tent houses"], "differentiation": "High-quality branded audio (JBL/Pioneer), professional clean cable management, reliable backup systems", "pricing_strategy": "₹5000-₹15000 per night depending on equipment scale"}',
   '[{"phase": "Week 1", "tasks": ["Purchase 2 active tops, 1 subwoofer, a basic mixer, and LED par cans", "Learn sound balancing"]}, {"phase": "Week 2", "tasks": ["Network with local event planners and banquet hall managers", "Print brochures"]}, {"phase": "Month 1", "tasks": ["Execute first 3 events (even at discount) to build relationships", "Gather photos/videos for marketing"]}, {"phase": "Month 3", "tasks": ["Reinvest profits into a DJ console and smoke machine", "Hire a helper for loading/unloading"]}]',
