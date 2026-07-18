@@ -55,7 +55,9 @@ function IdeaCard({
     'from-blue-900 to-slate-900',
     'from-rose-900 to-slate-900',
   ];
-  const gradClass = fallbackGradients[idea.id % fallbackGradients.length];
+  // idea.id is a UUID string, so modulo will result in NaN. Using title length instead for consistent random-like assignment.
+  const hash = idea.title ? idea.title.length : 0;
+  const gradClass = fallbackGradients[hash % fallbackGradients.length];
 
   return (
     <motion.div
