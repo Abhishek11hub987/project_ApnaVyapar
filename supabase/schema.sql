@@ -207,6 +207,22 @@ create policy "Public can view resource locations" on resource_locations for sel
 create index idx_resource_locations_city on resource_locations(city, type);
 
 
+-- 9. SIGNUP ANALYTICS
+create table signup_analytics (
+  id uuid default gen_random_uuid() primary key,
+  user_id uuid references auth.users(id) on delete cascade not null,
+  email text,
+  provider text check (provider in ('email', 'google', 'github')),
+  signup_date timestamp with time zone default timezone('utc'::text, now()),
+  first_name text,
+  city text,
+  is_first_time boolean default true
+);
+
+alter table signup_analytics enable row level security;
+create policy "Service role can manage signups" on signup_analytics for all using (false) with check (false);
+
+
 -- =========================================================================================
 -- SEED DATA (10 BUSINESS IDEAS)
 -- =========================================================================================

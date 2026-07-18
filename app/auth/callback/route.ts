@@ -29,13 +29,45 @@ export async function GET(request: NextRequest) {
       }
     )
 
-    const { error } = await supabase.auth.exchangeCodeForSession(code)
+    const { data: sessionData, error } = await supabase.auth.exchangeCodeForSession(code)
 
-    if (!error) {
+    if (!error && sessionData.user) {
+      // TRACK SIGNUP ANALYTICS
+      try {
+        const { supabaseAdmin } = await import('@/lib/supabase-admin');
+        const user = sessionData.user;
+        const email = user.email;
+        const provider = user.app_metadata?.provider || 'email';
+        const fullName = user.user_metadata?.full_name || '';
+        const firstName = fullName ? fullName.split(' ')[0] : '';
+        
+        // Check if user is already in signup_analytics
+        const { data: existing } = await supabaseAdmin
+          .from('signup_analytics')
+          .select('id')
+          .eq('user_id', user.id)
+          .single();
+          
+        if (!existing) {
+          await supabaseAdmin.from('signup_analytics').insert({
+            user_id: user.id,
+            email: email,
+            provider: provider,
+            first_name: firstName,
+            is_first_time: true
+          });
+          
+          // Append welcome param
+          return NextResponse.redirect(new URL(`${next}${next.includes('?') ? '&' : '?'}welcome=true`, request.url))
+        }
+      } catch (err) {
+        console.error('Analytics tracking error:', err);
+      }
+
       return NextResponse.redirect(new URL(next, request.url))
     } else {
-      console.error('Code exchange error:', error.message)
-      return NextResponse.redirect(new URL(`/?login=true&error=${encodeURIComponent(error.message)}`, request.url))
+      console.error('Code exchange error:', error?.message)
+      return NextResponse.redirect(new URL(`/?login=true&error=${encodeURIComponent(error?.message || 'Unknown error')}`, request.url))
     }
   }
 

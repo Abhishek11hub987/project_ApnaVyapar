@@ -6,6 +6,7 @@ import { Sun, Moon, Globe } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { useAuth } from '@/hooks/use-auth';
+import Logo from '@/components/logo';
 
 export default function Header() {
   const { theme, setTheme } = useTheme();
@@ -23,9 +24,8 @@ export default function Header() {
   return (
     <header className="sticky top-0 z-50 w-full bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800">
       <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
-        <Link href="/" className="font-extrabold text-xl tracking-tight text-teal-700 dark:text-teal-400 flex items-center gap-2">
-          <span className="w-8 h-8 rounded-lg bg-teal-700 text-white flex items-center justify-center text-sm">AV</span>
-          <span className="hidden sm:inline">Apna Vyapar</span>
+        <Link href="/" className="flex items-center gap-2 hover:opacity-90 transition-opacity">
+          <Logo iconSize={32} />
         </Link>
         
         {/* Desktop Navigation */}

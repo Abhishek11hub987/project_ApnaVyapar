@@ -2,6 +2,7 @@
 import Link from 'next/link';
 import { useLanguage } from '@/lib/language-context';
 import { ArrowRight, Bot, ShieldCheck, MapPin, Sparkles, Target, Rocket, TrendingUp, IndianRupee } from 'lucide-react';
+import Logo from '@/components/logo';
 
 export default function Home() {
   const { t } = useLanguage();
@@ -15,7 +16,11 @@ export default function Home() {
         <div className="absolute bottom-10 right-12 w-32 h-32 bg-amber-200/20 dark:bg-amber-500/10 rounded-full blur-2xl" />
         <div className="absolute top-32 right-20 w-16 h-16 bg-emerald-200/15 dark:bg-emerald-500/10 rounded-full blur-xl" />
 
-        <div className="px-4 py-16 md:py-24 max-w-7xl mx-auto flex flex-col items-center text-center relative z-10">
+        <div className="px-4 py-12 md:py-20 max-w-7xl mx-auto flex flex-col items-center text-center relative z-10">
+          <div className="mb-8 animate-fade-in-up">
+            <Logo iconSize={64} showTagline={true} />
+          </div>
+
           <div className="inline-flex items-center gap-2 bg-teal-50 dark:bg-teal-900/30 border border-teal-200 dark:border-teal-800 text-teal-800 dark:text-teal-300 text-xs font-bold uppercase tracking-wider px-4 py-1.5 rounded-full mb-8 animate-fade-in-up">
             <Sparkles size={14} className="text-amber-500 dark:text-amber-400" />
             {t('hero.badge')}

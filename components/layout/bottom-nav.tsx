@@ -2,10 +2,11 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, Lightbulb, MessageSquare, CheckSquare, User } from 'lucide-react';
+import { Lightbulb, MessageSquare, CheckSquare, User } from 'lucide-react';
 import { useAuth } from '@/hooks/use-auth';
 import { useLanguage } from '@/lib/language-context';
 import { useEffect, useState } from 'react';
+import LogoIcon from '@/components/logo-icon';
 
 export default function BottomNav() {
   const pathname = usePathname();
@@ -18,7 +19,7 @@ export default function BottomNav() {
   }, []);
 
   const navItems = [
-    { name: t('nav.home'), href: '/', icon: Home, showAlways: true },
+    { name: t('nav.home'), href: '/', icon: LogoIcon, showAlways: true },
     { name: t('nav.ideas'), href: '/ideas', icon: Lightbulb, showAlways: true },
     { name: t('nav.mitra'), href: '/chat', icon: MessageSquare, showAlways: true },
     { name: t('nav.tasks'), href: '/tasks', icon: CheckSquare, showAlways: false },
