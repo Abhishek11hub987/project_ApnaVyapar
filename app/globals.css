@@ -21,7 +21,16 @@
 }
 
 body {
-  @apply bg-teal-50 text-slate-800 antialiased dark:text-slate-200 transition-colors duration-300;
+  @apply text-slate-800 antialiased dark:text-slate-200 transition-colors duration-300;
+  background-color: #f8fafc;
+  background-image: 
+    radial-gradient(at 0% 0%, hsla(173,100%,96%,1) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, hsla(173,80%,90%,1) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, hsla(38,100%,94%,1) 0px, transparent 50%),
+    linear-gradient(rgba(15, 118, 110, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(15, 118, 110, 0.03) 1px, transparent 1px);
+  background-size: 100% 100%, 100% 100%, 100% 100%, 30px 30px, 30px 30px;
+  background-attachment: fixed;
 }
 
 @layer utilities {

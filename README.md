@@ -1,90 +1,75 @@
-<div align="center">
-  <img src="public/logo.png" alt="Apna Vyapar Logo" width="200" style="border-radius: 20px; margin-bottom: 20px; box-shadow: 0 4px 14px 0 rgba(0,0,0,0.1);" />
-  
-  <h1>🚀 Apna Vyapar</h1>
-  <p><strong>Your Ultimate AI-Powered Business Idea Navigator for India</strong></p>
+# 🚀 Apna Vyapar
 
-  <h3>🔥 <a href="https://your-live-url.vercel.app">Click Here to Use the Live App!</a> 🔥</h3>
-
-  <p>
-    <a href="#features">Features</a> •
-    <a href="#catalog">Business Catalog</a> •
-    <a href="#ai-assistant">Mitra AI</a> •
-    <a href="#for-developers--open-source">For Developers</a>
-  </p>
-</div>
+![Apna Vyapar Logo](public/logo.png){width=200}
 
 ---
 
-## 🌟 Welcome to Apna Vyapar
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Visit%20Now-brightgreen?style=for-the-badge)](https://your-live-url.vercel.app)
 
-**Apna Vyapar** is a premium, beautifully designed open-source web application built to empower aspiring entrepreneurs across India. Instead of vague ideas, Apna Vyapar provides deeply researched, actionable business blueprints. 
+## ✨ Overview
 
-If you just want to find a great business idea, **[use the live app here](https://your-live-url.vercel.app)**! You do not need to download this code to use the app.
-
----
-
-## ✨ Features That Stand Out
-
-- 📚 **Comprehensive 25+ Business Catalog:** Hand-picked, highly profitable business ideas specifically curated for the Indian market.
-- 🤖 **Mitra AI Assistant:** Stuck on a step? Need a custom budget? Chat with our integrated AI assistant powered by Google Gemini.
-- 📊 **Deep Data & Analytics:** Every single business idea comes with Estimated Market Size, Execution Roadmaps, Financial Projections, and Risk Strategies.
-- ✅ **Task Management:** Automatically generate actionable checklists for any business idea.
-- 📱 **Progressive Web App (PWA):** Install Apna Vyapar directly to your mobile phone or desktop for a native app experience.
-- 🇮🇳 **Multi-Language Support:** Seamlessly switch the entire platform between English and Hindi.
+**Apna Vyapar** is a premium, AI‑powered web app that helps aspiring Indian entrepreneurs discover, evaluate, and launch high‑impact business ideas. No local installation required – simply click the **Live Demo** button above to start.
 
 ---
 
-## 🔒 Enterprise-Grade Security
+## 🌟 Features
 
-We take user data seriously. Apna Vyapar is fortified with a **5-Layer Security Architecture**:
-1. **Edge Middleware (RBAC):** Strict Role-Based Access Control ensuring only verified admins can access sensitive routes.
-2. **Server-Side Verification:** Double verification on all secure API routes.
-3. **Database RLS:** Robust Row Level Security (RLS) via Supabase PostgreSQL.
-4. **Anti-Privilege Escalation:** Custom PostgreSQL triggers preventing any malicious role changes.
-5. **Strict Security Headers:** Comprehensive CSP (Content Security Policy), HSTS, and X-Frame-Options.
+- **🔥 25+ Curated Business Ideas** – tailored for the Indian market.
+- **🤖 Mitra AI Assistant** – ask questions, get budgets, step‑by‑step roadmaps.
+- **📊 Deep Analytics** – market size, financial projections, risk strategies.
+- **🗂️ Task Management** – auto‑generated actionable checklists.
+- **📱 Progressive Web App (PWA)** – install on mobile/desktop for a native experience.
+- **🇮🇳 Multi‑Language** – seamless switch between English and Hindi.
+- **💎 Futuristic Glassmorphism UI** – neon glows, glass cards, dark/light themes.
+
+---
+
+## 🛠️ Tech Stack
+
+- **Framework:** Next.js 14 (React, TypeScript)
+- **Styling:** Tailwind CSS with custom glass‑morphism utilities
+- **Database & Auth:** Supabase (Row‑Level Security, RBAC)
+- **AI:** Google Gemini / Groq for Mitra AI
+- **Maps:** Highcharts TopoJSON India map with interactive hover effects
 
 ---
 
-## 💻 For Developers / Open Source
+## 📦 Installation (For Developers)
 
-Apna Vyapar is proudly Open Source! If you are a developer and want to contribute or run the project locally, follow these steps:
+```bash
+# Clone the repository
+git clone https://github.com/Abhishek11hub987/project_ApnaVyapar.git
+cd project_ApnaVyapar
 
-### Tech Stack
-`Next.js 14` • `Tailwind CSS` • `TypeScript` • `Supabase` • `Google Gemini AI`
+# Install dependencies
+npm install
 
-### Local Installation
+# Configure environment variables
+cp .env.local.example .env.local
+# Edit .env.local and add your Supabase & Gemini keys
 
-1. **Clone & Install:**
-   ```bash
-   git clone https://github.com/Abhishek11hub987/project_ApnaVyapar.git
-   cd project_ApnaVyapar
-   npm install
-   ```
-
-2. **Environment Variables:**
-   Create a `.env.local` file using the provided `.env.local.example` and add your keys:
-   ```env
-   NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
-   NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
-   GEMINI_API_KEY=your_gemini_api_key
-   ```
-
-3. **Database Setup:**
-   Run the provided SQL migrations in your Supabase SQL Editor:
-   - `supabase/schema.sql` 
-   - `supabase-secure-role.sql` 
-   - `supabase/migrations/003_enrich_all_ideas.sql` 
-
-4. **Run the Development Server:**
-   ```bash
-   npm run dev
-   ```
-   Open [http://localhost:3000](http://localhost:3000) in your browser.
-
-We welcome pull requests and community contributions! 
+# Run the development server
+npm run dev
+# Open http://localhost:3000 (or 3001 if 3000 is busy)
+```
 
 ---
-<div align="center">
-  <p><i>"The secret of getting ahead is getting started."</i></p>
-</div>
+
+## 🤝 Contributing
+
+We welcome pull requests! Feel free to:
+- Add new business ideas or improve existing ones.
+- Enhance UI/UX with more animations or components.
+- Fix bugs or improve performance.
+
+Please read the **CONTRIBUTING.md** for guidelines.
+
+---
+
+## 📜 License
+
+Distributed under the MIT License. See `LICENSE` for more information.
+
+---
+
+*Built with love for Indian entrepreneurs.*
