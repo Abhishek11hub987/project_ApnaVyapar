@@ -189,11 +189,13 @@ function TasksContent() {
             const { data: insertedTasks, error: taskInsertError } = await supabase
               .from('checklist_tasks')
               .insert(newTasks)
-              .select()
-              .order('sort_order');
+              .select();
             
             if (taskInsertError) {
               console.error('Error inserting tasks:', taskInsertError);
+            } else if (insertedTasks) {
+              // Sort them in memory
+              insertedTasks.sort((a, b) => (a.sort_order || 0) - (b.sort_order || 0));
             }
               
             setTasks(insertedTasks || []);
@@ -281,10 +283,11 @@ function TasksContent() {
           <h1 className="text-2xl md:text-3xl font-extrabold text-slate-900 dark:text-slate-100">{checklist.title}</h1>
           <button 
             onClick={handleDeleteChecklist}
-            className="text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/30 p-2 rounded-full transition-colors flex items-center gap-1"
-            title="Delete Tasks"
+            className="text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/30 px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1.5 text-sm font-semibold border border-transparent hover:border-red-200 dark:hover:border-red-800"
+            title="Delete Checklist"
           >
-            <Trash2 size={20} />
+            <Trash2 size={16} />
+            Delete Checklist
           </button>
         </div>
         <p className="text-slate-500 dark:text-slate-400 mb-6 font-medium">Track your steps from idea to launch.</p>

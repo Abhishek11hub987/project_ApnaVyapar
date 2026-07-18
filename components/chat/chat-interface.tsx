@@ -26,24 +26,19 @@ function ChatContent() {
       if (SpeechRecognition) {
         const recognition = new SpeechRecognition();
         recognition.continuous = false;
-        recognition.interimResults = true;
-        recognition.lang = language === 'english' ? 'en-IN' : 'hi-IN';
-
-        let startingInput = '';
+        recognition.interimResults = false;
+        recognition.lang = language === 'english' ? 'en-US' : 'hi-IN';
 
         recognition.onstart = () => {
           setIsListening(true);
-          // Capture whatever was already typed before starting
-          startingInput = input;
         };
 
         recognition.onresult = (event: any) => {
           let currentTranscript = '';
-          for (let i = 0; i < event.results.length; i++) {
+          for (let i = event.resultIndex; i < event.results.length; i++) {
             currentTranscript += event.results[i][0].transcript;
           }
-          // Append the transcript to what was already typed
-          setInput(startingInput ? startingInput + ' ' + currentTranscript : currentTranscript);
+          setInput(currentTranscript.trim());
         };
 
         recognition.onerror = (event: any) => {
@@ -142,19 +137,42 @@ function ChatContent() {
       const reader = res.body?.getReader();
       const decoder = new TextDecoder();
       let aiResponse = '';
+      let streamBuffer = '';
 
       if (reader) {
         addMessage({ role: 'assistant', content: '' }); // Initial empty message
         while (true) {
           const { done, value } = await reader.read();
-          if (done) break;
+          if (done) {
+            // Process any remaining buffer
+            if (streamBuffer.trim()) {
+              const lines = streamBuffer.split('\n').filter(line => line.trim() !== '');
+              for (const line of lines) {
+                if (line.startsWith('data: ')) {
+                  const data = line.replace('data: ', '');
+                  if (data === '[DONE]') continue;
+                  try {
+                    const parsed = JSON.parse(data);
+                    const token = parsed.choices[0]?.delta?.content || '';
+                    aiResponse += token;
+                    updateLastMessage(aiResponse);
+                  } catch (e) {}
+                }
+              }
+            }
+            break;
+          }
           
           const chunk = decoder.decode(value, { stream: true });
-          const lines = chunk.split('\n').filter(line => line.trim() !== '');
+          streamBuffer += chunk;
+          
+          const lines = streamBuffer.split('\n');
+          streamBuffer = lines.pop() || '';
           
           for (const line of lines) {
-            if (line.startsWith('data: ')) {
-              const data = line.replace('data: ', '');
+            const trimmedLine = line.trim();
+            if (trimmedLine.startsWith('data: ')) {
+              const data = trimmedLine.replace('data: ', '');
               if (data === '[DONE]') continue;
               
               try {

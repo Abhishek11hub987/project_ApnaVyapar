@@ -162,20 +162,44 @@ export async function POST(req: Request) {
     const stream = new ReadableStream({
       async start(controller) {
         let fullResponse = '';
+        let streamBuffer = '';
         try {
           while (true) {
             const { done, value } = await reader.read();
-            if (done) break;
+            if (done) {
+              // Process any remaining buffer
+              if (streamBuffer.trim()) {
+                 const lines = streamBuffer.split('\n').filter(line => line.trim() !== '');
+                 for (const line of lines) {
+                   if (line.startsWith('data: ')) {
+                     const data = line.replace('data: ', '');
+                     if (data === '[DONE]') continue;
+                     try {
+                       const parsed = JSON.parse(data);
+                       const token = parsed.choices[0]?.delta?.content || '';
+                       fullResponse += token;
+                     } catch (e) {}
+                   }
+                 }
+              }
+              break;
+            }
 
             // Forward chunk to client immediately
             controller.enqueue(value);
 
             // Decode and parse chunk to accumulate the final AI response
             const chunk = decoder.decode(value, { stream: true });
-            const lines = chunk.split('\n').filter(line => line.trim() !== '');
+            streamBuffer += chunk;
+            
+            const lines = streamBuffer.split('\n');
+            // Keep the last element in the buffer because it might be incomplete
+            streamBuffer = lines.pop() || '';
+            
             for (const line of lines) {
-              if (line.startsWith('data: ')) {
-                const data = line.replace('data: ', '');
+              const trimmedLine = line.trim();
+              if (trimmedLine.startsWith('data: ')) {
+                const data = trimmedLine.replace('data: ', '');
                 if (data === '[DONE]') continue;
                 try {
                   const parsed = JSON.parse(data);
