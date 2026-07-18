@@ -12,7 +12,7 @@ import { IdeaRoulette } from '@/components/idea-roulette';
 import { BharatMap } from '@/components/bharat-map';
 import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
-import { motion } from 'framer-motion';
+import { motion, Variants } from 'framer-motion';
 
 // ─── Feature list ────────────────────────────────────────────────────
 const FEATURES = [
@@ -67,11 +67,11 @@ const HOW = [
 ];
 
 // ─── Animation ───────────────────────────────────────────────────────
-const fadeUp = {
+const fadeUp: Variants = {
   hidden: { opacity: 0, y: 24 },
   show:   { opacity: 1, y: 0, transition: { duration: 0.5, ease: 'easeOut' } },
 };
-const stagger = { show: { transition: { staggerChildren: 0.1 } } };
+const stagger: Variants = { show: { transition: { staggerChildren: 0.1 } } };
 
 // ─── Card shell — works in light AND dark ────────────────────────────
 function Card({ children, className = '' }: { children: React.ReactNode; className?: string }) {
