@@ -2,16 +2,13 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Lightbulb, MessageSquare, CheckSquare, User } from 'lucide-react';
+import { Home, Lightbulb, MessageSquare, CheckSquare, User } from 'lucide-react';
 import { useAuth } from '@/hooks/use-auth';
-import { useLanguage } from '@/lib/language-context';
 import { useEffect, useState } from 'react';
-import LogoIcon from '@/components/logo-icon';
 
 export default function BottomNav() {
   const pathname = usePathname();
   const { isAuthenticated, isLoading } = useAuth();
-  const { t } = useLanguage();
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -19,27 +16,40 @@ export default function BottomNav() {
   }, []);
 
   const navItems = [
-    { name: t('nav.home'), href: '/', icon: LogoIcon, showAlways: true },
-    { name: t('nav.ideas'), href: '/ideas', icon: Lightbulb, showAlways: true },
-    { name: t('nav.mitra'), href: '/chat', icon: MessageSquare, showAlways: true },
-    { name: t('nav.tasks'), href: '/tasks', icon: CheckSquare, showAlways: false },
-    { name: t('nav.profile'), href: '/profile', icon: User, showAlways: false },
+    { name: 'Home', href: '/ideas', icon: Home },
+    { name: 'Ideas', href: '/ideas', icon: Lightbulb },
+    { name: 'Mitra', href: '/chat', icon: MessageSquare },
+    { name: 'Tasks', href: '/tasks', icon: CheckSquare },
+    { name: 'Profile', href: '/profile', icon: User },
   ];
 
-  if (!mounted) return null; // Avoid hydration mismatch on auth state
+  if (!mounted || !isAuthenticated) return null; // Avoid hydration mismatch, only show if logged in
 
   return (
     <div className="fixed bottom-0 left-0 right-0 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-t border-slate-200 dark:border-slate-800 pb-safe z-50 shadow-[0_-4px_20px_rgba(0,0,0,0.06)] transition-colors md:hidden">
       <div className="flex justify-around items-center px-2 py-2.5 max-w-md mx-auto">
-        {navItems.map((item) => {
-          if (!item.showAlways && !isAuthenticated) return null;
+        {navItems.map((item, idx) => {
+          // If Home and Ideas both point to /ideas, highlight Home for exactly /ideas, 
+          // and maybe we just deduplicate or let both highlight. We will deduplicate visually if needed.
+          // The simplest is to just highlight the one that matches.
+          let isActive = pathname.startsWith(item.href);
           
-          const isActive = pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href));
+          // Special handling if both Home and Ideas point to /ideas
+          if (item.name === 'Home' && pathname === '/ideas') {
+             isActive = true;
+          } else if (item.name === 'Ideas' && pathname === '/ideas') {
+             isActive = false; // Only highlight Home when on /ideas exactly
+          } else if (item.name === 'Ideas' && pathname.startsWith('/ideas/')) {
+             isActive = true; // highlight Ideas if they are viewing a specific idea
+          } else if (item.name === 'Home') {
+             isActive = false;
+          }
+
           const Icon = item.icon;
           
           return (
             <Link
-              key={item.name}
+              key={item.name + idx}
               href={item.href}
               className={`flex flex-col items-center justify-center w-16 h-12 rounded-xl transition-all ${
                 isActive 

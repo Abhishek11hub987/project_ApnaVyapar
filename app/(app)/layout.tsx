@@ -1,8 +1,8 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import Sidebar from '@/components/layout/sidebar';
-import TopBar from '@/components/layout/top-bar';
+import { useEffect, useState } from 'react';
+import Header from '@/components/layout/header';
+import BottomNav from '@/components/layout/bottom-nav';
 import { useAuth } from '@/hooks/use-auth';
 import { useRouter, usePathname } from 'next/navigation';
 
@@ -11,10 +11,14 @@ export default function AppLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-  const { user, isAuthenticated, isLoading, logout } = useAuth();
+  const { user, isAuthenticated, isLoading } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     if (!isLoading && isAuthenticated && user) {
@@ -24,25 +28,17 @@ export default function AppLayout({
     }
   }, [user, isAuthenticated, isLoading, pathname, router]);
 
-  const handleLogout = () => {
-    logout();
-    router.push('/');
-  };
+  if (!mounted) return null;
 
   return (
-    <div className="flex h-screen overflow-hidden bg-slate-50 dark:bg-slate-950">
-      <Sidebar 
-        isOpen={sidebarOpen} 
-        onClose={() => setSidebarOpen(false)} 
-        onLogout={handleLogout}
-      />
+    <div className="flex flex-col min-h-screen bg-slate-50 dark:bg-slate-950">
+      <Header />
       
-      <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
-        <TopBar onMenuClick={() => setSidebarOpen(true)} />
-        <main className="flex-1 overflow-y-auto">
-          {children}
-        </main>
-      </div>
+      <main className="flex-1 overflow-y-auto pb-20 md:pb-0">
+        {children}
+      </main>
+      
+      <BottomNav />
     </div>
   );
 }
