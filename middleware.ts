@@ -88,11 +88,6 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL('/?login=true', request.url))
   }
 
-  // Redirect authenticated users away from the landing page
-  if (user && request.nextUrl.pathname === '/') {
-    return NextResponse.redirect(new URL('/ideas', request.url))
-  }
-
   return response
 }
 

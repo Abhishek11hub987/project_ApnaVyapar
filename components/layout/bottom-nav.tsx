@@ -16,7 +16,7 @@ export default function BottomNav() {
   }, []);
 
   const navItems = [
-    { name: 'Home', href: '/ideas', icon: Home },
+    { name: 'Home', href: '/', icon: Home },
     { name: 'Ideas', href: '/ideas', icon: Lightbulb },
     { name: 'Mitra', href: '/chat', icon: MessageSquare },
     { name: 'Tasks', href: '/tasks', icon: CheckSquare },
@@ -29,21 +29,10 @@ export default function BottomNav() {
     <div className="fixed bottom-0 left-0 right-0 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-t border-slate-200 dark:border-slate-800 pb-safe z-50 shadow-[0_-4px_20px_rgba(0,0,0,0.06)] transition-colors md:hidden">
       <div className="flex justify-around items-center px-2 py-2.5 max-w-md mx-auto">
         {navItems.map((item, idx) => {
-          // If Home and Ideas both point to /ideas, highlight Home for exactly /ideas, 
-          // and maybe we just deduplicate or let both highlight. We will deduplicate visually if needed.
-          // The simplest is to just highlight the one that matches.
-          let isActive = pathname.startsWith(item.href);
-          
-          // Special handling if both Home and Ideas point to /ideas
-          if (item.name === 'Home' && pathname === '/ideas') {
-             isActive = true;
-          } else if (item.name === 'Ideas' && pathname === '/ideas') {
-             isActive = false; // Only highlight Home when on /ideas exactly
-          } else if (item.name === 'Ideas' && pathname.startsWith('/ideas/')) {
-             isActive = true; // highlight Ideas if they are viewing a specific idea
-          } else if (item.name === 'Home') {
-             isActive = false;
-          }
+          const isActive =
+            item.href === '/'
+              ? pathname === '/'
+              : pathname.startsWith(item.href);
 
           const Icon = item.icon;
           
