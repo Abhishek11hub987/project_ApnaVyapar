@@ -71,7 +71,7 @@ function IdeaCard({
         {idea.image_url && !isEmoji && (
           <div 
             className="absolute inset-0" 
-            style={{ backgroundImage: `url(${idea.image_url})`, backgroundSize: 'cover', backgroundPosition: 'center' }} 
+            style={{ backgroundImage: `url('${idea.image_url}')`, backgroundSize: 'cover', backgroundPosition: 'center' }} 
           />
         )}
 
