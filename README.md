@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=800&q=80" alt="Apna Vyapar Banner" width="100%" style="border-radius: 12px; margin-bottom: 20px;" />
+  <img src="public/logo.png" alt="Apna Vyapar Logo" width="200" style="border-radius: 20px; margin-bottom: 20px; box-shadow: 0 4px 14px 0 rgba(0,0,0,0.1);" />
   
   <h1>🚀 Apna Vyapar</h1>
   <p><strong>Your Ultimate AI-Powered Business Idea Navigator for India</strong></p>
