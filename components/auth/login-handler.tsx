@@ -21,10 +21,19 @@ export default function LoginHandler() {
   useEffect(() => {
     if (isLoading) return;
 
-    if (searchParams.get('login') === 'true' && !isAuthenticated) {
+    if (searchParams.get('login') !== 'true') return;
+
+    if (!isAuthenticated) {
       setIsModalOpen(true);
+      return;
     }
-  }, [searchParams, isAuthenticated, isLoading]);
+
+    // Already logged in — strip login param without showing modal
+    const newSearchParams = new URLSearchParams(searchParams.toString());
+    newSearchParams.delete('login');
+    const newUrl = `${pathname}${newSearchParams.toString() ? `?${newSearchParams.toString()}` : ''}`;
+    router.replace(newUrl, { scroll: false });
+  }, [searchParams, isAuthenticated, isLoading, pathname, router]);
 
   const handleClose = () => {
     setIsModalOpen(false);
