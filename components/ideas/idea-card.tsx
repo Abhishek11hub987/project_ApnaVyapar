@@ -2,6 +2,21 @@ import Link from 'next/link';
 import { BusinessIdea } from '@/types/database';
 import { useLanguage } from '@/lib/language-context';
 
+export const CATEGORY_IMAGES: Record<string, string> = {
+  'Food': 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=800&q=80',
+  'Education': 'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=800&q=80',
+  'Technology': 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=800&q=80',
+  'Services': 'https://images.unsplash.com/photo-1521791136064-7986c2920216?w=800&q=80',
+  'Retail': 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800&q=80',
+  'Manufacturing': 'https://images.unsplash.com/photo-1565439386341-a1e4c76085a8?w=800&q=80',
+  'Agriculture': 'https://images.unsplash.com/photo-1625246333195-78d9c38ad449?w=800&q=80',
+  'Health': 'https://images.unsplash.com/photo-1505751172876-fa1923c5c528?w=800&q=80',
+  'Fashion': 'https://images.unsplash.com/photo-1445205170230-053b83016050?w=800&q=80',
+  'Transportation': 'https://images.unsplash.com/photo-1449844908441-8829872d2607?w=800&q=80',
+};
+
+export const DEFAULT_IMAGE = 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800&q=80';
+
 export default function IdeaCard({ idea }: { idea: BusinessIdea }) {
   const { t } = useLanguage();
   
@@ -12,13 +27,11 @@ export default function IdeaCard({ idea }: { idea: BusinessIdea }) {
     <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden flex flex-col group hover:shadow-lg hover:-translate-y-1 hover:border-teal-300 dark:hover:border-teal-700 transition-all duration-300">
       {/* Image Placeholder */}
       <div className="h-40 bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-5xl relative overflow-hidden">
-        {idea.image_url ? (
-          <img src={idea.image_url} alt={idea.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-        ) : (
-          <div className="w-full h-full bg-teal-50 dark:bg-slate-800 flex items-center justify-center text-teal-700 dark:text-teal-400 font-bold text-3xl opacity-50 group-hover:scale-105 transition-transform duration-500">
-            {idea.title.substring(0, 2).toUpperCase()}
-          </div>
-        )}
+        <img 
+          src={idea.image_url || CATEGORY_IMAGES[idea.category] || DEFAULT_IMAGE} 
+          alt={idea.title} 
+          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
+        />
         {idea.is_trending && (
           <div className="absolute top-3 right-3 bg-amber-500 dark:bg-amber-600 text-white text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded-full shadow-sm">
             Trending

@@ -57,7 +57,24 @@ export async function GET(request: NextRequest) {
             is_first_time: true
           });
           
-          // Append welcome param
+          // Create Welcome Chat Session
+          const welcomeMessage = { 
+            role: 'assistant', 
+            content: `Welcome to Apna Vyapar${firstName ? `, ${firstName}` : ''}! 👋\n\nI am Vyapar Mitra, your AI business assistant. Whether you're looking for the right business idea, trying to understand legal registrations, or need a step-by-step launch plan, I'm here to help.\n\nWhat kind of business are you interested in starting today?` 
+          };
+          
+          const { data: newSession } = await supabaseAdmin.from('chat_sessions').insert({
+            user_id: user.id,
+            title: 'Welcome to Apna Vyapar!',
+            messages: [welcomeMessage],
+            message_count: 1
+          }).select('id').single();
+          
+          if (newSession) {
+            return NextResponse.redirect(new URL(`/chat?session=${newSession.id}&welcome=true`, request.url))
+          }
+          
+          // Fallback if chat creation fails
           return NextResponse.redirect(new URL(`${next}${next.includes('?') ? '&' : '?'}welcome=true`, request.url))
         }
       } catch (err) {

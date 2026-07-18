@@ -3,6 +3,7 @@ import { Bot, CheckCircle, FileText, MapPin, Briefcase, Clock, IndianRupee, Shie
 import Link from 'next/link';
 import { BusinessIdea } from '@/types/database';
 import { useLanguage } from '@/lib/language-context';
+import { CATEGORY_IMAGES, DEFAULT_IMAGE } from './idea-card';
 
 export default function IdeaDetailClient({ idea }: { idea: BusinessIdea }) {
   const { t } = useLanguage();
@@ -16,6 +17,7 @@ export default function IdeaDetailClient({ idea }: { idea: BusinessIdea }) {
   const locationType = idea.location_type || '';
   const timeCommitment = idea.time_commitment || 'Flexible';
   const skillLevel = idea.skill_level || 'Beginner';
+  const imageUrl = idea.image_url || CATEGORY_IMAGES[idea.category] || DEFAULT_IMAGE;
 
   return (
     <main className="min-h-screen bg-slate-50 dark:bg-slate-950 pb-32 font-sans transition-colors">
@@ -23,36 +25,36 @@ export default function IdeaDetailClient({ idea }: { idea: BusinessIdea }) {
       <div className="relative bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
         
         {/* Background Image with Gradient Overlay */}
-        {idea.image_url && (
+        {imageUrl && (
           <>
             <div className="absolute inset-0 z-0">
-              <img src={idea.image_url} alt={idea.title} className="w-full h-full object-cover" />
+              <img src={imageUrl} alt={idea.title} className="w-full h-full object-cover" />
             </div>
             <div className="absolute inset-0 z-0 bg-gradient-to-t from-slate-900/90 via-slate-900/70 to-slate-900/40 dark:from-slate-950/95 dark:via-slate-950/80 dark:to-slate-950/50" />
           </>
         )}
 
-        <div className={`relative z-10 pt-6 pb-16 px-4 ${idea.image_url ? 'text-white' : ''}`}>
+        <div className={`relative z-10 pt-6 pb-16 px-4 ${imageUrl ? 'text-white' : ''}`}>
           <div className="max-w-5xl mx-auto">
-            <Link href="/ideas" className={`inline-flex items-center gap-2 text-sm font-bold mb-8 transition-colors ${idea.image_url ? 'text-slate-300 hover:text-white' : 'text-slate-500 dark:text-slate-400 hover:text-teal-700 dark:hover:text-teal-400'}`}>
+            <Link href="/ideas" className={`inline-flex items-center gap-2 text-sm font-bold mb-8 transition-colors ${imageUrl ? 'text-slate-300 hover:text-white' : 'text-slate-500 dark:text-slate-400 hover:text-teal-700 dark:hover:text-teal-400'}`}>
               <ArrowLeft size={18} /> Back to Catalog
             </Link>
 
             <div className="flex flex-wrap items-center gap-3 mb-5">
-              <span className={`px-4 py-1.5 rounded-full text-xs font-black tracking-widest uppercase border ${idea.image_url ? 'bg-teal-500/20 text-teal-300 border-teal-500/30' : 'bg-teal-100 dark:bg-teal-900/40 text-teal-800 dark:text-teal-300 border-teal-200 dark:border-teal-800/50'}`}>
+              <span className={`px-4 py-1.5 rounded-full text-xs font-black tracking-widest uppercase border ${imageUrl ? 'bg-teal-500/20 text-teal-300 border-teal-500/30' : 'bg-teal-100 dark:bg-teal-900/40 text-teal-800 dark:text-teal-300 border-teal-200 dark:border-teal-800/50'}`}>
                 {idea.category}
               </span>
               {idea.is_trending && (
-                <span className={`px-4 py-1.5 rounded-full text-xs font-black tracking-widest uppercase flex items-center gap-1.5 border ${idea.image_url ? 'bg-amber-500/20 text-amber-300 border-amber-500/30' : 'bg-amber-100 dark:bg-amber-900/40 text-amber-800 dark:text-amber-400 border-amber-200 dark:border-amber-800/50'}`}>
+                <span className={`px-4 py-1.5 rounded-full text-xs font-black tracking-widest uppercase flex items-center gap-1.5 border ${imageUrl ? 'bg-amber-500/20 text-amber-300 border-amber-500/30' : 'bg-amber-100 dark:bg-amber-900/40 text-amber-800 dark:text-amber-400 border-amber-200 dark:border-amber-800/50'}`}>
                   <TrendingUp size={14} /> Trending Now
                 </span>
               )}
             </div>
 
-            <h1 className={`text-3xl md:text-5xl font-extrabold leading-[1.1] mb-5 tracking-tight ${idea.image_url ? 'text-white' : 'text-slate-900 dark:text-slate-100'}`}>
+            <h1 className={`text-3xl md:text-5xl font-extrabold leading-[1.1] mb-5 tracking-tight ${imageUrl ? 'text-white' : 'text-slate-900 dark:text-slate-100'}`}>
               {idea.title}
             </h1>
-            <p className={`text-lg md:text-xl leading-relaxed max-w-3xl font-medium ${idea.image_url ? 'text-slate-200' : 'text-slate-600 dark:text-slate-400'}`}>
+            <p className={`text-lg md:text-xl leading-relaxed max-w-3xl font-medium ${imageUrl ? 'text-slate-200' : 'text-slate-600 dark:text-slate-400'}`}>
               {idea.description}
             </p>
           </div>
