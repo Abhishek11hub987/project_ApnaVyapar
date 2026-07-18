@@ -1,76 +1,63 @@
-# Apna Vyapar - AI-Powered Business Idea Navigator 🚀
+<div align="center">
+  <img src="https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=800&q=80" alt="Apna Vyapar Banner" width="100%" style="border-radius: 12px; margin-bottom: 20px;" />
+  
+  <h1>🚀 Apna Vyapar</h1>
+  <p><strong>Your Ultimate AI-Powered Business Idea Navigator for India</strong></p>
 
-Apna Vyapar is a modern, Next.js-based web application designed to empower aspiring entrepreneurs in India. It provides an enriched catalog of deeply researched business ideas, complete with localized market analysis, financial projections, interactive roadmaps, and an AI-powered assistant (Mitra) to guide users step-by-step from idea to execution.
+  <p>
+    <a href="#features">Features</a> •
+    <a href="#catalog">Business Catalog</a> •
+    <a href="#ai-assistant">Mitra AI</a> •
+    <a href="#security">Security</a>
+  </p>
+</div>
 
-## 🌟 Key Features
+---
 
-- **Comprehensive Business Catalog:** 25+ meticulously detailed business ideas tailored for the Indian market, covering categories like Food, Retail, Technology, Services, and Agriculture.
-- **Deep Data & Analytics:** Every business idea includes:
-  - Market Size & Demand Analysis
-  - Step-by-Step Execution Roadmaps
+## 🌟 Welcome to Apna Vyapar
+
+**Apna Vyapar** is a premium, beautifully designed web application built to empower aspiring entrepreneurs across India. Instead of vague ideas, Apna Vyapar provides deeply researched, actionable business blueprints. 
+
+From hyper-local market analysis and realistic financial projections to interactive roadmaps and risk mitigation strategies, this platform gives you everything you need to take your first step into the business world.
+
+---
+
+## ✨ Features That Stand Out
+
+- 📚 **Comprehensive 25+ Business Catalog:** Hand-picked, highly profitable business ideas specifically curated for the Indian market—ranging from Cloud Kitchens and Drone Mapping to Mobile Repair and Mushroom Farming.
+- 🤖 **Mitra AI Assistant:** Stuck on a step? Need a custom budget? Chat with our integrated AI assistant powered by Google Gemini. It acts as your personalized business consultant.
+- 📊 **Deep Data & Analytics:** Every single business idea comes with:
+  - Estimated Market Size & Demand Analysis
+  - Interactive Step-by-Step Execution Roadmaps
   - Financial Projections & Break-Even Timelines
-  - Real-World Success Stories in India
+  - Real-World Indian Success Stories
   - Risk Analysis & Mitigation Strategies
-- **Mitra AI Assistant:** An integrated chatbot powered by Gemini, allowing users to ask context-aware questions about any business idea, calculate custom budgets, and seek localized advice.
-- **Task Management:** Automatically generate actionable, step-by-step checklists for any selected business idea to track progress.
-- **Progressive Web App (PWA):** fully installable on mobile and desktop for a native-like experience.
-- **Multi-Language Support:** Seamlessly switch between English and Hindi.
-- **Secure Admin Dashboard:** A dedicated, hidden `/admin` panel to track user signups and analytics, protected by a 5-layer enterprise-grade security architecture.
+- ✅ **Task Management:** Automatically generate actionable checklists for any business idea so you can track your progress day by day.
+- 📱 **Progressive Web App (PWA):** Install Apna Vyapar directly to your mobile phone or desktop for a lightning-fast, native app experience.
+- 🇮🇳 **Multi-Language Support:** Seamlessly switch the entire platform between English and Hindi.
 
-## 🛠️ Technology Stack
+---
 
-- **Frontend:** [Next.js 14](https://nextjs.org/) (App Router), React, TypeScript
-- **Styling:** [Tailwind CSS](https://tailwindcss.com/), Lucide Icons
-- **Backend/Database:** [Supabase](https://supabase.com/) (PostgreSQL, Authentication)
-- **AI Integration:** Google Gemini API
-- **PWA:** `next-pwa`
+## 🔒 Enterprise-Grade Security
 
-## 🔒 5-Layer Security Architecture
+We take user data seriously. Apna Vyapar is fortified with a **5-Layer Security Architecture**:
+1. **Edge Middleware (RBAC):** Strict Role-Based Access Control ensuring only verified admins can access sensitive routes.
+2. **Server-Side Verification:** Double verification on all secure API routes.
+3. **Database RLS:** Robust Row Level Security (RLS) via Supabase PostgreSQL, ensuring users can only access their own data.
+4. **Anti-Privilege Escalation:** Custom PostgreSQL triggers preventing any malicious role changes.
+5. **Strict Security Headers:** Comprehensive CSP (Content Security Policy), HSTS, and X-Frame-Options to prevent XSS and clickjacking.
 
-Apna Vyapar implements rigorous security standards to protect both user data and admin routes:
+---
 
-1. **Edge Middleware (Route Protection):** Intercepts requests before they hit the server. Verifies active sessions and enforces Role-Based Access Control (RBAC) to block non-admins from `/admin` routes entirely (Returns HTTP 403).
-2. **Server-Side Verification:** Server components perform a secondary check against the database to ensure the user hasn't spoofed their session data.
-3. **Database Row Level Security (RLS):** Policies are enforced at the PostgreSQL level. Non-admins cannot run `SELECT`, `UPDATE`, or `DELETE` queries on secure tables (like `profiles` or analytics tables).
-4. **Anti-Privilege Escalation Triggers:** A custom SQL trigger (`prevent_role_modification()`) monitors the `profiles` table. It ensures that regular authenticated users cannot maliciously update their own profile to assign themselves the `admin` role via the client API.
-5. **Strict Security Headers (CSP & HSTS):** The `next.config.js` enforces `Strict-Transport-Security`, `X-Frame-Options (DENY)`, `X-Content-Type-Options (nosniff)`, and a robust Content Security Policy (CSP) to prevent XSS, clickjacking, and packet sniffing.
+## 🛠️ Built With Modern Tech
 
-## 🚀 Getting Started
+<div align="center">
+  <code>Next.js 14</code> • <code>Tailwind CSS</code> • <code>TypeScript</code> • <code>Supabase</code> • <code>Google Gemini AI</code>
+</div>
 
-### Prerequisites
-- Node.js 18+
-- A Supabase Project
-- A Gemini API Key
+---
 
-### Installation
-
-1. **Clone the repository & Install Dependencies:**
-   ```bash
-   npm install
-   ```
-
-2. **Environment Variables:**
-   Create a `.env.local` file in the root directory and add the following:
-   ```env
-   NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
-   NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
-   GEMINI_API_KEY=your_gemini_api_key
-   ```
-
-3. **Database Setup:**
-   Run the provided SQL migrations in your Supabase SQL Editor:
-   - `supabase/schema.sql` (Creates tables, RLS policies, and seed data)
-   - `supabase-secure-role.sql` (Creates the security trigger)
-   - `supabase/migrations/003_enrich_all_ideas.sql` (Populates the 25 in-depth business ideas)
-
-4. **Run the Development Server:**
-   ```bash
-   npm run dev
-   ```
-   Open [http://localhost:3000](http://localhost:3000) in your browser.
-
-## 📱 PWA Configuration
-The app is configured as a Progressive Web App. To test it, build the application for production (`npm run build` & `npm run start`). You will see an install icon in the URL bar in supported browsers (like Chrome).
-
-## 📄 License
-This project is proprietary and confidential.
+<div align="center">
+  <p><i>"The secret of getting ahead is getting started."</i></p>
+  <p><strong>Start your entrepreneurial journey with Apna Vyapar today!</strong></p>
+</div>
