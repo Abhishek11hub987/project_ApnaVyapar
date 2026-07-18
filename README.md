@@ -126,7 +126,7 @@ We welcome all contributions! Please read our [**CONTRIBUTING.md**](CONTRIBUTING
 ## 📜 License
 
 Distributed under the **Apna Vyapar Proprietary & Non-Commercial License**. 
-This project is strictly for educational and personal use. **Commercial use, monetization, or copying the core concept to build a competing product is strictly prohibited.** See the `LICENSE` file for full details.
+This project is strictly for educational and personal use. **Commercial use, monetization, or copying the core concept to build a competing product is strictly prohibited.** See the [**LICENSE**](LICENSE) file for full details.
 
 ---
 
