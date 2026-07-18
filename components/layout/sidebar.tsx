@@ -55,18 +55,21 @@ export default function Sidebar({ isOpen, onClose, onLogout }: SidebarProps) {
     <>
       <AnimatePresence>
         {isOpen && (
-          <div className="fixed inset-0 z-50 pointer-events-none">
-            {/* Backdrop overlay */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={onClose}
-              className="absolute inset-0 -z-10 bg-slate-900/40 backdrop-blur-sm lg:hidden pointer-events-auto"
-            />
+          <motion.div
+            key="backdrop"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={onClose}
+            className="fixed inset-0 z-40 bg-slate-900/40 backdrop-blur-sm lg:hidden pointer-events-auto"
+          />
+        )}
+      </AnimatePresence>
 
-          {/* Sidebar */}
+      <AnimatePresence>
+        {isOpen && (
           <motion.aside
+            key="sidebar"
             initial={{ x: '-100%' }}
             animate={{ x: 0 }}
             exit={{ x: '-100%' }}
@@ -87,15 +90,14 @@ export default function Sidebar({ isOpen, onClose, onLogout }: SidebarProps) {
 
             <div className="flex-1 overflow-y-auto py-6 px-4 space-y-1">
               {navItems.map((item, idx) => {
-                // Special check to highlight /ideas instead of having separate /home
                 const isActive = pathname === item.href || (item.name === 'Home' && pathname === '/');
-                // Don't show duplicates if Home and Ideas point to same
                 if (idx === 0 && item.href === '/ideas') return null;
 
                 return (
                   <Link
                     key={item.name}
                     href={item.href}
+                    onClick={onClose}
                     className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${
                       isActive 
                         ? 'bg-teal-50 dark:bg-teal-900/20 text-teal-700 dark:text-teal-400 font-bold' 
@@ -120,6 +122,7 @@ export default function Sidebar({ isOpen, onClose, onLogout }: SidebarProps) {
                 <Link
                   key={item.name}
                   href={item.href}
+                  onClick={onClose}
                   className="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/50 hover:text-slate-900 dark:hover:text-slate-200 font-medium text-sm transition-all"
                 >
                   <item.icon size={18} className="opacity-70" />
@@ -132,10 +135,10 @@ export default function Sidebar({ isOpen, onClose, onLogout }: SidebarProps) {
                 className="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/10 font-medium text-sm transition-all mt-2"
               >
                 <LogOut size={18} />
-                </button>
-              </div>
-            </motion.aside>
-          </div>
+                Logout
+              </button>
+            </div>
+          </motion.aside>
         )}
       </AnimatePresence>
     </>
