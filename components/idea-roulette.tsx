@@ -42,10 +42,6 @@ function IdeaCard({
 
   // Check if image_url is an actual URL or just an emoji
   const isEmoji = idea.image_url && !idea.image_url.startsWith('http') && !idea.image_url.startsWith('/');
-  
-  const bgStyle = (idea.image_url && !isEmoji)
-    ? { backgroundImage: `url(${idea.image_url})`, backgroundSize: 'cover', backgroundPosition: 'center' }
-    : {};
 
   // Fallback gradient if no image or if it's an emoji
   const fallbackGradients = [
@@ -68,16 +64,24 @@ function IdeaCard({
       onDragEnd={handleDragEnd}
       whileTap={{ scale: 1.02 }}
     >
-      {/* Card */}
-      <div
-        className={`w-full h-full rounded-[20px] overflow-hidden relative shadow-2xl border border-white/10 bg-slate-900 ${(!idea.image_url || isEmoji) ? `bg-gradient-to-br ${gradClass}` : ''}`}
-        style={bgStyle}
-      >
+      {/* Base Card with Gradient */}
+      <div className={`w-full h-full rounded-[20px] overflow-hidden relative shadow-2xl border border-white/10 bg-slate-900 bg-gradient-to-br ${gradClass}`}>
+        
+        {/* Image Layer (will be transparent if URL is broken) */}
+        {idea.image_url && !isEmoji && (
+          <div 
+            className="absolute inset-0" 
+            style={{ backgroundImage: `url(${idea.image_url})`, backgroundSize: 'cover', backgroundPosition: 'center' }} 
+          />
+        )}
+
+        {/* Emoji Layer */}
         {isEmoji && (
           <div className="absolute inset-0 flex items-center justify-center opacity-60">
             <span style={{ fontSize: '8rem' }}>{idea.image_url}</span>
           </div>
         )}
+        
         {/* Overlay gradient */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
 
