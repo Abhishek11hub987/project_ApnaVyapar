@@ -32,14 +32,10 @@ export default function ChatHistorySidebar({ isOpen, onClose, onSelectSession, c
     setLoading(true);
     const { data: { session } } = await supabase.auth.getSession();
     
-    let query = supabase.from('chat_sessions').select('id, title, created_at').order('created_at', { ascending: false });
+    let query = supabase.from('chat_sessions').select('id, title, created_at').order('created_at', { ascending: false }).limit(50);
     
     if (session?.user) {
       query = query.eq('user_id', session.user.id);
-    } else {
-      // If anonymous, just get the last 10 sessions created recently to avoid getting everyone's sessions
-      // A better approach would be local storage for anon users, but this works for MVP
-      query = query.limit(10); 
     }
 
     const { data, error } = await query;
@@ -49,10 +45,14 @@ export default function ChatHistorySidebar({ isOpen, onClose, onSelectSession, c
     setLoading(false);
   };
 
+  const [deletingId, setDeletingId] = useState<string | null>(null);
+
   const deleteSession = async (e: React.MouseEvent, id: string) => {
     e.stopPropagation();
+    setDeletingId(id);
     await supabase.from('chat_sessions').delete().eq('id', id);
     setSessions(sessions.filter(s => s.id !== id));
+    setDeletingId(null);
   };
 
   if (!isOpen) return null;
@@ -116,9 +116,10 @@ export default function ChatHistorySidebar({ isOpen, onClose, onSelectSession, c
                   </div>
                   <button 
                     onClick={(e) => deleteSession(e, session.id)}
-                    className="opacity-0 group-hover:opacity-100 p-1.5 text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded transition-all"
+                    disabled={deletingId === session.id}
+                    className="opacity-0 group-hover:opacity-100 p-1.5 text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded transition-all disabled:opacity-30"
                   >
-                    <Trash2 size={14} />
+                    {deletingId === session.id ? '...' : <Trash2 size={14} />}
                   </button>
                 </div>
               ))}

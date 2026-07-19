@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import Header from '@/components/layout/header';
 import BottomNav from '@/components/layout/bottom-nav';
 import { useAuth } from '@/hooks/use-auth';
@@ -14,12 +14,6 @@ export default function AppLayout({
   const { user, isAuthenticated, isLoading } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
   useEffect(() => {
     if (!isLoading && isAuthenticated && user) {
       if (!user.onboarding_completed && pathname !== '/onboarding') {
@@ -27,8 +21,6 @@ export default function AppLayout({
       }
     }
   }, [user, isAuthenticated, isLoading, pathname, router]);
-
-  if (!mounted) return null;
 
   return (
     <div className="flex flex-col min-h-screen bg-slate-50 dark:bg-slate-950">

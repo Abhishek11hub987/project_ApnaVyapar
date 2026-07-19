@@ -29,11 +29,9 @@ export const useAuth = create<AuthState>()(
       initialize: async () => {
         set({ isLoading: true });
         
-        // Check active Supabase session
         const { data: { session } } = await supabase.auth.getSession();
         
         if (session?.user) {
-          // Fetch profile from Supabase
           const { data: profile } = await supabase
             .from('profiles')
             .select('*')
@@ -52,7 +50,7 @@ export const useAuth = create<AuthState>()(
     }),
     {
       name: 'auth-storage',
-      partialize: (state) => ({ user: state.user }), // Only persist user, not isAuthenticated
+      partialize: (state) => ({ isAuthenticated: state.isAuthenticated }),
     }
   )
 );

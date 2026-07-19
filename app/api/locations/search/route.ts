@@ -14,9 +14,12 @@ export async function GET(req: Request) {
     const lngStr = searchParams.get('lng');
     const limitStr = searchParams.get('limit');
 
-    const lat = latStr ? parseFloat(latStr) : undefined;
-    const lng = lngStr ? parseFloat(lngStr) : undefined;
-    const limit = limitStr ? parseInt(limitStr, 10) : 5;
+    const parsedLat = latStr ? parseFloat(latStr) : NaN;
+    const parsedLng = lngStr ? parseFloat(lngStr) : NaN;
+    const parsedLimit = limitStr ? parseInt(limitStr, 10) : NaN;
+    const lat = isFinite(parsedLat) ? parsedLat : undefined;
+    const lng = isFinite(parsedLng) ? parsedLng : undefined;
+    const limit = isFinite(parsedLimit) && parsedLimit > 0 ? parsedLimit : 5;
 
     // Optional auth check for rate limiting
     const cookieStore = cookies();

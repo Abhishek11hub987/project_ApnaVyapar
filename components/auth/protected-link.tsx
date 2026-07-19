@@ -25,7 +25,7 @@ export default function ProtectedLink({ href, children, onClick, ...props }: Pro
         login: 'true',
         redirect: href,
       });
-      router.push(`${pathname}?${params.toString()}`, { scroll: false });
+      router.push(`${href}?${params.toString()}`, { scroll: false });
     }
   };
 

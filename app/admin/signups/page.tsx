@@ -1,7 +1,7 @@
 import { supabaseAdmin } from '@/lib/supabase-admin';
 import { createServerClient, type CookieOptions } from '@supabase/ssr';
 import { cookies } from 'next/headers';
-import { notFound } from 'next/navigation';
+import { redirect, notFound } from 'next/navigation';
 import { Users, Mail, Clock, Calendar } from 'lucide-react';
 
 export const revalidate = 0; // Disable caching for admin dashboard
@@ -20,9 +20,9 @@ export default async function AdminSignupsPage() {
     }
   );
 
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) {
-    notFound();
+  const { data: { user }, error: authError } = await supabase.auth.getUser();
+  if (authError || !user) {
+    redirect('/?login=true');
   }
 
   const { data: profile } = await supabase.from('profiles').select('role').eq('id', user.id).single();

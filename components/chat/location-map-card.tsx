@@ -22,22 +22,25 @@ export default function LocationMapCard({ typeQuery, userCity }: LocationMapCard
   const { t } = useLanguage();
 
   useEffect(() => {
+    let cancelled = false;
+
     const fetchLocations = async () => {
       setLoading(true);
+      setError('');
       try {
-        // Parse the query. Format from AI is usually [MAP:Type] or [MAP:Type-City]
         const parts = typeQuery.split('-');
         const type = parts[0];
         let city = parts.length > 1 ? parts[1] : userCity;
 
-        // Try getting user's current GPS location first
         if ("geolocation" in navigator) {
           navigator.geolocation.getCurrentPosition(
             async (position) => {
+              if (cancelled) return;
               const { latitude, longitude } = position.coords;
               await fetchWithCoords(type, city, latitude, longitude);
             },
             async (err) => {
+              if (cancelled) return;
               console.log("Geolocation denied or failed, falling back to city.", err);
               await fetchWithCoords(type, city);
             },
@@ -46,8 +49,8 @@ export default function LocationMapCard({ typeQuery, userCity }: LocationMapCard
         } else {
           await fetchWithCoords(type, city);
         }
-      } catch (err: any) {
-        setError(err.message);
+      } catch {
+        setError('Failed to load locations');
         setLoading(false);
       }
     };
@@ -66,15 +69,17 @@ export default function LocationMapCard({ typeQuery, userCity }: LocationMapCard
         const res = await fetch(`/api/locations/search?${queryParams.toString()}`);
         if (!res.ok) throw new Error('Failed to fetch locations');
         const data = await res.json();
-        setLocations(data);
-      } catch (err: any) {
-        setError(err.message);
+        if (!cancelled) setLocations(data);
+      } catch {
+        if (!cancelled) setError('Failed to load locations');
       } finally {
-        setLoading(false);
+        if (!cancelled) setLoading(false);
       }
     };
 
     fetchLocations();
+
+    return () => { cancelled = true; };
   }, [typeQuery, userCity]);
 
   if (loading) {
@@ -93,7 +98,7 @@ export default function LocationMapCard({ typeQuery, userCity }: LocationMapCard
   if (error) {
     return (
       <div className="bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 p-4 rounded-xl border border-red-100 dark:border-red-800 my-2 text-sm">
-        Failed to load map: {error}
+        Could not load nearby offices. Please try again later.
       </div>
     );
   }

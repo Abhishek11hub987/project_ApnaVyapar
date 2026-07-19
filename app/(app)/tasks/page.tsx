@@ -38,8 +38,9 @@ function TasksContent() {
       // Try to find an existing checklist for this user and idea
       let query = supabase.from('checklists').select('*').eq('user_id', user!.id);
       
-      if (ideaId) {
-        query = query.eq('business_idea_id', parseInt(ideaId));
+      const ideaIdNum = ideaId ? parseInt(ideaId, 10) : NaN;
+      if (!isNaN(ideaIdNum)) {
+        query = query.eq('business_idea_id', ideaIdNum);
       }
 
       const { data: existingChecklists } = await query;
@@ -58,10 +59,15 @@ function TasksContent() {
         setTasks(existingTasks || []);
       } else if (ideaId) {
         // Create new checklist based on idea
+      const parsedIdeaId = parseInt(ideaId || '', 10);
+        if (isNaN(parsedIdeaId)) {
+          setLoading(false);
+          return;
+        }
         const { data: idea } = await supabase
           .from('business_ideas')
           .select('*')
-          .eq('id', parseInt(ideaId))
+          .eq('id', parsedIdeaId)
           .single();
 
         if (idea) {
@@ -228,15 +234,27 @@ function TasksContent() {
       .eq('id', taskId);
   };
 
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+
   const handleDeleteChecklist = async () => {
     if (!checklist) return;
-    if (confirm('Are you sure you want to delete this task list?')) {
-      // Because of foreign keys, you may need to delete tasks first or rely on CASCADE. 
-      // Supabase handles cascade if configured, but let's delete tasks manually just in case.
-      await supabase.from('checklist_tasks').delete().eq('checklist_id', checklist.id);
+    setIsDeleting(true);
+    const prevChecklist = checklist;
+    const prevTasks = tasks;
+    setChecklist(null);
+    setTasks([]);
+    const { error } = await supabase.from('checklist_tasks').delete().eq('checklist_id', checklist.id);
+    if (!error) {
       await supabase.from('checklists').delete().eq('id', checklist.id);
-      setChecklist(null);
-      setTasks([]);
+    }
+    if (error) {
+      setChecklist(prevChecklist);
+      setTasks(prevTasks);
+    }
+    setIsDeleting(false);
+    setShowDeleteConfirm(false);
+    if (!error) {
       router.push('/ideas');
     }
   };
@@ -281,14 +299,33 @@ function TasksContent() {
       <div className="mb-8">
         <div className="flex justify-between items-start mb-2">
           <h1 className="text-2xl md:text-3xl font-extrabold text-slate-900 dark:text-slate-100">{checklist.title}</h1>
-          <button 
-            onClick={handleDeleteChecklist}
-            className="text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/30 px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1.5 text-sm font-semibold border border-transparent hover:border-red-200 dark:hover:border-red-800"
-            title="Delete Checklist"
-          >
-            <Trash2 size={16} />
-            Delete Checklist
-          </button>
+          {showDeleteConfirm ? (
+            <div className="flex items-center gap-2">
+              <span className="text-sm text-slate-500">Are you sure?</span>
+              <button 
+                onClick={handleDeleteChecklist}
+                disabled={isDeleting}
+                className="text-white bg-red-600 hover:bg-red-700 px-3 py-1.5 rounded-lg transition-colors text-sm font-semibold disabled:opacity-50"
+              >
+                {isDeleting ? 'Deleting...' : 'Yes, Delete'}
+              </button>
+              <button 
+                onClick={() => setShowDeleteConfirm(false)}
+                className="text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 px-3 py-1.5 rounded-lg transition-colors text-sm font-semibold"
+              >
+                Cancel
+              </button>
+            </div>
+          ) : (
+            <button 
+              onClick={() => setShowDeleteConfirm(true)}
+              className="text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/30 px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1.5 text-sm font-semibold border border-transparent hover:border-red-200 dark:hover:border-red-800"
+              title="Delete Checklist"
+            >
+              <Trash2 size={16} />
+              Delete Checklist
+            </button>
+          )}
         </div>
         <p className="text-slate-500 dark:text-slate-400 mb-6 font-medium">Track your steps from idea to launch.</p>
         

@@ -3,6 +3,20 @@ import { GlassCard } from '@/components/ui/glass-card';
 
 import { useLanguage } from '@/lib/language-context';
 
+const BUDGET_LABELS: Record<string, string> = {
+  'under-10k': 'Under ₹10,000',
+  '10k-50k': '₹10,000 - ₹50,000',
+  '50k-1lakh': '₹50,000 - ₹1 Lakh',
+  '1lakh-5lakh': '₹1 Lakh - ₹5 Lakh',
+  '5lakh-10lakh': '₹5 Lakh - ₹10 Lakh',
+  'above-10lakh': 'Above ₹10 Lakh',
+};
+
+function formatBudget(budget: string | null | undefined): string {
+  if (!budget) return 'Not set';
+  return BUDGET_LABELS[budget] || budget;
+}
+
 interface ProfileHeaderProps {
   user: any;
   onEditClick: () => void;
@@ -88,7 +102,7 @@ export default function ProfileHeader({ user, onEditClick }: ProfileHeaderProps)
           <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Resources</h3>
           <div className="text-sm font-semibold text-slate-700 dark:text-slate-300">
             <span className="text-slate-500 font-medium mr-1">Budget:</span>
-            {user.investment_budget ? `₹${user.investment_budget.toLocaleString('en-IN')}` : 'Not set'}
+            {formatBudget(user.investment_budget)}
           </div>
           <div className="text-sm font-semibold text-slate-700 dark:text-slate-300 mt-1">
             <span className="text-slate-500 font-medium mr-1">Time:</span>

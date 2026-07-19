@@ -5,6 +5,10 @@ import IdeaDetailClient from '@/components/ideas/idea-detail-client';
 export const revalidate = 60;
 
 export default async function IdeaDetailPage({ params }: { params: { slug: string } }) {
+  if (!/^[a-z0-9-]+$/.test(params.slug)) {
+    notFound();
+  }
+
   const { data: idea, error: fetchError } = await supabaseAdmin
     .from('business_ideas')
     .select('*')

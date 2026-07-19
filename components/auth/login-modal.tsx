@@ -18,6 +18,14 @@ export default function LoginModal({ onClose }: LoginModalProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(searchParams.get('error') || '');
 
+  const getAuthCallbackUrl = () => {
+    const redirectTarget = searchParams.get('redirect');
+    if (redirectTarget && redirectTarget.startsWith('/') && !redirectTarget.startsWith('//')) {
+      return `${window.location.origin}/auth/callback?next=${encodeURIComponent(redirectTarget)}`;
+    }
+    return `${window.location.origin}/auth/callback`;
+  };
+
   const handleGithubLogin = async () => {
     try {
       setLoading(true);
@@ -25,7 +33,7 @@ export default function LoginModal({ onClose }: LoginModalProps) {
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'github',
         options: {
-          redirectTo: `${window.location.origin}/auth/callback`,
+          redirectTo: getAuthCallbackUrl(),
         }
       });
       if (error) throw error;
@@ -43,7 +51,7 @@ export default function LoginModal({ onClose }: LoginModalProps) {
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          redirectTo: `${window.location.origin}/auth/callback`,
+          redirectTo: getAuthCallbackUrl(),
           queryParams: {
             access_type: 'offline',
             prompt: 'consent',
@@ -68,7 +76,7 @@ export default function LoginModal({ onClose }: LoginModalProps) {
       const { error } = await supabase.auth.signInWithOtp({
         email,
         options: {
-          emailRedirectTo: `${window.location.origin}/auth/callback`,
+          emailRedirectTo: getAuthCallbackUrl(),
         }
       });
       

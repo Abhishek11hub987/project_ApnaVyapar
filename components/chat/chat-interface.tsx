@@ -20,7 +20,6 @@ function ChatContent() {
   const isSubmittingRef = useRef(false);
 
   useEffect(() => {
-    // Initialize speech recognition if supported
     if (typeof window !== 'undefined') {
       const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
       if (SpeechRecognition) {
@@ -44,17 +43,26 @@ function ChatContent() {
         recognition.onerror = (event: any) => {
           console.error('Speech recognition error:', event.error);
           setIsListening(false);
-          alert('Speech recognition error: ' + event.error);
         };
 
         recognition.onend = () => {
           setIsListening(false);
         };
 
+        if (recognitionRef.current) {
+          recognitionRef.current.abort();
+        }
         recognitionRef.current = recognition;
       }
     }
-  }, [language, input]); // Need input dependency to capture latest input on start, though it resets recognition
+
+    return () => {
+      if (recognitionRef.current) {
+        recognitionRef.current.abort();
+        recognitionRef.current = null;
+      }
+    };
+  }, [language]);
 
   const toggleListening = () => {
     if (isListening) {
@@ -67,16 +75,16 @@ function ChatContent() {
         } catch (e) {
           console.error(e);
         }
-      } else {
-        alert('Speech recognition is not supported in this browser. Please use Chrome.');
       }
     }
   };
 
   useEffect(() => {
     if (businessIdeaId) {
+      const id = parseInt(businessIdeaId, 10);
+      if (isNaN(id)) return;
       import('@/lib/supabase').then(({ supabase }) => {
-        supabase.from('business_ideas').select('title').eq('id', parseInt(businessIdeaId)).single()
+        supabase.from('business_ideas').select('title').eq('id', id).single()
           .then(({ data }) => { if (data) setIdeaTitle(data.title); });
       });
     }
@@ -105,6 +113,8 @@ function ChatContent() {
     }
   }, [sessionId, setMessages]);
 
+  const submitRef = useRef<{ abort: () => void } | null>(null);
+
   const handleSubmit = async (e?: React.FormEvent, overrideInput?: string) => {
     e?.preventDefault();
     const text = overrideInput || input;
@@ -114,6 +124,9 @@ function ChatContent() {
     addMessage({ role: 'user', content: text });
     setLoading(true);
     isSubmittingRef.current = true;
+
+    const abortController = new AbortController();
+    submitRef.current = abortController;
 
     try {
       const res = await fetch('/api/chat', {
@@ -125,6 +138,7 @@ function ChatContent() {
           sessionId,
           businessIdeaId
         }),
+        signal: abortController.signal,
       });
 
       if (!res.ok) throw new Error('Failed to send message');
@@ -140,11 +154,10 @@ function ChatContent() {
       let streamBuffer = '';
 
       if (reader) {
-        addMessage({ role: 'assistant', content: '' }); // Initial empty message
+        addMessage({ role: 'assistant', content: '' });
         while (true) {
           const { done, value } = await reader.read();
           if (done) {
-            // Process any remaining buffer
             if (streamBuffer.trim()) {
               const lines = streamBuffer.split('\n').filter(line => line.trim() !== '');
               for (const line of lines) {
@@ -180,21 +193,27 @@ function ChatContent() {
                 const token = parsed.choices[0]?.delta?.content || '';
                 aiResponse += token;
                 updateLastMessage(aiResponse);
-              } catch (e) {
-                // Ignore parse errors on incomplete chunks
-              }
+              } catch (e) {}
             }
           }
         }
       }
-    } catch (error) {
+    } catch (error: any) {
+      if (error.name === 'AbortError') return;
       console.error(error);
       addMessage({ role: 'assistant', content: 'Sorry, I encountered an error connecting to Vyapar Mitra. Please try again.' });
     } finally {
       setLoading(false);
       isSubmittingRef.current = false;
+      submitRef.current = null;
     }
   };
+
+  useEffect(() => {
+    return () => {
+      submitRef.current?.abort();
+    };
+  }, []);
 
   return (
     <div className="flex flex-col h-[calc(100vh-140px)] md:h-[calc(100vh-200px)] bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden shadow-sm transition-colors">

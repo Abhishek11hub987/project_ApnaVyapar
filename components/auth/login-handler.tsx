@@ -5,6 +5,17 @@ import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 import LoginModal from '@/components/auth/login-modal';
 import { useAuth } from '@/hooks/use-auth';
 
+function isSafeRedirect(path: string | null): path is string {
+  return !!path && path.startsWith('/') && !path.startsWith('//');
+}
+
+function stripLoginParams(pathname: string, searchParams: URLSearchParams) {
+  const newSearchParams = new URLSearchParams(searchParams.toString());
+  newSearchParams.delete('login');
+  newSearchParams.delete('redirect');
+  return `${pathname}${newSearchParams.toString() ? `?${newSearchParams.toString()}` : ''}`;
+}
+
 export default function LoginHandler() {
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -28,22 +39,33 @@ export default function LoginHandler() {
       return;
     }
 
-    // Already logged in — strip login param without showing modal
-    const newSearchParams = new URLSearchParams(searchParams.toString());
-    newSearchParams.delete('login');
-    const newUrl = `${pathname}${newSearchParams.toString() ? `?${newSearchParams.toString()}` : ''}`;
-    router.replace(newUrl, { scroll: false });
-  }, [searchParams, isAuthenticated, isLoading, pathname, router]);
+    const redirect = searchParams.get('redirect');
+    if (isSafeRedirect(redirect)) {
+      router.replace(redirect);
+      return;
+    }
+
+    if (pathname && searchParams.toString()) {
+      router.replace(stripLoginParams(pathname, searchParams), { scroll: false });
+    }
+  }, [searchParams.get('login'), searchParams.get('redirect'), isAuthenticated, isLoading, pathname, router]);
+
+  // After login on the same page, follow redirect target if present
+  useEffect(() => {
+    if (isLoading || !isAuthenticated || !isModalOpen) return;
+
+    const redirect = searchParams.get('redirect');
+    if (isSafeRedirect(redirect)) {
+      setIsModalOpen(false);
+      router.replace(redirect);
+    }
+  }, [isAuthenticated, isLoading, isModalOpen, searchParams, router]);
 
   const handleClose = () => {
     setIsModalOpen(false);
 
-    // Remove ?login=true from URL without reload
     if (searchParams.get('login') === 'true') {
-      const newSearchParams = new URLSearchParams(searchParams.toString());
-      newSearchParams.delete('login');
-      const newUrl = `${pathname}${newSearchParams.toString() ? `?${newSearchParams.toString()}` : ''}`;
-      router.replace(newUrl, { scroll: false });
+      router.replace(stripLoginParams(pathname, searchParams), { scroll: false });
     }
   };
 

@@ -1,5 +1,6 @@
 'use client';
 import Link from 'next/link';
+import ProtectedLink from '@/components/auth/protected-link';
 import { useLanguage } from '@/lib/language-context';
 import {
   ArrowRight, Bot, TrendingUp, BarChart2, Map,
@@ -83,15 +84,32 @@ function Card({ children, className = '' }: { children: React.ReactNode; classNa
 }
 
 // ─── Primary button — navigable ──────────────────────────────────────
-function PrimaryBtn({ href, children, variant = 'teal' }: { href: string; children: React.ReactNode; variant?: 'teal' | 'amber' }) {
+function PrimaryBtn({
+  href,
+  children,
+  variant = 'teal',
+  requireAuth = false,
+}: {
+  href: string;
+  children: React.ReactNode;
+  variant?: 'teal' | 'amber';
+  requireAuth?: boolean;
+}) {
   const cls = variant === 'teal'
     ? 'border-teal-500 text-teal-600 dark:text-teal-400 hover:bg-teal-500 hover:text-white dark:hover:bg-teal-500'
     : 'border-amber-500 text-amber-600 dark:text-amber-400 hover:bg-amber-500 hover:text-white dark:hover:bg-amber-500';
+  const className = `inline-flex items-center gap-2 px-7 py-3 rounded-full border-2 font-bold text-sm tracking-wide transition-all duration-200 ${cls}`;
+
+  if (requireAuth) {
+    return (
+      <ProtectedLink href={href} className={className}>
+        {children}
+      </ProtectedLink>
+    );
+  }
+
   return (
-    <Link
-      href={href}
-      className={`inline-flex items-center gap-2 px-7 py-3 rounded-full border-2 font-bold text-sm tracking-wide transition-all duration-200 ${cls}`}
-    >
+    <Link href={href} className={className}>
       {children}
     </Link>
   );
@@ -111,13 +129,13 @@ export default function Home() {
       .eq('is_active', true)
       .then(({ count }) => setIdeaCount(count ?? 0));
 
-    // Ideas for roulette
+    // Ideas for roulette — random selection
     supabase
       .from('business_ideas')
       .select('*')
       .eq('is_active', true)
       .limit(5)
-      .then(({ data }) => { if (data) setIdeas(data); });
+      .then(({ data }) => { if (data) setIdeas(data.sort(() => Math.random() - 0.5)); });
   }, []);
 
   return (
@@ -171,7 +189,7 @@ export default function Home() {
             <PrimaryBtn href="/ideas" variant="teal">
               {t('hero.cta.ideas')} <ArrowRight size={16} />
             </PrimaryBtn>
-            <PrimaryBtn href="/chat" variant="amber">
+            <PrimaryBtn href="/chat" variant="amber" requireAuth>
               Ask Mitra AI <Bot size={16} />
             </PrimaryBtn>
           </motion.div>
