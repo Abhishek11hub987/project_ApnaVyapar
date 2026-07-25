@@ -57,10 +57,10 @@ export function LandingNavbar() {
             </Link>
           )}
           <Link
-            href={isAuthenticated ? "/dashboard" : "/ideas"}
+            href="/ideas"
             className="text-sm font-semibold bg-gradient-to-r from-cyan to-cyan-dark text-white px-5 py-2.5 rounded-full hover:scale-105 transition-transform shadow-neon-cyan focus-ring"
           >
-            {isAuthenticated ? "Dashboard" : "Get Started"}
+            Get Started
           </Link>
         </div>
       </div>
