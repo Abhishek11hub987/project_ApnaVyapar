@@ -381,3 +381,26 @@ insert into resource_locations (
 (
   'Common Service Centre (CSC) - HSR Layout', 'CSC', '27th Main, Sector 1, HSR Layout, Bangalore', 'Bangalore', 'Karnataka', '560102', '080-12345678', null, null, 12.9121, 77.6446, ARRAY['Aadhaar Updates', 'GST Filing', 'Trade License']
 );
+
+-- =========================================================================================
+-- 10. PRODUCTS (INVENTORY)
+-- =========================================================================================
+
+create table products (
+  id uuid default gen_random_uuid() primary key,
+  user_id uuid references profiles(id) on delete cascade not null,
+  name text not null,
+  description text,
+  price numeric(10, 2) not null,
+  stock_quantity integer default 0,
+  sku text,
+  status text default 'active' check (status in ('active', 'draft', 'out_of_stock')),
+  created_at timestamp with time zone default timezone('utc'::text, now()),
+  updated_at timestamp with time zone default timezone('utc'::text, now())
+);
+
+alter table products enable row level security;
+create policy "Users can CRUD own products" on products for all using (auth.uid() = user_id);
+
+create trigger products_updated_at before update on products
+  for each row execute procedure public.update_updated_at();
