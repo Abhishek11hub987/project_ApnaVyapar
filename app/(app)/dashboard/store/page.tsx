@@ -10,6 +10,7 @@ export default function StoreBuilderPage() {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
+  const [debugLog, setDebugLog] = useState<string[]>([]);
 
   const [formData, setFormData] = useState({
     id: "",
@@ -19,22 +20,39 @@ export default function StoreBuilderPage() {
     is_active: true
   });
 
+  const addLog = (msg: string) => {
+    console.log(msg);
+    setDebugLog(prev => [...prev, msg]);
+  };
+
   useEffect(() => {
     let isMounted = true;
+    addLog("useEffect mounted");
+    
     async function fetchStoreSettings() {
+      addLog("fetchStoreSettings started");
       try {
         const { data: userData, error: authError } = await supabase.auth.getUser();
-        if (authError || !userData?.user) return;
+        addLog(`getUser finished. authError: ${authError?.message}, user: ${userData?.user?.id}`);
+        
+        if (authError || !userData?.user) {
+          addLog("No user, returning");
+          return;
+        }
 
+        addLog("Fetching store settings...");
         const { data, error } = await supabase
           .from("store_settings")
           .select("*")
           .eq("user_id", userData.user.id)
           .single();
 
+        addLog(`Fetch settings finished. Error: ${error?.message}`);
+
         if (error && error.code !== "PGRST116") {
           console.error(error);
         } else if (data && isMounted) {
+          addLog("Setting form data");
           setFormData({
             id: data.id,
             store_name: data.store_name,
@@ -43,14 +61,23 @@ export default function StoreBuilderPage() {
             is_active: data.is_active
           });
         }
-      } catch (err) {
+      } catch (err: any) {
+        addLog(`Catch block hit: ${err?.message}`);
         console.error(err);
       } finally {
-        if (isMounted) setLoading(false);
+        addLog("Finally block hit");
+        if (isMounted) {
+          addLog("Setting loading false");
+          setLoading(false);
+        }
       }
     }
+    
     fetchStoreSettings();
-    return () => { isMounted = false; };
+    return () => { 
+      addLog("useEffect cleanup");
+      isMounted = false; 
+    };
   }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -100,18 +127,24 @@ export default function StoreBuilderPage() {
     }
   };
 
-  const storeUrl = formData.slug ? `${window.location.origin}/store/${formData.slug}` : "";
+  const storeUrl = formData.slug ? `${typeof window !== 'undefined' ? window.location.origin : ''}/store/${formData.slug}` : "";
 
   return (
     <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 max-w-3xl mx-auto">
       <div className="mb-8">
         <h1 className="text-3xl font-extrabold text-white tracking-tight mb-2">Store Builder</h1>
         <p className="text-white/60">Configure your public storefront where customers can view and buy your products.</p>
+        
+        {/* Debug UI block */}
+        <div className="mt-4 p-4 bg-black/50 text-xs font-mono text-green-400 rounded overflow-auto max-h-32">
+          {debugLog.length === 0 ? "No logs..." : debugLog.map((log, i) => <div key={i}>{log}</div>)}
+        </div>
       </div>
 
       {loading ? (
-        <div className="glass-card p-12 flex justify-center items-center">
-          <div className="w-8 h-8 border-2 border-cyan/30 border-t-cyan rounded-full animate-spin" />
+        <div className="glass-card p-12 flex justify-center items-center flex-col">
+          <div className="w-8 h-8 border-2 border-cyan/30 border-t-cyan rounded-full animate-spin mb-4" />
+          <button onClick={() => setLoading(false)} className="text-xs text-white/40 underline">Force Skip Loading</button>
         </div>
       ) : (
         <form onSubmit={handleSubmit} className="space-y-6">

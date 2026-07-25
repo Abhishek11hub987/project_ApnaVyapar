@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import "../../globals.css"; // Ensure global styles are loaded
+import "../globals.css"; // Ensure global styles are loaded
 
 export const metadata = {
   title: "Storefront - Apna Vyapar",
