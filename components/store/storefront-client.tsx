@@ -2,8 +2,9 @@
 
 import { CartProvider, useCart } from "./cart-context";
 import { CartDrawer } from "./cart-drawer";
-import { ShoppingBag, Search } from "lucide-react";
+import { ShoppingBag, Search, X } from "lucide-react";
 import { Product } from "@/components/dashboard/inventory-table";
+import { useState } from "react";
 
 function Header({ store }: { store: any }) {
   const { items, setIsCartOpen } = useCart();
@@ -15,7 +16,14 @@ function Header({ store }: { store: any }) {
       style={{ backgroundColor: store.theme_color || '#00D4FF' }}
     >
       <div className="max-w-5xl mx-auto flex items-center justify-between">
-        <h1 className="text-3xl font-extrabold tracking-tight">{store.store_name}</h1>
+        <div className="flex items-center gap-3">
+          {store.logo_url && (
+            <div className="w-12 h-12 rounded-full overflow-hidden bg-white/10 flex items-center justify-center shrink-0 border border-white/20">
+              <img src={store.logo_url} alt="Store Logo" className="w-full h-full object-cover" />
+            </div>
+          )}
+          <h1 className="text-3xl font-extrabold tracking-tight">{store.store_name}</h1>
+        </div>
         <button 
           onClick={() => setIsCartOpen(true)}
           className="bg-black/20 hover:bg-black/30 px-5 py-2.5 rounded-full font-bold transition-all hover:scale-105 active:scale-95 flex items-center gap-2 shadow-lg"
@@ -95,6 +103,8 @@ function ProductGrid({ products }: { products: Product[] }) {
 }
 
 function Footer({ store }: { store: any }) {
+  const [activePolicy, setActivePolicy] = useState<'privacy' | 'terms' | null>(null);
+
   return (
     <footer className="bg-slate-900 text-slate-400 py-12 mt-12 border-t border-slate-800">
       <div className="max-w-5xl mx-auto px-4 grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -112,9 +122,12 @@ function Footer({ store }: { store: any }) {
         <div className="flex flex-col items-start md:items-end justify-between">
           <div className="flex flex-col md:items-end mb-8 md:mb-0">
             <h4 className="text-white font-semibold text-sm mb-4">Policies</h4>
-            <a href="#" className="text-sm hover:text-white transition-colors mb-2">Shipping & Returns</a>
-            <a href="#" className="text-sm hover:text-white transition-colors mb-2">Privacy Policy</a>
-            <a href="#" className="text-sm hover:text-white transition-colors">Terms of Service</a>
+            {store.privacy_policy && (
+              <button onClick={() => setActivePolicy('privacy')} className="text-sm hover:text-white transition-colors mb-2 text-left md:text-right">Privacy Policy</button>
+            )}
+            {store.terms_conditions && (
+              <button onClick={() => setActivePolicy('terms')} className="text-sm hover:text-white transition-colors text-left md:text-right">Terms of Service</button>
+            )}
           </div>
           
           <div className="mt-8 pt-8 border-t border-slate-800 w-full md:w-auto md:border-t-0 md:pt-0">
@@ -125,6 +138,38 @@ function Footer({ store }: { store: any }) {
           </div>
         </div>
       </div>
+      
+      {/* Disclaimer */}
+      <div className="max-w-5xl mx-auto px-4 mt-12 pt-8 border-t border-slate-800">
+        <p className="text-xs text-slate-500 text-center max-w-3xl mx-auto leading-relaxed">
+          <strong>Disclaimer:</strong> This storefront is independently owned and operated by the merchant. 
+          Apna Vyapar provides the e-commerce platform and software infrastructure only. Apna Vyapar is not responsible 
+          for any transactions, claims, product fulfillment, refunds, or misconduct associated with this store. 
+          All agreements and purchases are strictly between the customer and the merchant.
+        </p>
+      </div>
+
+      {/* Policy Modal */}
+      {activePolicy && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/80 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="bg-white text-slate-800 rounded-2xl shadow-2xl w-full max-w-2xl max-h-[85vh] flex flex-col overflow-hidden animate-in zoom-in-95 duration-200">
+            <div className="p-4 border-b border-slate-100 flex items-center justify-between bg-slate-50">
+              <h3 className="font-bold text-lg">{activePolicy === 'privacy' ? 'Privacy Policy' : 'Terms of Service'}</h3>
+              <button onClick={() => setActivePolicy(null)} className="p-2 hover:bg-slate-200 rounded-full transition-colors">
+                <X size={20} />
+              </button>
+            </div>
+            <div className="p-6 overflow-y-auto whitespace-pre-wrap font-mono text-sm leading-relaxed">
+              {activePolicy === 'privacy' ? store.privacy_policy : store.terms_conditions}
+            </div>
+            <div className="p-4 border-t border-slate-100 bg-slate-50 flex justify-end">
+              <button onClick={() => setActivePolicy(null)} className="px-6 py-2 bg-slate-800 text-white font-semibold rounded-lg hover:bg-slate-700 transition-colors">
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </footer>
   );
 }

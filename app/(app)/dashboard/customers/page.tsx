@@ -3,8 +3,9 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { CustomersTable, Customer } from "@/components/dashboard/customers-table";
-import { UserPlus, Download } from "lucide-react";
+import { Download, Plus, Search, UserPlus } from "lucide-react";
 import Link from "next/link";
+import { downloadCSV } from "@/lib/csv";
 
 export default function CustomersPage() {
   const [customers, setCustomers] = useState<Customer[]>([]);
@@ -49,7 +50,10 @@ export default function CustomersPage() {
           <p className="text-white/60">Manage your clients, view their purchase history, and track lifetime value.</p>
         </div>
         <div className="flex gap-3">
-          <button className="px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-sm font-medium hover:bg-white/10 transition-colors flex items-center gap-2">
+          <button 
+            onClick={() => downloadCSV(customers, 'customers')}
+            className="px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-sm font-medium hover:bg-white/10 transition-colors flex items-center gap-2"
+          >
             <Download size={16} /> Export CSV
           </button>
           <Link 

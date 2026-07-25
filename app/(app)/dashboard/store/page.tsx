@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
-import { Save, Store, Globe, Palette, Share2, Copy, PhoneCall, Mail, Type } from "lucide-react";
+import { Save, Store, Globe, Palette, Share2, Copy, PhoneCall, Mail, Type, ShieldCheck, FileText, Image as ImageIcon, Upload } from "lucide-react";
 import Link from "next/link";
 
 export default function StoreBuilderPage() {
@@ -20,7 +20,50 @@ export default function StoreBuilderPage() {
     support_email: "",
     support_phone: "",
     hero_text: "",
+    logo_url: "",
+    privacy_policy: "",
+    terms_conditions: "",
   });
+  
+  const [logoFile, setLogoFile] = useState<File | null>(null);
+  const [logoPreview, setLogoPreview] = useState<string | null>(null);
+
+  const defaultPrivacyPolicy = `**Privacy Policy**
+
+Last updated: ${new Date().toLocaleDateString()}
+
+This Privacy Policy describes how your personal information is collected, used, and shared when you visit or make a purchase from this store.
+
+**Personal Information We Collect**
+When you visit the store, we collect certain information about your device, your interaction with the store, and information necessary to process your purchases.
+
+**How Do We Use Your Personal Information?**
+We use the Order Information that we collect generally to fulfill any orders placed through the store (including processing your payment information, arranging for shipping, and providing you with invoices and/or order confirmations).
+
+**Apna Vyapar Platform**
+Our store is hosted on Apna Vyapar. They provide us with the online e-commerce platform that allows us to sell our products and services to you. Your data is stored through Apna Vyapar's data storage, databases, and the general Apna Vyapar application.
+
+**Contact Us**
+For more information about our privacy practices, if you have questions, or if you would like to make a complaint, please contact us by e-mail or phone provided in the store contact details.`;
+
+  const defaultTermsConditions = `**Terms and Conditions**
+
+Last updated: ${new Date().toLocaleDateString()}
+
+**Overview**
+This website is operated by the merchant. Throughout the site, the terms "we", "us" and "our" refer to the merchant. The merchant offers this website, including all information, tools and services available from this site to you, the user, conditioned upon your acceptance of all terms, conditions, policies and notices stated here.
+
+**Section 1 - Platform Disclaimer**
+Our store is hosted on the Apna Vyapar platform. Apna Vyapar provides the e-commerce software that allows us to sell our products. Apna Vyapar is NOT responsible for the products, services, or content of this store, and is not liable for any disputes, refunds, or fulfillment issues. All transactions and agreements are strictly between you (the customer) and us (the merchant).
+
+**Section 2 - Online Store Terms**
+By agreeing to these Terms of Service, you represent that you are at least the age of majority in your state or province of residence.
+
+**Section 3 - Modifications to the Service and Prices**
+Prices for our products are subject to change without notice. We reserve the right at any time to modify or discontinue the Service (or any part or content thereof) without notice at any time.
+
+**Contact Information**
+Questions about the Terms of Service should be sent to us via the contact details provided in our store.`;
 
   useEffect(() => {
     let isMounted = true;
@@ -51,7 +94,20 @@ export default function StoreBuilderPage() {
             support_email: data.support_email || "",
             support_phone: data.support_phone || "",
             hero_text: data.hero_text || "",
+            logo_url: data.logo_url || "",
+            privacy_policy: data.privacy_policy || defaultPrivacyPolicy,
+            terms_conditions: data.terms_conditions || defaultTermsConditions,
           });
+          if (data.logo_url) {
+            setLogoPreview(data.logo_url);
+          }
+        } else {
+          // If no existing data, pre-fill with defaults
+          setFormData(prev => ({
+            ...prev,
+            privacy_policy: defaultPrivacyPolicy,
+            terms_conditions: defaultTermsConditions
+          }));
         }
       } catch (err: any) {
         console.error(err);
@@ -78,6 +134,25 @@ export default function StoreBuilderPage() {
       const { data: userData } = await supabase.auth.getUser();
       if (!userData?.user) throw new Error("Not authenticated");
 
+      let uploadedLogoUrl = formData.logo_url;
+
+      if (logoFile) {
+        const fileExt = logoFile.name.split('.').pop();
+        const fileName = `${userData.user.id}-logo-${Math.random().toString(36).substring(2)}-${Date.now()}.${fileExt}`;
+        
+        const { error: uploadError } = await supabase.storage
+          .from("product-images") // Reusing product-images bucket for store assets
+          .upload(fileName, logoFile);
+
+        if (uploadError) throw uploadError;
+
+        const { data: publicUrlData } = supabase.storage
+          .from("product-images")
+          .getPublicUrl(fileName);
+          
+        uploadedLogoUrl = publicUrlData.publicUrl;
+      }
+
       if (formData.id) {
         // Update existing
         const { error } = await supabase
@@ -90,6 +165,9 @@ export default function StoreBuilderPage() {
             support_email: formData.support_email,
             support_phone: formData.support_phone,
             hero_text: formData.hero_text,
+            logo_url: uploadedLogoUrl,
+            privacy_policy: formData.privacy_policy,
+            terms_conditions: formData.terms_conditions,
           })
           .eq("id", formData.id);
         if (error) throw error;
@@ -106,6 +184,9 @@ export default function StoreBuilderPage() {
             support_email: formData.support_email,
             support_phone: formData.support_phone,
             hero_text: formData.hero_text,
+            logo_url: uploadedLogoUrl,
+            privacy_policy: formData.privacy_policy,
+            terms_conditions: formData.terms_conditions,
           })
           .select()
           .single();
@@ -201,6 +282,80 @@ export default function StoreBuilderPage() {
                   onChange={(e) => setFormData({ ...formData, hero_text: e.target.value })}
                   className="w-full bg-navy border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-cyan transition-colors"
                   placeholder="e.g. Welcome to the best shop in India!"
+                />
+              </div>
+            </div>
+
+            {/* Store Assets */}
+            <div className="space-y-4">
+              <div className="flex items-center gap-2 border-b border-white/10 pb-2 mb-4">
+                <ImageIcon size={18} className="text-cyan" />
+                <h3 className="text-lg font-bold text-white">Store Logo</h3>
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-white/70 mb-1.5">Upload Logo</label>
+                <div className="flex items-center gap-6">
+                  <div className="w-24 h-24 rounded-xl bg-navy border border-white/10 flex items-center justify-center overflow-hidden flex-shrink-0">
+                    {logoPreview ? (
+                      <img src={logoPreview} alt="Logo Preview" className="w-full h-full object-contain" />
+                    ) : (
+                      <ImageIcon size={32} className="text-white/20" />
+                    )}
+                  </div>
+                  <div className="flex-1">
+                    <label className="cursor-pointer px-4 py-2 rounded-lg border border-white/10 text-white text-sm font-medium hover:bg-white/5 transition-colors inline-flex items-center gap-2">
+                      <Upload size={16} /> Choose Image
+                      <input 
+                        type="file" 
+                        accept="image/*" 
+                        className="hidden" 
+                        onChange={(e) => {
+                          const file = e.target.files?.[0];
+                          if (file) {
+                            setLogoFile(file);
+                            setLogoPreview(URL.createObjectURL(file));
+                          }
+                        }}
+                      />
+                    </label>
+                    <p className="text-white/40 text-xs mt-2">Recommended: Square image or transparent PNG, max 2MB.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Legal & Policies */}
+            <div className="space-y-4">
+              <div className="flex items-center gap-2 border-b border-white/10 pb-2 mb-4">
+                <ShieldCheck size={18} className="text-cyan" />
+                <h3 className="text-lg font-bold text-white">Legal & Policies</h3>
+              </div>
+              <p className="text-sm text-white/60">We have provided standard templates that protect you and the Apna Vyapar platform. Feel free to modify them to suit your specific business needs.</p>
+              
+              <div>
+                <label className="block text-sm font-medium text-white/70 mb-1.5 flex items-center gap-2">
+                  <FileText size={14} className="text-white/40" /> Privacy Policy
+                </label>
+                <textarea
+                  rows={8}
+                  value={formData.privacy_policy}
+                  onChange={(e) => setFormData({ ...formData, privacy_policy: e.target.value })}
+                  className="w-full bg-navy border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-cyan transition-colors resize-y font-mono text-sm"
+                  placeholder="Enter your privacy policy..."
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-white/70 mb-1.5 flex items-center gap-2">
+                  <FileText size={14} className="text-white/40" /> Terms and Conditions
+                </label>
+                <textarea
+                  rows={8}
+                  value={formData.terms_conditions}
+                  onChange={(e) => setFormData({ ...formData, terms_conditions: e.target.value })}
+                  className="w-full bg-navy border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-cyan transition-colors resize-y font-mono text-sm"
+                  placeholder="Enter your terms and conditions..."
                 />
               </div>
             </div>

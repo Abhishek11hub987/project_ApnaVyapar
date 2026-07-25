@@ -13,6 +13,7 @@ import {
   PackageX
 } from "lucide-react";
 import Link from "next/link";
+import { downloadCSV } from "@/lib/csv";
 
 export default function DashboardPage() {
   const [stats, setStats] = useState({
@@ -78,7 +79,10 @@ export default function DashboardPage() {
           <p className="text-white/60">Welcome back! Here's what's happening with your store today.</p>
         </div>
         <div className="flex gap-3">
-          <button className="px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-sm font-medium hover:bg-white/10 transition-colors opacity-50 cursor-not-allowed" disabled>
+          <button 
+            onClick={() => downloadCSV([stats], 'dashboard_report')}
+            className="px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-sm font-medium hover:bg-white/10 transition-colors"
+          >
             Download Report
           </button>
           <Link href="/dashboard/inventory" className="px-4 py-2 rounded-xl bg-cyan text-navy-dark text-sm font-bold hover:scale-105 transition-transform shadow-neon-cyan flex items-center gap-2">

@@ -3,7 +3,8 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { OrdersTable, Order } from "@/components/dashboard/orders-table";
-import { Download } from "lucide-react";
+import { Package, Download } from "lucide-react";
+import { downloadCSV } from "@/lib/csv";
 
 export default function OrdersPage() {
   const [orders, setOrders] = useState<Order[]>([]);
@@ -63,7 +64,10 @@ export default function OrdersPage() {
           <p className="text-white/60">Track and fulfill incoming orders from your public storefront.</p>
         </div>
         <div className="flex gap-3">
-          <button className="px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-sm font-medium hover:bg-white/10 transition-colors flex items-center gap-2">
+          <button 
+            onClick={() => downloadCSV(orders, 'orders')}
+            className="px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-sm font-medium hover:bg-white/10 transition-colors flex items-center gap-2"
+          >
             <Download size={16} /> Export CSV
           </button>
         </div>
