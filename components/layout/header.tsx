@@ -24,7 +24,7 @@ export default function Header() {
 
   return (
     <header className="sticky top-0 z-50 w-full bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800">
-      <div className="max-w-7xl mx-auto px-4 h-16 grid grid-cols-3 items-center">
+      <div className="max-w-7xl mx-auto px-4 h-16 grid grid-cols-[1fr_auto_1fr] items-center">
         <Link href="/" className="hover:opacity-90 transition-opacity justify-self-start">
           <Logo iconSize={28} />
         </Link>
