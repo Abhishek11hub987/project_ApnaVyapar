@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { PackageSearch, Edit2, CheckCircle2, Truck, XCircle, Clock } from "lucide-react";
+import { PackageSearch, Edit2, CheckCircle2, Truck, XCircle, Clock, Loader2 } from "lucide-react";
+import { supabase } from "@/lib/supabase";
 
 export type Order = {
   id: string;
@@ -15,6 +16,28 @@ export type Order = {
 
 export function OrdersTable({ initialOrders }: { initialOrders: Order[] }) {
   const [orders, setOrders] = useState<Order[]>(initialOrders);
+  const [updatingId, setUpdatingId] = useState<string | null>(null);
+
+  const updateOrderStatus = async (orderId: string, newStatus: Order['status']) => {
+    setUpdatingId(orderId);
+    try {
+      const { error } = await supabase
+        .from('orders')
+        .update({ status: newStatus })
+        .eq('id', orderId);
+
+      if (error) throw error;
+
+      setOrders(current => 
+        current.map(o => (o.id === orderId ? { ...o, status: newStatus } : o))
+      );
+    } catch (error) {
+      console.error('Failed to update status:', error);
+      alert('Failed to update order status');
+    } finally {
+      setUpdatingId(null);
+    }
+  };
 
   if (orders.length === 0) {
     return (
@@ -96,10 +119,24 @@ export function OrdersTable({ initialOrders }: { initialOrders: Order[] }) {
                   ₹{order.total_amount.toLocaleString('en-IN')}
                 </td>
                 <td className="px-6 py-4">
-                  <div className="flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <button className="px-3 py-1.5 rounded-lg border border-white/10 text-white/70 hover:bg-white/10 hover:text-white transition-colors text-xs font-medium">
-                      Update Status
-                    </button>
+                  <div className="flex items-center justify-center gap-2 opacity-100 transition-opacity">
+                    {updatingId === order.id ? (
+                      <div className="px-3 py-1.5 flex items-center justify-center text-white/50">
+                        <Loader2 size={16} className="animate-spin" />
+                      </div>
+                    ) : (
+                      <select
+                        value={order.status}
+                        onChange={(e) => updateOrderStatus(order.id, e.target.value as Order['status'])}
+                        className="px-2 py-1.5 rounded-lg border border-white/10 bg-navy text-white/70 hover:bg-white/10 hover:text-white transition-colors text-xs font-medium outline-none cursor-pointer text-center appearance-none"
+                      >
+                        <option value="pending" className="bg-navy text-left">Set Pending</option>
+                        <option value="processing" className="bg-navy text-left">Set Processing</option>
+                        <option value="shipped" className="bg-navy text-left">Set Shipped</option>
+                        <option value="delivered" className="bg-navy text-left">Set Delivered</option>
+                        <option value="cancelled" className="bg-navy text-left text-red-400">Cancel Order</option>
+                      </select>
+                    )}
                   </div>
                 </td>
               </tr>
