@@ -26,13 +26,8 @@ export function LandingNavbar() {
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 md:px-8 py-4 flex items-center justify-between">
-        <Link href="/" className="flex items-center gap-2 hover:opacity-90 transition-opacity">
-          <div className="w-8 h-8 bg-gradient-to-br from-cyan to-cyan-dark rounded-lg flex items-center justify-center">
-            <span className="text-white font-extrabold text-sm tracking-tighter">AV</span>
-          </div>
-          <span className="text-lg font-bold text-white tracking-tight">
-            Apna Vyapar
-          </span>
+        <Link href="/" className="hover:opacity-90 transition-opacity">
+          <Logo iconSize={32} />
         </Link>
 
         <div className="hidden md:flex items-center gap-8">

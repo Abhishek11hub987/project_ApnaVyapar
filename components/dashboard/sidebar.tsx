@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
+import Logo from "@/components/logo";
 import { 
   LayoutDashboard, 
   Package, 
@@ -38,11 +39,8 @@ export function DashboardSidebar() {
     <aside className="w-64 bg-navy-dark border-r border-white/10 h-screen sticky top-0 flex flex-col hidden md:flex">
       {/* Brand */}
       <div className="h-16 flex items-center px-6 border-b border-white/10">
-        <Link href="/" className="flex items-center gap-2 hover:opacity-90 transition-opacity">
-          <div className="w-8 h-8 bg-gradient-to-br from-cyan to-cyan-dark rounded-lg flex items-center justify-center">
-            <span className="text-white font-extrabold text-sm tracking-tighter">AV</span>
-          </div>
-          <span className="text-lg font-bold text-white tracking-tight">Apna Vyapar</span>
+        <Link href="/" className="hover:opacity-90 transition-opacity">
+          <Logo iconSize={24} />
         </Link>
       </div>
 
