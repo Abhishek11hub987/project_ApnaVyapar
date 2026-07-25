@@ -43,6 +43,9 @@ export default function Header() {
           <ProtectedLink href="/tasks" className={`font-semibold text-sm transition-colors hover:text-teal-600 dark:hover:text-teal-400 ${pathname.startsWith('/tasks') ? 'text-teal-600 dark:text-teal-400' : 'text-slate-600 dark:text-slate-300'}`}>
             Tasks
           </ProtectedLink>
+          <ProtectedLink href="/dashboard" className={`font-semibold text-sm transition-colors hover:text-teal-600 dark:hover:text-teal-400 ${pathname.startsWith('/dashboard') ? 'text-teal-600 dark:text-teal-400' : 'text-slate-600 dark:text-slate-300'}`}>
+            Dashboard
+          </ProtectedLink>
           <ProtectedLink href="/profile" className={`font-semibold text-sm transition-colors hover:text-teal-600 dark:hover:text-teal-400 ${pathname.startsWith('/profile') ? 'text-teal-600 dark:text-teal-400' : 'text-slate-600 dark:text-slate-300'}`}>
             Profile
           </ProtectedLink>
