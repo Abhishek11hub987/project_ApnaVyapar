@@ -4,37 +4,44 @@ import {
   Package, Share2, BarChart3, Users, FileText, Headphones,
 } from "lucide-react";
 import { useEffect, useRef } from "react";
+import Link from "next/link";
 
 const FEATURES = [
   {
     icon: Package,
     title: "Inventory Management",
     desc: "Real-time stock tracking with low-stock alerts and automatic reorder suggestions.",
+    slug: "inventory-management",
   },
   {
     icon: Share2,
     title: "Multi-Channel Selling",
     desc: "Sell on WhatsApp, Instagram, and your own website — all from one dashboard.",
+    slug: "multi-channel-selling",
   },
   {
     icon: BarChart3,
     title: "Analytics Dashboard",
     desc: "Beautiful charts that actually make sense. Track revenue, growth, and customer trends.",
+    slug: "analytics-dashboard",
   },
   {
     icon: Users,
     title: "Customer CRM",
     desc: "Know your customers, build lasting relationships, and increase repeat purchases.",
+    slug: "customer-crm",
   },
   {
     icon: FileText,
     title: "Automated Invoicing",
     desc: "GST-compliant bills generated automatically. Send via WhatsApp or email instantly.",
+    slug: "automated-invoicing",
   },
   {
     icon: Headphones,
     title: "24/7 Support",
     desc: "Real humans, real help, anytime you need. Chat, call, or email — we are always here.",
+    slug: "24-7-support",
   },
 ];
 
@@ -90,16 +97,17 @@ export function FeaturesGrid() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {FEATURES.map((f) => (
-            <div
+            <Link
+              href={`/p/${f.slug}`}
               key={f.title}
-              className="feature-card glass-card p-8 opacity-0 group"
+              className="feature-card glass-card p-8 opacity-0 group block hover:scale-[1.02] transition-transform duration-300"
             >
               <div className="w-12 h-12 rounded-xl bg-cyan/10 border border-cyan/20 flex items-center justify-center mb-5 group-hover:bg-cyan/20 transition-colors">
                 <f.icon size={22} className="text-cyan" />
               </div>
-              <h3 className="text-lg font-bold text-white mb-2">{f.title}</h3>
+              <h3 className="text-lg font-bold text-white mb-2 group-hover:text-cyan transition-colors">{f.title}</h3>
               <p className="text-white/45 text-sm leading-relaxed">{f.desc}</p>
-            </div>
+            </Link>
           ))}
         </div>
       </div>

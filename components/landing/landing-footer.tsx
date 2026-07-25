@@ -4,28 +4,28 @@ import Link from "next/link";
 
 const FOOTER_LINKS = {
   Products: [
-    { label: "Store Builder", href: "/ideas" },
-    { label: "Analytics", href: "/ideas" },
-    { label: "Payments", href: "/ideas" },
-    { label: "Inventory", href: "/ideas" },
+    { label: "Store Builder", href: "/p/store-builder" },
+    { label: "Analytics", href: "/p/analytics" },
+    { label: "Payments", href: "/p/payments" },
+    { label: "Inventory", href: "/p/inventory" },
   ],
   Company: [
-    { label: "About Us", href: "/about" },
-    { label: "Careers", href: "/about" },
-    { label: "Press", href: "/about" },
-    { label: "Contact", href: "/contact" },
+    { label: "About Us", href: "/p/about-us" },
+    { label: "Careers", href: "/p/careers" },
+    { label: "Press", href: "/p/press" },
+    { label: "Contact", href: "/p/contact" },
   ],
   Resources: [
-    { label: "Blog", href: "/ideas" },
-    { label: "Help Center", href: "/faq" },
-    { label: "API Docs", href: "/faq" },
-    { label: "Community", href: "/faq" },
+    { label: "Blog", href: "/p/blog" },
+    { label: "Help Center", href: "/p/help-center" },
+    { label: "API Docs", href: "/p/api-docs" },
+    { label: "Community", href: "/p/community" },
   ],
   Legal: [
-    { label: "Privacy", href: "/about" },
-    { label: "Terms", href: "/about" },
-    { label: "Cookies", href: "/about" },
-    { label: "Security", href: "/about" },
+    { label: "Privacy", href: "/p/privacy" },
+    { label: "Terms", href: "/p/terms" },
+    { label: "Cookies", href: "/p/cookies" },
+    { label: "Security", href: "/p/security" },
   ],
 };
 
