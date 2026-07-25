@@ -122,12 +122,8 @@ function Footer({ store }: { store: any }) {
         <div className="flex flex-col items-start md:items-end justify-between">
           <div className="flex flex-col md:items-end mb-8 md:mb-0">
             <h4 className="text-white font-semibold text-sm mb-4">Policies</h4>
-            {store.privacy_policy && (
-              <button onClick={() => setActivePolicy('privacy')} className="text-sm hover:text-white transition-colors mb-2 text-left md:text-right">Privacy Policy</button>
-            )}
-            {store.terms_conditions && (
-              <button onClick={() => setActivePolicy('terms')} className="text-sm hover:text-white transition-colors text-left md:text-right">Terms of Service</button>
-            )}
+            <button onClick={() => setActivePolicy('privacy')} className="text-sm text-slate-300 hover:text-white transition-colors mb-2 text-left md:text-right font-medium">Privacy Policy</button>
+            <button onClick={() => setActivePolicy('terms')} className="text-sm text-slate-300 hover:text-white transition-colors text-left md:text-right font-medium">Terms of Service</button>
           </div>
           
           <div className="mt-8 pt-8 border-t border-slate-800 w-full md:w-auto md:border-t-0 md:pt-0">
@@ -141,8 +137,8 @@ function Footer({ store }: { store: any }) {
       
       {/* Disclaimer */}
       <div className="max-w-5xl mx-auto px-4 mt-12 pt-8 border-t border-slate-800">
-        <p className="text-xs text-slate-500 text-center max-w-3xl mx-auto leading-relaxed">
-          <strong>Disclaimer:</strong> This storefront is independently owned and operated by the merchant. 
+        <p className="text-sm text-slate-300 text-center max-w-3xl mx-auto leading-relaxed font-medium bg-slate-800/50 p-4 rounded-xl border border-slate-700/50">
+          <strong className="text-white">Disclaimer:</strong> This storefront is independently owned and operated by the merchant. 
           Apna Vyapar provides the e-commerce platform and software infrastructure only. Apna Vyapar is not responsible 
           for any transactions, claims, product fulfillment, refunds, or misconduct associated with this store. 
           All agreements and purchases are strictly between the customer and the merchant.
@@ -160,7 +156,9 @@ function Footer({ store }: { store: any }) {
               </button>
             </div>
             <div className="p-6 overflow-y-auto whitespace-pre-wrap font-mono text-sm leading-relaxed">
-              {activePolicy === 'privacy' ? store.privacy_policy : store.terms_conditions}
+              {activePolicy === 'privacy' 
+                ? (store.privacy_policy || "This store has not provided a custom privacy policy yet.") 
+                : (store.terms_conditions || "This store has not provided custom terms and conditions yet.")}
             </div>
             <div className="p-4 border-t border-slate-100 bg-slate-50 flex justify-end">
               <button onClick={() => setActivePolicy(null)} className="px-6 py-2 bg-slate-800 text-white font-semibold rounded-lg hover:bg-slate-700 transition-colors">
