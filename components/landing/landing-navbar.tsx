@@ -3,9 +3,11 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import Logo from "@/components/logo";
+import { useAuth } from "@/hooks/use-auth";
 
 export function LandingNavbar() {
   const [scrolled, setScrolled] = useState(false);
+  const { isAuthenticated } = useAuth();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -46,17 +48,19 @@ export function LandingNavbar() {
         </div>
 
         <div className="flex items-center gap-3">
+          {!isAuthenticated && (
+            <Link
+              href="/?login=true"
+              className="text-sm text-white/70 hover:text-white transition-colors font-medium focus-ring"
+            >
+              Log in
+            </Link>
+          )}
           <Link
-            href="/?login=true"
-            className="text-sm text-white/70 hover:text-white transition-colors font-medium focus-ring"
-          >
-            Log in
-          </Link>
-          <Link
-            href="/ideas"
+            href={isAuthenticated ? "/dashboard" : "/ideas"}
             className="text-sm font-semibold bg-gradient-to-r from-cyan to-cyan-dark text-white px-5 py-2.5 rounded-full hover:scale-105 transition-transform shadow-neon-cyan focus-ring"
           >
-            Get Started
+            {isAuthenticated ? "Dashboard" : "Get Started"}
           </Link>
         </div>
       </div>

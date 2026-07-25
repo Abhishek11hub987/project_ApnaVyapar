@@ -3,6 +3,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { BusinessIdea } from '@/types/database';
 import { useLanguage } from '@/lib/language-context';
+import { Sparkles } from 'lucide-react';
 
 export const CATEGORY_IMAGES: Record<string, string> = {
   'Food': 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=800&q=80',
@@ -34,7 +35,7 @@ export const DEFAULT_IMAGE = 'https://images.unsplash.com/photo-1486406146926-c6
 
 import ideasHi from '@/locales/ideas_hi.json';
 
-export default function IdeaCard({ idea }: { idea: BusinessIdea }) {
+export default function IdeaCard({ idea, isCommunity = false }: { idea: any, isCommunity?: boolean }) {
   const { language, t } = useLanguage();
   const [imgError, setImgError] = useState(false);
   
@@ -65,9 +66,23 @@ export default function IdeaCard({ idea }: { idea: BusinessIdea }) {
         {/* Gradient Overlay */}
         <div className="absolute inset-0 bg-gradient-to-t from-navy via-navy/30 to-transparent pointer-events-none"></div>
         
-        {idea.is_trending && (
+        {isCommunity && idea.ai_generated && (
+          <div className="absolute top-3 right-3 bg-gradient-to-r from-cyan to-emerald-500 text-navy-dark text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full shadow-sm z-10 flex items-center gap-1">
+            <Sparkles size={10} /> AI Researched
+          </div>
+        )}
+
+        {!isCommunity && idea.is_trending && (
           <div className="absolute top-3 right-3 bg-gradient-to-r from-amber-500 to-orange-500 text-white text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full shadow-sm z-10 pointer-events-none">
             {t('card.trending')}
+          </div>
+        )}
+
+        {isCommunity && (
+          <div className="absolute bottom-3 left-3 z-10">
+            <span className="text-white/60 text-xs font-medium bg-navy/60 backdrop-blur-sm px-2 py-1 rounded-full border border-white/5 shadow-sm">
+              by {idea.contributor_name || 'Anonymous'}
+            </span>
           </div>
         )}
       </div>

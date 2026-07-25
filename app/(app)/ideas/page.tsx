@@ -223,65 +223,7 @@ export default function IdeasCatalog() {
             ) : filteredCommunityIdeas.length > 0 ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                 {filteredCommunityIdeas.map(idea => (
-                  <div key={idea.id} className="h-full">
-                    <div className="h-full glass-card !p-0 overflow-hidden flex flex-col group relative rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl hover:border-emerald-500/30 transition-all duration-500 hover:shadow-[0_0_30px_rgba(16,185,129,0.1)]">
-                      {/* Gradient header instead of image */}
-                      <div className={`h-40 bg-gradient-to-br ${CATEGORY_GRADIENTS[idea.category] || 'from-cyan-500/30 to-blue-500/30'} flex items-center justify-center relative overflow-hidden`}>
-                        <div className="text-5xl font-black text-white/10">{idea.title.substring(0, 2).toUpperCase()}</div>
-                        <div className="absolute inset-0 bg-gradient-to-t from-navy via-transparent to-transparent" />
-                        
-                        {/* AI Badge */}
-                        {idea.ai_generated && (
-                          <div className="absolute top-3 right-3 bg-gradient-to-r from-cyan to-emerald-500 text-navy-dark text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full shadow-sm z-10 flex items-center gap-1">
-                            <Sparkles size={10} /> AI Researched
-                          </div>
-                        )}
-                        
-                        {/* Contributor */}
-                        <div className="absolute bottom-3 left-3 z-10">
-                          <span className="text-white/60 text-xs font-medium bg-navy/60 backdrop-blur-sm px-2 py-1 rounded-full">
-                            by {idea.contributor_name || 'Anonymous'}
-                          </span>
-                        </div>
-                      </div>
-
-                      <div className="p-5 flex flex-col flex-1">
-                        <span className="text-xs font-bold text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-1 rounded-full w-fit mb-3">
-                          {idea.category}
-                        </span>
-                        <h3 className="text-lg font-bold text-white mb-2 line-clamp-2 leading-[1.3] group-hover:text-emerald-400 transition-colors">
-                          {idea.title}
-                        </h3>
-                        <p className="text-white/40 text-sm mb-4 line-clamp-2">{idea.description}</p>
-
-                        <div className="mt-auto space-y-2 text-sm text-white/50 mb-4">
-                          <div className="flex justify-between items-center bg-white/5 px-3 py-2 rounded-lg border border-white/5">
-                            <span className="font-medium text-white/40">Investment</span>
-                            <span className="font-bold text-white">
-                              {formatINR(idea.investment_min)} - {formatINR(idea.investment_max)}
-                            </span>
-                          </div>
-                          <div className="flex justify-between items-center px-1">
-                            <span className="font-medium">Est. Profit</span>
-                            <span className="font-bold text-emerald-400">
-                              {idea.monthly_profit_min ? `${formatINR(idea.monthly_profit_min)}/mo` : 'Varies'}
-                            </span>
-                          </div>
-                        </div>
-
-                        {/* Pros preview */}
-                        {idea.pros && idea.pros.length > 0 && (
-                          <div className="flex flex-wrap gap-1 mb-4">
-                            {idea.pros.slice(0, 2).map((pro, i) => (
-                              <span key={i} className="text-[10px] text-emerald-400/70 bg-emerald-500/5 border border-emerald-500/10 px-2 py-0.5 rounded-full">
-                                ✓ {pro}
-                              </span>
-                            ))}
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </div>
+                  <IdeaCard key={idea.id} idea={idea} isCommunity={true} />
                 ))}
               </div>
             ) : (

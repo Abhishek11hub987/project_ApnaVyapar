@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { supabase } from "@/lib/supabase";
 import { 
   LayoutDashboard, 
   Package, 
@@ -26,6 +27,12 @@ const NAV_ITEMS = [
 
 export function DashboardSidebar() {
   const pathname = usePathname();
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    router.push("/");
+  };
 
   return (
     <aside className="w-64 bg-navy-dark border-r border-white/10 h-screen sticky top-0 flex flex-col hidden md:flex">
@@ -74,6 +81,7 @@ export function DashboardSidebar() {
           <span className="font-medium text-sm">Settings</span>
         </Link>
         <button
+          onClick={handleLogout}
           className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200 text-red-400/80 hover:bg-red-400/10 hover:text-red-400 mt-2"
         >
           <LogOut size={18} className="opacity-80" />

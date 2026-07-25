@@ -9,19 +9,33 @@ export default async function IdeaDetailPage({ params }: { params: { slug: strin
     notFound();
   }
 
-  const { data: idea, error: fetchError } = await supabaseAdmin
+  let { data: idea, error: fetchError } = await supabaseAdmin
     .from('business_ideas')
     .select('*')
     .eq('slug', params.slug)
     .single();
 
+  let isCommunity = false;
+
+  // If not found in business_ideas, check community_ideas
   if (fetchError || !idea) {
-    notFound();
+    const { data: communityIdea, error: communityError } = await supabaseAdmin
+      .from('community_ideas')
+      .select('*')
+      .eq('slug', params.slug)
+      .eq('is_approved', true)
+      .single();
+    
+    if (communityError || !communityIdea) {
+      notFound();
+    }
+    idea = communityIdea;
+    isCommunity = true;
   }
 
   // Increment view count
   await supabaseAdmin
-    .from('business_ideas')
+    .from(isCommunity ? 'community_ideas' : 'business_ideas')
     .update({ view_count: (idea.view_count || 0) + 1 })
     .eq('id', idea.id);
 
