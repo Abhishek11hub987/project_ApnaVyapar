@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
-import { Save, Store, Globe, Palette, Share2, Copy, PhoneCall, Mail, Type, ShieldCheck, FileText, Image as ImageIcon, Upload, Banknote } from "lucide-react";
+import { Save, Store, Globe, Palette, Share2, Copy, PhoneCall, Mail, Type, ShieldCheck, FileText, Image as ImageIcon, Upload } from "lucide-react";
 import Link from "next/link";
 
 export default function StoreBuilderPage() {
@@ -23,57 +23,47 @@ export default function StoreBuilderPage() {
     logo_url: "",
     privacy_policy: "",
     terms_conditions: "",
-    payment_instructions: "",
   });
   
   const [logoFile, setLogoFile] = useState<File | null>(null);
   const [logoPreview, setLogoPreview] = useState<string | null>(null);
 
-  const defaultPrivacyPolicy = `**Privacy Policy**
+  const defaultPrivacyPolicy = `Privacy Policy
 
 Last updated: ${new Date().toLocaleDateString()}
 
 This Privacy Policy describes how your personal information is collected, used, and shared when you visit or make a purchase from this store.
 
-**Personal Information We Collect**
+Personal Information We Collect
 When you visit the store, we collect certain information about your device, your interaction with the store, and information necessary to process your purchases.
 
-**How Do We Use Your Personal Information?**
+How Do We Use Your Personal Information?
 We use the Order Information that we collect generally to fulfill any orders placed through the store (including processing your payment information, arranging for shipping, and providing you with invoices and/or order confirmations).
 
-**Apna Vyapar Platform**
+Apna Vyapar Platform
 Our store is hosted on Apna Vyapar. They provide us with the online e-commerce platform that allows us to sell our products and services to you. Your data is stored through Apna Vyapar's data storage, databases, and the general Apna Vyapar application.
 
-**Contact Us**
+Contact Us
 For more information about our privacy practices, if you have questions, or if you would like to make a complaint, please contact us by e-mail or phone provided in the store contact details.`;
 
-  const defaultTermsConditions = `**Terms and Conditions**
+  const defaultTermsConditions = `Terms and Conditions
 
 Last updated: ${new Date().toLocaleDateString()}
 
-**Overview**
+Overview
 This website is operated by the merchant. Throughout the site, the terms "we", "us" and "our" refer to the merchant. The merchant offers this website, including all information, tools and services available from this site to you, the user, conditioned upon your acceptance of all terms, conditions, policies and notices stated here.
 
-**Section 1 - Platform Disclaimer**
+Section 1 - Platform Disclaimer
 Our store is hosted on the Apna Vyapar platform. Apna Vyapar provides the e-commerce software that allows us to sell our products. Apna Vyapar is NOT responsible for the products, services, or content of this store, and is not liable for any disputes, refunds, or fulfillment issues. All transactions and agreements are strictly between you (the customer) and us (the merchant).
 
-**Section 2 - Online Store Terms**
+Section 2 - Online Store Terms
 By agreeing to these Terms of Service, you represent that you are at least the age of majority in your state or province of residence.
 
-**Section 3 - Modifications to the Service and Prices**
+Section 3 - Modifications to the Service and Prices
 Prices for our products are subject to change without notice. We reserve the right at any time to modify or discontinue the Service (or any part or content thereof) without notice at any time.
 
-**Contact Information**
+Contact Information
 Questions about the Terms of Service should be sent to us via the contact details provided in our store.`;
-
-  const defaultPaymentInstructions = `**Payment Instructions**
-
-Please make your payment directly to our bank account or via UPI.
-
-**UPI ID:** yourname@upi
-**Bank Transfer:** Account No: 123456789 | IFSC: ABCD0123456
-
-Your order will not be shipped until the funds have cleared in our account. Once you place the order, we will contact you to verify payment.`;
 
   useEffect(() => {
     let isMounted = true;
@@ -107,7 +97,6 @@ Your order will not be shipped until the funds have cleared in our account. Once
             logo_url: data.logo_url || "",
             privacy_policy: data.privacy_policy || defaultPrivacyPolicy,
             terms_conditions: data.terms_conditions || defaultTermsConditions,
-            payment_instructions: data.payment_instructions || defaultPaymentInstructions,
           });
           if (data.logo_url) {
             setLogoPreview(data.logo_url);
@@ -117,8 +106,7 @@ Your order will not be shipped until the funds have cleared in our account. Once
           setFormData(prev => ({
             ...prev,
             privacy_policy: defaultPrivacyPolicy,
-            terms_conditions: defaultTermsConditions,
-            payment_instructions: defaultPaymentInstructions
+            terms_conditions: defaultTermsConditions
           }));
         }
       } catch (err: any) {
@@ -180,7 +168,6 @@ Your order will not be shipped until the funds have cleared in our account. Once
             logo_url: uploadedLogoUrl,
             privacy_policy: formData.privacy_policy,
             terms_conditions: formData.terms_conditions,
-            payment_instructions: formData.payment_instructions,
           })
           .eq("id", formData.id);
         if (error) throw error;
@@ -200,7 +187,6 @@ Your order will not be shipped until the funds have cleared in our account. Once
             logo_url: uploadedLogoUrl,
             privacy_policy: formData.privacy_policy,
             terms_conditions: formData.terms_conditions,
-            payment_instructions: formData.payment_instructions,
           })
           .select()
           .single();
@@ -370,19 +356,6 @@ Your order will not be shipped until the funds have cleared in our account. Once
                   onChange={(e) => setFormData({ ...formData, terms_conditions: e.target.value })}
                   className="w-full bg-navy border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-cyan transition-colors resize-y font-mono text-sm"
                   placeholder="Enter your terms and conditions..."
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-white/70 mb-1.5 flex items-center gap-2">
-                  <Banknote size={14} className="text-white/40" /> Payment Instructions
-                </label>
-                <textarea
-                  rows={6}
-                  value={formData.payment_instructions}
-                  onChange={(e) => setFormData({ ...formData, payment_instructions: e.target.value })}
-                  className="w-full bg-navy border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-cyan transition-colors resize-y font-mono text-sm"
-                  placeholder="Enter payment instructions (e.g. UPI ID or Bank Details)..."
                 />
               </div>
             </div>

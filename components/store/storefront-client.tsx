@@ -147,7 +147,7 @@ function Footer({ store }: { store: any }) {
 
       {/* Policy Modal */}
       {activePolicy && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/80 backdrop-blur-sm animate-in fade-in duration-200">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/80 backdrop-blur-sm animate-in fade-in duration-200">
           <div className="bg-white text-slate-800 rounded-2xl shadow-2xl w-full max-w-2xl max-h-[85vh] flex flex-col overflow-hidden animate-in zoom-in-95 duration-200">
             <div className="p-4 border-b border-slate-100 flex items-center justify-between bg-slate-50">
               <h3 className="font-bold text-lg">{activePolicy === 'privacy' ? 'Privacy Policy' : 'Terms of Service'}</h3>
@@ -157,8 +157,39 @@ function Footer({ store }: { store: any }) {
             </div>
             <div className="p-6 overflow-y-auto whitespace-pre-wrap font-mono text-sm leading-relaxed">
               {activePolicy === 'privacy' 
-                ? (store.privacy_policy || "This store has not provided a custom privacy policy yet.") 
-                : (store.terms_conditions || "This store has not provided custom terms and conditions yet.")}
+                ? (store.privacy_policy || `Privacy Policy
+
+Last updated: ${new Date().toLocaleDateString()}
+
+Personal Information We Collect
+When you visit the store, we collect certain information about your device, your interaction with the store, and information necessary to process your purchases.
+
+How Do We Use Your Personal Information?
+We use the Order Information that we collect generally to fulfill any orders placed through the store (including processing your payment information, arranging for shipping, and providing you with invoices and/or order confirmations).
+
+Apna Vyapar Platform
+Our store is hosted on Apna Vyapar. They provide us with the online e-commerce platform that allows us to sell our products and services to you. Your data is stored through Apna Vyapar's data storage, databases, and the general Apna Vyapar application.
+
+Contact Us
+For more information about our privacy practices, if you have questions, or if you would like to make a complaint, please contact us by e-mail or phone provided in the store contact details.`) 
+                : (store.terms_conditions || `Terms and Conditions
+
+Last updated: ${new Date().toLocaleDateString()}
+
+Overview
+This website is operated by the merchant. Throughout the site, the terms "we", "us" and "our" refer to the merchant. The merchant offers this website, including all information, tools and services available from this site to you, the user, conditioned upon your acceptance of all terms, conditions, policies and notices stated here.
+
+Section 1 - Platform Disclaimer
+Our store is hosted on the Apna Vyapar platform. Apna Vyapar provides the e-commerce software that allows us to sell our products. Apna Vyapar is NOT responsible for the products, services, or content of this store, and is not liable for any disputes, refunds, or fulfillment issues. All transactions and agreements are strictly between you (the customer) and us (the merchant).
+
+Section 2 - Online Store Terms
+By agreeing to these Terms of Service, you represent that you are at least the age of majority in your state or province of residence.
+
+Section 3 - Modifications to the Service and Prices
+Prices for our products are subject to change without notice. We reserve the right at any time to modify or discontinue the Service (or any part or content thereof) without notice at any time.
+
+Contact Information
+Questions about the Terms of Service should be sent to us via the contact details provided in our store.`)}
             </div>
             <div className="p-4 border-t border-slate-100 bg-slate-50 flex justify-end">
               <button onClick={() => setActivePolicy(null)} className="px-6 py-2 bg-slate-800 text-white font-semibold rounded-lg hover:bg-slate-700 transition-colors">

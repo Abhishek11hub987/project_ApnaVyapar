@@ -140,13 +140,6 @@ export function CartDrawer({ store }: { store: any }) {
                 </div>
               </div>
 
-              {store.payment_instructions && (
-                <div className="bg-blue-50 border border-blue-100 rounded-xl p-4 mt-6">
-                  <h4 className="font-bold text-blue-900 mb-2">Payment Instructions</h4>
-                  <div className="text-sm text-blue-800 whitespace-pre-wrap font-mono">{store.payment_instructions}</div>
-                </div>
-              )}
-
               <label className="flex items-start gap-3 p-4 bg-slate-50 border border-slate-200 rounded-xl cursor-pointer">
                 <input 
                   type="checkbox" 
