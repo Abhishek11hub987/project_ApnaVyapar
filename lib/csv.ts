@@ -27,7 +27,14 @@ export function downloadCSV(data: any[], filename: string) {
     headers.join(','),
     ...data.map(row => 
       headers.map(header => {
-        const cell = row[header] === null || row[header] === undefined ? '' : row[header].toString();
+        let cell = '';
+        if (row[header] !== null && row[header] !== undefined) {
+          if (typeof row[header] === 'object') {
+            cell = JSON.stringify(row[header]);
+          } else {
+            cell = row[header].toString();
+          }
+        }
         // Escape quotes and wrap in quotes if contains comma
         return `"${cell.replace(/"/g, '""')}"`;
       }).join(',')
