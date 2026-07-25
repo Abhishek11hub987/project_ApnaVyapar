@@ -235,7 +235,7 @@ export function HeroScrollAnimation() {
               Your Business, Digitally Transformed
             </p>
             <a
-              href="/dashboard"
+              href="/ideas"
               className="hero-cta mt-10 inline-flex items-center gap-2 px-10 py-4 rounded-full text-white font-semibold text-base
                          bg-gradient-to-r from-cyan to-cyan-dark
                          shadow-neon-cyan hover:scale-105 hover:-translate-y-0.5
@@ -258,7 +258,7 @@ export function HeroScrollAnimation() {
               Your Business, Digitally Transformed
             </p>
             <a
-              href="/dashboard"
+              href="/ideas"
               className="mt-10 inline-flex items-center gap-2 px-10 py-4 rounded-full text-white font-semibold
                          bg-gradient-to-r from-cyan to-cyan-dark shadow-neon-cyan
                          hover:scale-105 transition-all duration-300 focus-ring"

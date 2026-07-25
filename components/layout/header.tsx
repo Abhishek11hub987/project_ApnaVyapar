@@ -30,23 +30,23 @@ export default function Header() {
         </Link>
         
         {/* Desktop Navigation — always centered */}
-        <nav className="hidden md:flex items-center justify-center gap-6">
-          <Link href="/" className={`font-semibold text-sm transition-colors hover:text-teal-600 dark:hover:text-teal-400 ${pathname === '/' ? 'text-teal-600 dark:text-teal-400' : 'text-slate-600 dark:text-slate-300'}`}>
+        <nav className="hidden md:flex items-center justify-center gap-1 bg-slate-50/50 dark:bg-slate-800/30 p-1 rounded-full border border-slate-200/50 dark:border-slate-700/50 shadow-sm">
+          <Link href="/" className={`font-medium text-sm transition-all px-4 py-1.5 rounded-full ${pathname === '/' ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-black/5 dark:hover:bg-white/5'}`}>
             Home
           </Link>
-          <Link href="/ideas" className={`font-semibold text-sm transition-colors hover:text-teal-600 dark:hover:text-teal-400 ${pathname.startsWith('/ideas') ? 'text-teal-600 dark:text-teal-400' : 'text-slate-600 dark:text-slate-300'}`}>
+          <Link href="/ideas" className={`font-medium text-sm transition-all px-4 py-1.5 rounded-full ${pathname.startsWith('/ideas') ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-black/5 dark:hover:bg-white/5'}`}>
             Ideas
           </Link>
-          <ProtectedLink href="/chat" className={`font-semibold text-sm transition-colors hover:text-teal-600 dark:hover:text-teal-400 ${pathname.startsWith('/chat') ? 'text-teal-600 dark:text-teal-400' : 'text-slate-600 dark:text-slate-300'}`}>
+          <ProtectedLink href="/chat" className={`font-medium text-sm transition-all px-4 py-1.5 rounded-full ${pathname.startsWith('/chat') ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-black/5 dark:hover:bg-white/5'}`}>
             Mitra
           </ProtectedLink>
-          <ProtectedLink href="/tasks" className={`font-semibold text-sm transition-colors hover:text-teal-600 dark:hover:text-teal-400 ${pathname.startsWith('/tasks') ? 'text-teal-600 dark:text-teal-400' : 'text-slate-600 dark:text-slate-300'}`}>
+          <ProtectedLink href="/tasks" className={`font-medium text-sm transition-all px-4 py-1.5 rounded-full ${pathname.startsWith('/tasks') ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-black/5 dark:hover:bg-white/5'}`}>
             Tasks
           </ProtectedLink>
-          <ProtectedLink href="/dashboard" className={`font-semibold text-sm transition-colors hover:text-teal-600 dark:hover:text-teal-400 ${pathname.startsWith('/dashboard') ? 'text-teal-600 dark:text-teal-400' : 'text-slate-600 dark:text-slate-300'}`}>
+          <ProtectedLink href="/dashboard" className={`font-medium text-sm transition-all px-4 py-1.5 rounded-full ${pathname.startsWith('/dashboard') ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-black/5 dark:hover:bg-white/5'}`}>
             Dashboard
           </ProtectedLink>
-          <ProtectedLink href="/profile" className={`font-semibold text-sm transition-colors hover:text-teal-600 dark:hover:text-teal-400 ${pathname.startsWith('/profile') ? 'text-teal-600 dark:text-teal-400' : 'text-slate-600 dark:text-slate-300'}`}>
+          <ProtectedLink href="/profile" className={`font-medium text-sm transition-all px-4 py-1.5 rounded-full ${pathname.startsWith('/profile') ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-black/5 dark:hover:bg-white/5'}`}>
             Profile
           </ProtectedLink>
         </nav>
