@@ -404,3 +404,26 @@ create policy "Users can CRUD own products" on products for all using (auth.uid(
 
 create trigger products_updated_at before update on products
   for each row execute procedure public.update_updated_at();
+
+-- =========================================================================================
+-- 11. CUSTOMERS (CRM)
+-- =========================================================================================
+
+create table customers (
+  id uuid default gen_random_uuid() primary key,
+  user_id uuid references profiles(id) on delete cascade not null,
+  name text not null,
+  email text,
+  phone text,
+  total_spent numeric(10, 2) default 0,
+  total_orders integer default 0,
+  status text default 'active' check (status in ('active', 'inactive', 'vip')),
+  created_at timestamp with time zone default timezone('utc'::text, now()),
+  updated_at timestamp with time zone default timezone('utc'::text, now())
+);
+
+alter table customers enable row level security;
+create policy "Users can CRUD own customers" on customers for all using (auth.uid() = user_id);
+
+create trigger customers_updated_at before update on customers
+  for each row execute procedure public.update_updated_at();
