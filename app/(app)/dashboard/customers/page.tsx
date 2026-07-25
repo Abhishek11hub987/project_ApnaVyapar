@@ -11,27 +11,35 @@ export default function CustomersPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchCustomers();
-  }, []);
+    let isMounted = true;
 
-  const fetchCustomers = async () => {
-    try {
-      const { data, error } = await supabase
-        .from("customers")
-        .select("*")
-        .order("total_spent", { ascending: false });
+    async function fetchCustomers() {
+      try {
+        const { data, error } = await supabase
+          .from("customers")
+          .select("*")
+          .order("total_spent", { ascending: false });
 
-      if (error) {
-        console.error("Error fetching customers:", error);
-      } else {
-        setCustomers(data || []);
+        if (error) {
+          console.error("Error fetching customers:", error);
+        } else if (isMounted) {
+          setCustomers(data || []);
+        }
+      } catch (error) {
+        console.error("Error:", error);
+      } finally {
+        if (isMounted) {
+          setLoading(false);
+        }
       }
-    } catch (error) {
-      console.error("Error:", error);
-    } finally {
-      setLoading(false);
     }
-  };
+
+    fetchCustomers();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   return (
     <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">

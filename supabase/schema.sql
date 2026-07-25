@@ -427,3 +427,39 @@ create policy "Users can CRUD own customers" on customers for all using (auth.ui
 
 create trigger customers_updated_at before update on customers
   for each row execute procedure public.update_updated_at();
+
+-- =========================================================================================
+-- 12. STORE SETTINGS & ORDERS (PHASE 4)
+-- =========================================================================================
+
+create table store_settings (
+  id uuid default gen_random_uuid() primary key,
+  user_id uuid references profiles(id) on delete cascade not null unique,
+  store_name text not null,
+  slug text unique not null,
+  theme_color text default '#00D4FF',
+  is_active boolean default true,
+  created_at timestamp with time zone default timezone('utc'::text, now()),
+  updated_at timestamp with time zone default timezone('utc'::text, now())
+);
+
+create table orders (
+  id uuid default gen_random_uuid() primary key,
+  store_id uuid references store_settings(id) on delete cascade not null,
+  customer_id uuid references customers(id) on delete set null,
+  total_amount numeric(10, 2) not null,
+  status text default 'pending' check (status in ('pending', 'processing', 'shipped', 'delivered', 'cancelled')),
+  created_at timestamp with time zone default timezone('utc'::text, now())
+);
+
+alter table store_settings enable row level security;
+create policy "Users can CRUD own store" on store_settings for all using (auth.uid() = user_id);
+create policy "Public can view active stores" on store_settings for select using (is_active = true);
+
+alter table orders enable row level security;
+create policy "Users can CRUD own orders" on orders for all using (
+  store_id in (select id from store_settings where user_id = auth.uid())
+);
+
+create trigger store_settings_updated_at before update on store_settings
+  for each row execute procedure public.update_updated_at();

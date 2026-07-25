@@ -1,0 +1,245 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { supabase } from "@/lib/supabase";
+import { Save, Store, Globe, Palette } from "lucide-react";
+import Link from "next/link";
+
+export default function StoreBuilderPage() {
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState(false);
+
+  const [formData, setFormData] = useState({
+    id: "",
+    store_name: "",
+    slug: "",
+    theme_color: "#00D4FF",
+    is_active: true
+  });
+
+  useEffect(() => {
+    let isMounted = true;
+    async function fetchStoreSettings() {
+      try {
+        const { data: userData, error: authError } = await supabase.auth.getUser();
+        if (authError || !userData?.user) return;
+
+        const { data, error } = await supabase
+          .from("store_settings")
+          .select("*")
+          .eq("user_id", userData.user.id)
+          .single();
+
+        if (error && error.code !== "PGRST116") {
+          console.error(error);
+        } else if (data && isMounted) {
+          setFormData({
+            id: data.id,
+            store_name: data.store_name,
+            slug: data.slug,
+            theme_color: data.theme_color,
+            is_active: data.is_active
+          });
+        }
+      } catch (err) {
+        console.error(err);
+      } finally {
+        if (isMounted) setLoading(false);
+      }
+    }
+    fetchStoreSettings();
+    return () => { isMounted = false; };
+  }, []);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSaving(true);
+    setError(null);
+    setSuccess(false);
+
+    try {
+      const { data: userData } = await supabase.auth.getUser();
+      if (!userData?.user) throw new Error("Not authenticated");
+
+      if (formData.id) {
+        // Update existing
+        const { error } = await supabase
+          .from("store_settings")
+          .update({
+            store_name: formData.store_name,
+            slug: formData.slug,
+            theme_color: formData.theme_color,
+            is_active: formData.is_active
+          })
+          .eq("id", formData.id);
+        if (error) throw error;
+      } else {
+        // Insert new
+        const { data, error } = await supabase
+          .from("store_settings")
+          .insert({
+            user_id: userData.user.id,
+            store_name: formData.store_name,
+            slug: formData.slug,
+            theme_color: formData.theme_color,
+            is_active: formData.is_active
+          })
+          .select()
+          .single();
+        if (error) throw error;
+        if (data) setFormData(prev => ({ ...prev, id: data.id }));
+      }
+      setSuccess(true);
+      setTimeout(() => setSuccess(false), 3000);
+    } catch (err: any) {
+      setError(err.message || "Failed to save store settings.");
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const storeUrl = formData.slug ? `${window.location.origin}/store/${formData.slug}` : "";
+
+  return (
+    <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 max-w-3xl mx-auto">
+      <div className="mb-8">
+        <h1 className="text-3xl font-extrabold text-white tracking-tight mb-2">Store Builder</h1>
+        <p className="text-white/60">Configure your public storefront where customers can view and buy your products.</p>
+      </div>
+
+      {loading ? (
+        <div className="glass-card p-12 flex justify-center items-center">
+          <div className="w-8 h-8 border-2 border-cyan/30 border-t-cyan rounded-full animate-spin" />
+        </div>
+      ) : (
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="glass-card p-6 md:p-8 border-white/5 space-y-8">
+            
+            {error && (
+              <div className="bg-red-500/10 border border-red-500/20 text-red-400 p-4 rounded-xl text-sm font-medium">
+                {error}
+              </div>
+            )}
+            {success && (
+              <div className="bg-teal-500/10 border border-teal-500/20 text-teal-400 p-4 rounded-xl text-sm font-medium">
+                Store settings saved successfully!
+              </div>
+            )}
+
+            {/* Store Details */}
+            <div className="space-y-4">
+              <div className="flex items-center gap-2 border-b border-white/10 pb-2 mb-4">
+                <Store size={18} className="text-cyan" />
+                <h3 className="text-lg font-bold text-white">Store Identity</h3>
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-white/70 mb-1.5">Store Name *</label>
+                <input
+                  type="text"
+                  required
+                  value={formData.store_name}
+                  onChange={(e) => setFormData({ ...formData, store_name: e.target.value })}
+                  className="w-full bg-navy border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-cyan transition-colors"
+                  placeholder="e.g. My Awesome Shop"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-white/70 mb-1.5">Store URL (Slug) *</label>
+                <div className="flex bg-navy border border-white/10 rounded-xl overflow-hidden focus-within:border-cyan transition-colors">
+                  <span className="px-4 py-3 bg-white/5 text-white/40 border-r border-white/10 whitespace-nowrap">
+                    apnavyapar.com/store/
+                  </span>
+                  <input
+                    type="text"
+                    required
+                    value={formData.slug}
+                    onChange={(e) => setFormData({ ...formData, slug: e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '-') })}
+                    className="w-full bg-transparent px-4 py-3 text-white outline-none"
+                    placeholder="my-awesome-shop"
+                  />
+                </div>
+                {storeUrl && (
+                  <p className="mt-2 text-xs text-white/40">
+                    Your store will be live at: <a href={storeUrl} target="_blank" rel="noopener noreferrer" className="text-cyan hover:underline">{storeUrl}</a>
+                  </p>
+                )}
+              </div>
+            </div>
+
+            {/* Appearance */}
+            <div className="space-y-4">
+              <div className="flex items-center gap-2 border-b border-white/10 pb-2 mb-4">
+                <Palette size={18} className="text-cyan" />
+                <h3 className="text-lg font-bold text-white">Appearance</h3>
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-white/70 mb-1.5">Brand Color</label>
+                <div className="flex items-center gap-4">
+                  <input
+                    type="color"
+                    value={formData.theme_color}
+                    onChange={(e) => setFormData({ ...formData, theme_color: e.target.value })}
+                    className="w-12 h-12 rounded bg-navy border border-white/10 cursor-pointer"
+                  />
+                  <span className="text-white/60 font-mono text-sm">{formData.theme_color.toUpperCase()}</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Status */}
+            <div className="space-y-4">
+              <div className="flex items-center gap-2 border-b border-white/10 pb-2 mb-4">
+                <Globe size={18} className="text-cyan" />
+                <h3 className="text-lg font-bold text-white">Visibility</h3>
+              </div>
+              
+              <label className="flex items-center gap-3 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={formData.is_active}
+                  onChange={(e) => setFormData({ ...formData, is_active: e.target.checked })}
+                  className="w-5 h-5 rounded bg-navy border border-white/10 text-cyan focus:ring-cyan focus:ring-offset-navy"
+                />
+                <div>
+                  <p className="text-white font-medium">Store is Active</p>
+                  <p className="text-white/40 text-sm">If unchecked, customers will see a "Maintenance" page.</p>
+                </div>
+              </label>
+            </div>
+
+          </div>
+
+          <div className="flex justify-end gap-3">
+            {storeUrl && formData.id && (
+              <a
+                href={storeUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-6 py-3 rounded-xl border border-white/10 text-white font-medium hover:bg-white/5 transition-colors flex items-center gap-2"
+              >
+                View Store <Globe size={16} />
+              </a>
+            )}
+            <button
+              type="submit"
+              disabled={saving}
+              className="px-6 py-3 rounded-xl bg-cyan text-navy-dark font-bold hover:scale-105 transition-all shadow-neon-cyan flex items-center gap-2 disabled:opacity-50 disabled:hover:scale-100"
+            >
+              {saving ? (
+                <div className="w-5 h-5 border-2 border-navy-dark/30 border-t-navy-dark rounded-full animate-spin" />
+              ) : (
+                <Save size={18} />
+              )}
+              Save Settings
+            </button>
+          </div>
+        </form>
+      )}
+    </div>
+  );
+}
