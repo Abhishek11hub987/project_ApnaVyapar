@@ -1,21 +1,29 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { useFramePreloader } from "@/hooks/use-frame-preloader";
+import { useEffect, useRef, useState, useCallback } from "react";
 
 const FRAME_COUNT = 240;
+const FOLDER_PATH = "/frames/hero-sequence";
+
+function padNum(num: number, size: number): string {
+  let s = num.toString();
+  while (s.length < size) s = "0" + s;
+  return s;
+}
 
 export function HeroScrollAnimation() {
   const containerRef = useRef<HTMLDivElement>(null);
+  const canvasWrapperRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const overlayRef = useRef<HTMLDivElement>(null);
-  const { images, isReady, progress } = useFramePreloader();
-  const [isPinned, setIsPinned] = useState(true);
+  const imagesRef = useRef<(HTMLImageElement | null)[]>([]);
   const currentFrameRef = useRef(0);
   const rafRef = useRef<number>(0);
 
-  // Check reduced motion preference
+  const [loadProgress, setLoadProgress] = useState(0);
+  const [isReady, setIsReady] = useState(false);
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+
+  // Check reduced motion
   useEffect(() => {
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
     setPrefersReducedMotion(mq.matches);
@@ -24,37 +32,29 @@ export function HeroScrollAnimation() {
     return () => mq.removeEventListener("change", handler);
   }, []);
 
-  // Draw a specific frame onto the canvas
-  const drawFrame = (index: number) => {
+  // Draw frame onto canvas
+  const drawFrame = useCallback((index: number) => {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    const img = images[index];
+    // Find the image, fallback to nearest loaded
+    let img = imagesRef.current[index] || null;
     if (!img) {
-      // Find nearest loaded frame
-      let nearest = null;
-      for (let d = 0; d < FRAME_COUNT; d++) {
-        if (images[index + d]) { nearest = images[index + d]; break; }
-        if (images[index - d]) { nearest = images[index - d]; break; }
+      for (let d = 1; d < FRAME_COUNT; d++) {
+        if (imagesRef.current[index - d]) { img = imagesRef.current[index - d]; break; }
+        if (imagesRef.current[index + d]) { img = imagesRef.current[index + d]; break; }
       }
-      if (!nearest) return;
-      renderImage(ctx, canvas, nearest);
-      return;
     }
-    renderImage(ctx, canvas, img);
-  };
+    if (!img) return;
 
-  const renderImage = (
-    ctx: CanvasRenderingContext2D,
-    canvas: HTMLCanvasElement,
-    img: HTMLImageElement
-  ) => {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    // Set canvas resolution to match viewport
+    const dpr = 1; // Use 1 for performance with 240 frames
+    canvas.width = window.innerWidth * dpr;
+    canvas.height = window.innerHeight * dpr;
 
-    // Cover fit
+    // Cover-fit the image
     const hRatio = canvas.width / img.width;
     const vRatio = canvas.height / img.height;
     const ratio = Math.max(hRatio, vRatio);
@@ -63,135 +63,154 @@ export function HeroScrollAnimation() {
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.drawImage(img, 0, 0, img.width, img.height, cx, cy, img.width * ratio, img.height * ratio);
-  };
+  }, []);
 
-  // Set up GSAP ScrollTrigger
+  // Preload all frames
+  useEffect(() => {
+    imagesRef.current = new Array(FRAME_COUNT).fill(null);
+    let loadedCount = 0;
+
+    for (let i = 0; i < FRAME_COUNT; i++) {
+      const img = new Image();
+      img.onload = () => {
+        imagesRef.current[i] = img;
+        loadedCount++;
+        setLoadProgress(Math.floor((loadedCount / FRAME_COUNT) * 100));
+
+        // Mark ready once first 30 frames loaded
+        if (loadedCount >= 30) {
+          setIsReady(true);
+        }
+
+        // Draw frame 0 as soon as it loads
+        if (i === 0) {
+          drawFrame(0);
+        }
+      };
+      img.src = `${FOLDER_PATH}/frame_${padNum(i + 1, 3)}.jpg`;
+    }
+  }, [drawFrame]);
+
+  // GSAP ScrollTrigger setup
   useEffect(() => {
     if (!isReady || prefersReducedMotion) {
-      // For reduced motion, just show frame 120 (middle)
-      if (prefersReducedMotion && images[119]) {
-        drawFrame(119);
-      }
+      if (prefersReducedMotion) drawFrame(119);
       return;
     }
 
-    let gsapModule: any;
-    let ScrollTriggerModule: any;
+    let killed = false;
+    let st: any = null;
+    let stText: any = null;
 
-    async function initGSAP() {
-      const gsapPkg = await import("gsap");
-      const stPkg = await import("gsap/ScrollTrigger");
+    async function init() {
+      const gsapMod = await import("gsap");
+      const stMod = await import("gsap/ScrollTrigger");
 
-      gsapModule = gsapPkg.gsap || gsapPkg.default;
-      ScrollTriggerModule = stPkg.ScrollTrigger || stPkg.default;
-      gsapModule.registerPlugin(ScrollTriggerModule);
+      if (killed) return;
 
-      // Draw first frame immediately
+      const gsap = gsapMod.gsap || gsapMod.default;
+      const ScrollTrigger = stMod.ScrollTrigger || stMod.default;
+      gsap.registerPlugin(ScrollTrigger);
+
+      // Draw initial frame
       drawFrame(0);
 
-      // Main hero pin + frame scrub
-      ScrollTriggerModule.create({
+      // Pin the canvas wrapper and scrub through frames
+      st = ScrollTrigger.create({
         trigger: containerRef.current,
         start: "top top",
         end: "bottom bottom",
-        scrub: 0.8,
+        pin: canvasWrapperRef.current,
+        scrub: true,
+        anticipatePin: 1,
         onUpdate: (self: any) => {
-          const frameIndex = Math.min(
-            FRAME_COUNT - 1,
-            Math.floor(self.progress * FRAME_COUNT)
-          );
-
+          const progress = self.progress;
+          const frameIndex = Math.min(FRAME_COUNT - 1, Math.floor(progress * FRAME_COUNT));
           if (frameIndex !== currentFrameRef.current) {
             currentFrameRef.current = frameIndex;
             cancelAnimationFrame(rafRef.current);
             rafRef.current = requestAnimationFrame(() => drawFrame(frameIndex));
           }
         },
-        onLeave: () => setIsPinned(false),
-        onEnterBack: () => setIsPinned(true),
       });
 
-      // Overlay text animations
-      const tl = gsapModule.timeline({
+      // Text overlay timeline synced to scroll
+      const tl = gsap.timeline({
         scrollTrigger: {
           trigger: containerRef.current,
           start: "top top",
           end: "bottom bottom",
-          scrub: 0.8,
+          scrub: true,
         },
       });
 
-      // Title: 5% - 22%
-      tl.fromTo(
-        ".hero-title",
+      // 0-5%: nothing
+      // 5-15%: title fades in
+      tl.fromTo(".hero-title",
         { y: 60, opacity: 0, scale: 0.95 },
-        { y: 0, opacity: 1, scale: 1, ease: "power3.out" },
+        { y: 0, opacity: 1, scale: 1, duration: 0.1, ease: "power3.out" },
         0.05
       );
-      // Tagline: 12% - 22%
-      tl.fromTo(
-        ".hero-tagline",
+      // 10-18%: tagline fades in
+      tl.fromTo(".hero-tagline",
         { y: 40, opacity: 0 },
-        { y: 0, opacity: 1, ease: "power3.out" },
-        0.12
+        { y: 0, opacity: 1, duration: 0.08, ease: "power3.out" },
+        0.10
       );
-      // CTA: 18% - 22%
-      tl.fromTo(
-        ".hero-cta",
+      // 15-22%: CTA fades in
+      tl.fromTo(".hero-cta",
         { y: 30, opacity: 0, scale: 0.9 },
-        { y: 0, opacity: 1, scale: 1, ease: "power3.out" },
-        0.18
+        { y: 0, opacity: 1, scale: 1, duration: 0.07, ease: "power3.out" },
+        0.15
       );
-      // Hold static 22% - 75%
-      tl.to(".hero-overlay-content", { opacity: 1 }, 0.22);
-      // Fade out 75% - 85%
-      tl.to(
-        ".hero-overlay-content",
-        { y: -50, opacity: 0, scale: 0.98, ease: "power2.in" },
+      // 75-85%: everything fades out
+      tl.to(".hero-overlay-content",
+        { y: -50, opacity: 0, scale: 0.98, duration: 0.1, ease: "power2.in" },
         0.75
       );
+
+      stText = tl.scrollTrigger;
     }
 
-    initGSAP();
+    init();
 
     return () => {
-      if (ScrollTriggerModule) {
-        ScrollTriggerModule.getAll().forEach((t: any) => t.kill());
-      }
+      killed = true;
+      if (st) st.kill();
+      if (stText) stText.kill();
       cancelAnimationFrame(rafRef.current);
     };
-  }, [isReady, prefersReducedMotion]);
+  }, [isReady, prefersReducedMotion, drawFrame]);
 
-  // Resize handler
+  // Window resize
   useEffect(() => {
-    const handleResize = () => {
-      drawFrame(currentFrameRef.current);
-    };
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, [images]);
+    const onResize = () => drawFrame(currentFrameRef.current);
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, [drawFrame]);
 
   return (
     <div ref={containerRef} className="relative" style={{ height: "500vh" }}>
-      {/* Fixed canvas */}
-      <div
-        className="sticky top-0 w-full overflow-hidden"
-        style={{ height: "100vh" }}
-      >
+      {/* This div gets pinned by GSAP */}
+      <div ref={canvasWrapperRef} className="w-full overflow-hidden" style={{ height: "100vh" }}>
+
         {/* Loading state */}
         {!isReady && (
           <div className="absolute inset-0 z-50 flex flex-col items-center justify-center bg-navy">
-            <div className="w-12 h-12 border-2 border-cyan/30 border-t-cyan rounded-full mb-4" style={{ animation: "spin-slow 1s linear infinite" }} />
+            <div
+              className="w-12 h-12 border-2 border-cyan/30 border-t-cyan rounded-full mb-4"
+              style={{ animation: "spin-slow 1s linear infinite" }}
+            />
             <p className="text-white/50 text-sm font-medium tracking-widest uppercase">
               Loading experience...
             </p>
             <div className="mt-3 w-48 h-1 bg-white/10 rounded-full overflow-hidden">
               <div
                 className="h-full bg-cyan rounded-full transition-all duration-300"
-                style={{ width: `${progress}%` }}
+                style={{ width: `${loadProgress}%` }}
               />
             </div>
-            <p className="mt-2 text-white/30 text-xs">{progress}%</p>
+            <p className="mt-2 text-white/30 text-xs">{loadProgress}%</p>
           </div>
         )}
 
@@ -203,15 +222,12 @@ export function HeroScrollAnimation() {
           aria-label="Animated visualization of a digital city growing, representing business expansion"
         />
 
-        {/* Dark overlay for text readability */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/50 z-[2]" />
+        {/* Dark gradient overlay for text readability */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/10 to-black/60 z-[2]" />
 
-        {/* Overlay content */}
+        {/* Overlay text content */}
         {!prefersReducedMotion && (
-          <div
-            ref={overlayRef}
-            className="hero-overlay-content absolute inset-0 z-10 flex flex-col items-center justify-center text-center px-6 pointer-events-none"
-          >
+          <div className="hero-overlay-content absolute inset-0 z-10 flex flex-col items-center justify-center text-center px-6 pointer-events-none">
             <h1 className="hero-title hero-text-shadow text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold text-white tracking-[-0.03em] mb-6 opacity-0">
               Apna Vyapar
             </h1>
