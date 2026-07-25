@@ -23,30 +23,30 @@ export default function Header() {
   if (!mounted) return null;
 
   return (
-    <header className="sticky top-0 z-50 w-full bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800">
+    <header className="sticky top-0 z-50 w-full bg-navy/90 backdrop-blur-xl border-b border-white/5 shadow-lg">
       <div className="max-w-7xl mx-auto px-4 h-16 grid grid-cols-[1fr_auto_1fr] items-center">
         <Link href="/" className="hover:opacity-90 transition-opacity justify-self-start">
           <Logo iconSize={28} />
         </Link>
         
-        {/* Desktop Navigation — always centered */}
-        <nav className="hidden md:flex items-center justify-center gap-1 bg-slate-50/50 dark:bg-slate-800/30 p-1.5 px-5 rounded-full border border-slate-200/50 dark:border-slate-700/50 shadow-sm">
-          <Link href="/" className={`font-medium text-sm transition-all px-4 py-1.5 rounded-full ${pathname === '/' ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-black/5 dark:hover:bg-white/5'}`}>
+        {/* Desktop Navigation — pill style */}
+        <nav className="hidden md:flex items-center justify-center gap-1 bg-white/5 p-1.5 px-3 rounded-full border border-white/10">
+          <Link href="/" className={`font-medium text-sm transition-all px-4 py-1.5 rounded-full ${pathname === '/' ? 'bg-white/15 text-white shadow-sm' : 'text-white/50 hover:text-white/80 hover:bg-white/5'}`}>
             Home
           </Link>
-          <Link href="/ideas" className={`font-medium text-sm transition-all px-4 py-1.5 rounded-full ${pathname.startsWith('/ideas') ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-black/5 dark:hover:bg-white/5'}`}>
+          <Link href="/ideas" className={`font-medium text-sm transition-all px-4 py-1.5 rounded-full ${pathname.startsWith('/ideas') ? 'bg-cyan/20 text-cyan shadow-sm border border-cyan/20' : 'text-white/50 hover:text-white/80 hover:bg-white/5'}`}>
             Ideas
           </Link>
-          <ProtectedLink href="/chat" className={`font-medium text-sm transition-all px-4 py-1.5 rounded-full ${pathname.startsWith('/chat') ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-black/5 dark:hover:bg-white/5'}`}>
+          <ProtectedLink href="/chat" className={`font-medium text-sm transition-all px-4 py-1.5 rounded-full ${pathname.startsWith('/chat') ? 'bg-cyan/20 text-cyan shadow-sm border border-cyan/20' : 'text-white/50 hover:text-white/80 hover:bg-white/5'}`}>
             Mitra
           </ProtectedLink>
-          <ProtectedLink href="/tasks" className={`font-medium text-sm transition-all px-4 py-1.5 rounded-full ${pathname.startsWith('/tasks') ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-black/5 dark:hover:bg-white/5'}`}>
+          <ProtectedLink href="/tasks" className={`font-medium text-sm transition-all px-4 py-1.5 rounded-full ${pathname.startsWith('/tasks') ? 'bg-cyan/20 text-cyan shadow-sm border border-cyan/20' : 'text-white/50 hover:text-white/80 hover:bg-white/5'}`}>
             Tasks
           </ProtectedLink>
-          <ProtectedLink href="/dashboard" className={`font-medium text-sm transition-all px-4 py-1.5 rounded-full ${pathname.startsWith('/dashboard') ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-black/5 dark:hover:bg-white/5'}`}>
+          <ProtectedLink href="/dashboard" className={`font-medium text-sm transition-all px-4 py-1.5 rounded-full ${pathname.startsWith('/dashboard') ? 'bg-cyan/20 text-cyan shadow-sm border border-cyan/20' : 'text-white/50 hover:text-white/80 hover:bg-white/5'}`}>
             Dashboard
           </ProtectedLink>
-          <ProtectedLink href="/profile" className={`font-medium text-sm transition-all px-4 py-1.5 rounded-full ${pathname.startsWith('/profile') ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-black/5 dark:hover:bg-white/5'}`}>
+          <ProtectedLink href="/profile" className={`font-medium text-sm transition-all px-4 py-1.5 rounded-full ${pathname.startsWith('/profile') ? 'bg-cyan/20 text-cyan shadow-sm border border-cyan/20' : 'text-white/50 hover:text-white/80 hover:bg-white/5'}`}>
             Profile
           </ProtectedLink>
         </nav>
@@ -56,7 +56,7 @@ export default function Header() {
             <>
               <button
                 onClick={() => setLanguage(language === 'en' ? 'hi' : 'en')}
-                className="flex items-center gap-1.5 text-xs font-bold bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 px-3 py-2 rounded-full transition-colors"
+                className="flex items-center gap-1.5 text-xs font-bold bg-white/5 border border-white/10 hover:bg-white/10 text-white/70 px-3 py-2 rounded-full transition-colors"
               >
                 <Globe size={14} />
                 {language === 'en' ? 'HI' : 'EN'}
@@ -64,7 +64,7 @@ export default function Header() {
 
               <button
                 onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-                className="w-9 h-9 flex items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
+                className="w-9 h-9 flex items-center justify-center rounded-full bg-white/5 border border-white/10 text-white/70 hover:bg-white/10 transition-colors"
                 aria-label="Toggle theme"
               >
                 {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}

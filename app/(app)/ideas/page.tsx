@@ -4,44 +4,81 @@ import { supabase } from '@/lib/supabase';
 import { BusinessIdea } from '@/types/database';
 import IdeaCard from '@/components/ideas/idea-card';
 import IdeaFilters from '@/components/ideas/idea-filters';
-import { Search } from 'lucide-react';
+import ContributeIdeaModal from '@/components/ideas/contribute-idea-modal';
+import { Search, Lightbulb, Users2, Sparkles, Plus, TrendingUp } from 'lucide-react';
 import { useLanguage } from '@/lib/language-context';
 import { GuruGyaan } from '@/components/guru-gyaan';
+import { CATEGORY_GRADIENTS } from '@/components/ideas/idea-card';
+
+type CommunityIdea = {
+  id: number;
+  title: string;
+  description: string;
+  category: string;
+  investment_min: number;
+  investment_max: number;
+  location_type: string;
+  monthly_profit_min: number | null;
+  monthly_profit_max: number | null;
+  pros: string[];
+  cons: string[];
+  required_skills: string[];
+  image_url: string | null;
+  slug: string;
+  contributor_name: string | null;
+  ai_generated: boolean;
+  view_count: number;
+  created_at: string;
+};
 
 export default function IdeasCatalog() {
   const [ideas, setIdeas] = useState<BusinessIdea[]>([]);
+  const [communityIdeas, setCommunityIdeas] = useState<CommunityIdea[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [filters, setFilters] = useState({ category: '', budget: '', location: '', sort: 'popular' });
+  const [activeTab, setActiveTab] = useState<'curated' | 'community'>('curated');
+  const [showContribute, setShowContribute] = useState(false);
   const { t } = useLanguage();
 
   useEffect(() => {
     fetchIdeas();
-  }, [filters]);
+  }, [filters, activeTab]);
 
   const fetchIdeas = async () => {
     setLoading(true);
-    let query = supabase.from('business_ideas').select('*').eq('is_active', true);
 
-    // Apply exact filters
-    if (filters.category) query = query.eq('category', filters.category);
-    if (filters.location) query = query.eq('location_type', filters.location);
+    if (activeTab === 'curated') {
+      let query = supabase.from('business_ideas').select('*').eq('is_active', true);
+
+      if (filters.category) query = query.eq('category', filters.category);
+      if (filters.location) query = query.eq('location_type', filters.location);
+      
+      if (filters.budget === 'under-10k') query = query.lte('investment_min', 10000);
+      else if (filters.budget === '10k-50k') query = query.gte('investment_min', 10000).lte('investment_max', 50000);
+      else if (filters.budget === '50k-2l') query = query.gte('investment_min', 50000).lte('investment_max', 200000);
+      else if (filters.budget === '2l-10l') query = query.gte('investment_min', 200000).lte('investment_max', 1000000);
+
+      if (filters.sort === 'inv_low') query = query.order('investment_min', { ascending: true });
+      else if (filters.sort === 'inv_high') query = query.order('investment_min', { ascending: false });
+      else if (filters.sort === 'profit') query = query.order('monthly_profit_max', { ascending: false });
+      else if (filters.sort === 'trending') query = query.order('is_trending', { ascending: false }).order('view_count', { ascending: false });
+      else query = query.order('view_count', { ascending: false });
+
+      const { data } = await query;
+      setIdeas(data || []);
+    } else {
+      // Fetch community ideas
+      let query = supabase.from('community_ideas').select('*').eq('is_approved', true);
+      
+      if (filters.category) query = query.eq('category', filters.category);
+      
+      query = query.order('created_at', { ascending: false });
+      
+      const { data } = await query;
+      setCommunityIdeas(data || []);
+    }
     
-    // Apply range filters
-    if (filters.budget === 'under-10k') query = query.lte('investment_min', 10000);
-    else if (filters.budget === '10k-50k') query = query.gte('investment_min', 10000).lte('investment_max', 50000);
-    else if (filters.budget === '50k-2l') query = query.gte('investment_min', 50000).lte('investment_max', 200000);
-    else if (filters.budget === '2l-10l') query = query.gte('investment_min', 200000).lte('investment_max', 1000000);
-
-    // Apply sorting
-    if (filters.sort === 'inv_low') query = query.order('investment_min', { ascending: true });
-    else if (filters.sort === 'inv_high') query = query.order('investment_min', { ascending: false });
-    else if (filters.sort === 'profit') query = query.order('monthly_profit_max', { ascending: false });
-    else if (filters.sort === 'trending') query = query.order('is_trending', { ascending: false }).order('view_count', { ascending: false });
-    else query = query.order('view_count', { ascending: false }); // default popular
-
-    const { data } = await query;
-    setIdeas(data || []);
     setLoading(false);
   };
 
@@ -49,33 +86,40 @@ export default function IdeasCatalog() {
     ? ideas.filter(i => i.title.toLowerCase().includes(search.toLowerCase()) || i.description.toLowerCase().includes(search.toLowerCase()))
     : ideas;
 
+  const filteredCommunityIdeas = search
+    ? communityIdeas.filter(i => i.title.toLowerCase().includes(search.toLowerCase()) || i.description.toLowerCase().includes(search.toLowerCase()))
+    : communityIdeas;
+
+  const formatINR = (amount: number) => 
+    new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(amount);
+
   return (
-    <main className="min-h-screen bg-slate-50 dark:bg-slate-950 pb-24 font-sans transition-colors">
+    <main className="min-h-screen bg-navy pb-24 font-sans transition-colors">
       {/* Header */}
       <div className="pt-12 pb-20 px-4 relative overflow-hidden">
         {/* Abstract background shapes */}
         <div className="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none">
-          <div className="absolute -top-24 -right-24 w-96 h-96 bg-teal-500 rounded-full blur-3xl"></div>
-          <div className="absolute top-24 -left-24 w-64 h-64 bg-amber-500 rounded-full blur-3xl"></div>
+          <div className="absolute -top-24 -right-24 w-96 h-96 bg-cyan rounded-full blur-3xl"></div>
+          <div className="absolute top-24 -left-24 w-64 h-64 bg-emerald-500 rounded-full blur-3xl"></div>
         </div>
 
         <div className="max-w-7xl mx-auto relative z-10 flex flex-col items-center">
           <GuruGyaan context="general" />
-          <h1 className="text-3xl md:text-5xl font-extrabold text-slate-900 dark:text-white mt-8 mb-4">
+          <h1 className="text-3xl md:text-5xl font-extrabold text-white mt-8 mb-4 text-center">
             {t('catalog.title')}
           </h1>
-          <p className="text-slate-600 dark:text-slate-400 text-lg md:text-xl max-w-2xl mx-auto font-medium text-center">
+          <p className="text-white/50 text-lg md:text-xl max-w-2xl mx-auto font-medium text-center">
             {t('catalog.subtitle')}
           </p>
           
-          <div className="relative max-w-2xl w-full mt-8 shadow-xl rounded-2xl">
-            <Search className="absolute left-4 top-4 text-slate-400" size={22} />
+          <div className="relative max-w-2xl w-full mt-8">
+            <Search className="absolute left-4 top-4 text-white/30" size={22} />
             <input 
               type="text" 
               placeholder={t('ideas.searchPlaceholder')} 
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full bg-white dark:bg-slate-800 rounded-2xl pl-12 pr-4 py-4 outline-none text-slate-800 dark:text-slate-200 font-medium border border-transparent dark:border-slate-700 focus:ring-4 focus:ring-teal-500/30 transition-shadow placeholder:text-slate-400"
+              className="w-full bg-white/5 backdrop-blur-xl rounded-2xl pl-12 pr-4 py-4 outline-none text-white font-medium border border-white/10 focus:border-cyan/40 focus:ring-2 focus:ring-cyan/20 transition-all placeholder:text-white/25"
             />
           </div>
         </div>
@@ -83,49 +127,194 @@ export default function IdeasCatalog() {
 
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 -mt-16 relative z-20">
-        <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-lg border border-slate-100 dark:border-slate-800 p-5 md:p-8 mb-10">
+        {/* Tab Switcher + Contribute Button */}
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-8">
+          <div className="flex items-center gap-2 bg-white/5 p-1.5 rounded-xl border border-white/10">
+            <button
+              onClick={() => setActiveTab('curated')}
+              className={`flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold transition-all ${
+                activeTab === 'curated' 
+                  ? 'bg-cyan/20 text-cyan border border-cyan/20 shadow-[0_0_15px_rgba(0,212,255,0.1)]' 
+                  : 'text-white/40 hover:text-white/70'
+              }`}
+            >
+              <Sparkles size={16} /> Curated Ideas
+            </button>
+            <button
+              onClick={() => setActiveTab('community')}
+              className={`flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold transition-all ${
+                activeTab === 'community' 
+                  ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/20 shadow-[0_0_15px_rgba(16,185,129,0.1)]' 
+                  : 'text-white/40 hover:text-white/70'
+              }`}
+            >
+              <Users2 size={16} /> Community Ideas
+            </button>
+          </div>
+
+          <button
+            onClick={() => setShowContribute(true)}
+            className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold bg-gradient-to-r from-cyan to-emerald-500 text-navy-dark hover:shadow-neon-cyan hover:scale-105 transition-all"
+          >
+            <Plus size={16} /> Contribute Your Idea
+          </button>
+        </div>
+
+        {/* Filters */}
+        <div className="glass-card p-5 md:p-8 mb-10 border border-white/5">
           <IdeaFilters filters={filters} setFilters={setFilters} />
         </div>
 
-        {loading ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[1,2,3,4,5,6].map(i => (
-              <div key={i} className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-slate-700 overflow-hidden">
-                <div className="h-40 bg-slate-200 dark:bg-slate-700 animate-pulse" />
-                <div className="p-5 space-y-4">
-                  <div className="h-5 w-20 bg-slate-200 dark:bg-slate-700 animate-pulse rounded-full" />
-                  <div className="h-6 w-4/5 bg-slate-200 dark:bg-slate-700 animate-pulse" />
-                  <div className="h-4 w-3/5 bg-slate-200 dark:bg-slate-700 animate-pulse" />
-                  <div className="space-y-2 pt-2">
-                    <div className="h-10 bg-slate-200 dark:bg-slate-700 animate-pulse rounded-lg" />
-                    <div className="h-4 w-2/3 bg-slate-200 dark:bg-slate-700 animate-pulse" />
-                    <div className="h-4 w-1/2 bg-slate-200 dark:bg-slate-700 animate-pulse" />
+        {/* Content based on active tab */}
+        {activeTab === 'curated' ? (
+          <>
+            {loading ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {[1,2,3,4,5,6].map(i => (
+                  <div key={i} className="glass-card overflow-hidden border border-white/5">
+                    <div className="h-40 bg-white/5 animate-pulse" />
+                    <div className="p-5 space-y-4">
+                      <div className="h-5 w-20 bg-white/10 animate-pulse rounded-full" />
+                      <div className="h-6 w-4/5 bg-white/10 animate-pulse" />
+                      <div className="h-4 w-3/5 bg-white/10 animate-pulse" />
+                      <div className="space-y-2 pt-2">
+                        <div className="h-10 bg-white/10 animate-pulse rounded-lg" />
+                        <div className="h-4 w-2/3 bg-white/10 animate-pulse" />
+                      </div>
+                      <div className="h-12 bg-white/10 animate-pulse rounded-xl mt-2" />
+                    </div>
                   </div>
-                  <div className="h-12 bg-slate-200 dark:bg-slate-700 animate-pulse rounded-xl mt-2" />
-                </div>
+                ))}
               </div>
-            ))}
-          </div>
-        ) : filteredIdeas.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 animate-stagger">
-            {filteredIdeas.map(idea => (
-              <IdeaCard key={idea.id} idea={idea} />
-            ))}
-          </div>
+            ) : filteredIdeas.length > 0 ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 animate-stagger">
+                {filteredIdeas.map(idea => (
+                  <IdeaCard key={idea.id} idea={idea} />
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-24 glass-card border border-white/5 animate-in fade-in">
+                <div className="text-6xl mb-4">🔍</div>
+                <h3 className="text-2xl font-bold text-white mb-2">No ideas found</h3>
+                <p className="text-white/40 text-sm mb-8 max-w-md mx-auto">We couldn't find any business ideas matching your current filters. Try broadening your search.</p>
+                <button 
+                  onClick={() => { setFilters({ category: '', budget: '', location: '', sort: 'popular' }); setSearch(''); }}
+                  className="bg-cyan text-navy-dark px-8 py-3 rounded-full font-bold hover:shadow-neon-cyan transition-all"
+                >
+                  Reset All Filters
+                </button>
+              </div>
+            )}
+          </>
         ) : (
-          <div className="text-center py-24 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm animate-in fade-in">
-            <div className="text-6xl mb-4">🔍</div>
-            <h3 className="text-2xl font-bold text-slate-800 dark:text-slate-200 mb-2">No ideas found</h3>
-            <p className="text-slate-500 dark:text-slate-400 mb-8 max-w-md mx-auto">We couldn't find any business ideas matching your current filters. Try broadening your search.</p>
-            <button 
-              onClick={() => { setFilters({ category: '', budget: '', location: '', sort: 'popular' }); setSearch(''); }}
-              className="bg-amber-500 text-white px-8 py-3 rounded-full font-bold hover:bg-amber-600 transition-colors shadow-md"
-            >
-              Reset All Filters
-            </button>
-          </div>
+          <>
+            {loading ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {[1,2,3].map(i => (
+                  <div key={i} className="glass-card overflow-hidden border border-white/5">
+                    <div className="h-40 bg-white/5 animate-pulse" />
+                    <div className="p-5 space-y-4">
+                      <div className="h-5 w-20 bg-white/10 animate-pulse rounded-full" />
+                      <div className="h-6 w-4/5 bg-white/10 animate-pulse" />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : filteredCommunityIdeas.length > 0 ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                {filteredCommunityIdeas.map(idea => (
+                  <div key={idea.id} className="h-full">
+                    <div className="h-full glass-card !p-0 overflow-hidden flex flex-col group relative rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl hover:border-emerald-500/30 transition-all duration-500 hover:shadow-[0_0_30px_rgba(16,185,129,0.1)]">
+                      {/* Gradient header instead of image */}
+                      <div className={`h-40 bg-gradient-to-br ${CATEGORY_GRADIENTS[idea.category] || 'from-cyan-500/30 to-blue-500/30'} flex items-center justify-center relative overflow-hidden`}>
+                        <div className="text-5xl font-black text-white/10">{idea.title.substring(0, 2).toUpperCase()}</div>
+                        <div className="absolute inset-0 bg-gradient-to-t from-navy via-transparent to-transparent" />
+                        
+                        {/* AI Badge */}
+                        {idea.ai_generated && (
+                          <div className="absolute top-3 right-3 bg-gradient-to-r from-cyan to-emerald-500 text-navy-dark text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full shadow-sm z-10 flex items-center gap-1">
+                            <Sparkles size={10} /> AI Researched
+                          </div>
+                        )}
+                        
+                        {/* Contributor */}
+                        <div className="absolute bottom-3 left-3 z-10">
+                          <span className="text-white/60 text-xs font-medium bg-navy/60 backdrop-blur-sm px-2 py-1 rounded-full">
+                            by {idea.contributor_name || 'Anonymous'}
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="p-5 flex flex-col flex-1">
+                        <span className="text-xs font-bold text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-1 rounded-full w-fit mb-3">
+                          {idea.category}
+                        </span>
+                        <h3 className="text-lg font-bold text-white mb-2 line-clamp-2 leading-[1.3] group-hover:text-emerald-400 transition-colors">
+                          {idea.title}
+                        </h3>
+                        <p className="text-white/40 text-sm mb-4 line-clamp-2">{idea.description}</p>
+
+                        <div className="mt-auto space-y-2 text-sm text-white/50 mb-4">
+                          <div className="flex justify-between items-center bg-white/5 px-3 py-2 rounded-lg border border-white/5">
+                            <span className="font-medium text-white/40">Investment</span>
+                            <span className="font-bold text-white">
+                              {formatINR(idea.investment_min)} - {formatINR(idea.investment_max)}
+                            </span>
+                          </div>
+                          <div className="flex justify-between items-center px-1">
+                            <span className="font-medium">Est. Profit</span>
+                            <span className="font-bold text-emerald-400">
+                              {idea.monthly_profit_min ? `${formatINR(idea.monthly_profit_min)}/mo` : 'Varies'}
+                            </span>
+                          </div>
+                        </div>
+
+                        {/* Pros preview */}
+                        {idea.pros && idea.pros.length > 0 && (
+                          <div className="flex flex-wrap gap-1 mb-4">
+                            {idea.pros.slice(0, 2).map((pro, i) => (
+                              <span key={i} className="text-[10px] text-emerald-400/70 bg-emerald-500/5 border border-emerald-500/10 px-2 py-0.5 rounded-full">
+                                ✓ {pro}
+                              </span>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-24 glass-card border border-white/5 animate-in fade-in">
+                <div className="w-20 h-20 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center mx-auto mb-6">
+                  <Lightbulb size={36} className="text-emerald-400" />
+                </div>
+                <h3 className="text-2xl font-bold text-white mb-2">No community ideas yet</h3>
+                <p className="text-white/40 text-sm mb-8 max-w-md mx-auto">Be the first to contribute a business idea! Our AI will research it and create a detailed card for the community.</p>
+                <button 
+                  onClick={() => setShowContribute(true)}
+                  className="bg-gradient-to-r from-cyan to-emerald-500 text-navy-dark px-8 py-3 rounded-full font-bold hover:shadow-neon-cyan transition-all inline-flex items-center gap-2"
+                >
+                  <Plus size={18} /> Contribute First Idea
+                </button>
+              </div>
+            )}
+          </>
         )}
       </div>
+
+      {/* Contribute Modal */}
+      <ContributeIdeaModal 
+        isOpen={showContribute} 
+        onClose={() => setShowContribute(false)} 
+        onSuccess={() => {
+          if (activeTab === 'community') {
+            fetchIdeas();
+          } else {
+            setActiveTab('community');
+          }
+        }}
+      />
     </main>
   );
 }

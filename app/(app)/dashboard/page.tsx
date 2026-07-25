@@ -10,7 +10,9 @@ import {
   Users, 
   TrendingUp,
   ArrowRight,
-  PackageX
+  PackageX,
+  FileText,
+  Download
 } from "lucide-react";
 import Link from "next/link";
 import { downloadCSV } from "@/lib/csv";
@@ -22,8 +24,18 @@ export default function DashboardPage() {
     orders: 0,
     customers: 0,
     weeklyRevenue: [0, 0, 0, 0],
+    monthlyData: {
+      current: [0, 0, 0, 0],
+      previous: [0, 0, 0, 0],
+      currentMonth: new Date().getMonth(),
+      currentYear: new Date().getFullYear(),
+    },
+    prevMonthRevenue: 0,
+    prevMonthOrders: 0,
+    prevMonthCustomers: 0,
   });
   const [loading, setLoading] = useState(true);
+  const [recentOrders, setRecentOrders] = useState<any[]>([]);
 
   useEffect(() => {
     let isMounted = true;
@@ -37,20 +49,28 @@ export default function DashboardPage() {
           .from("customers")
           .select("*", { count: "exact", head: true });
 
-        // Fetch all orders to calculate total revenue and weekly data
+        // Fetch all orders with dates
         const { data: orders } = await supabase
           .from("orders")
-          .select("total_amount, status, created_at");
+          .select("total_amount, status, created_at, customer_name")
+          .order("created_at", { ascending: false });
 
         let totalRevenue = 0;
         let totalOrders = 0;
         let weeklyRevenue = [0, 0, 0, 0];
+        let currentMonthWeekly = [0, 0, 0, 0];
+        let prevMonthWeekly = [0, 0, 0, 0];
+        let prevMonthRevenue = 0;
+        let prevMonthOrders = 0;
+
+        const now = new Date();
+        const currentMonth = now.getMonth();
+        const currentYear = now.getFullYear();
+        const prevMonth = (currentMonth - 1 + 12) % 12;
+        const prevMonthYear = currentMonth === 0 ? currentYear - 1 : currentYear;
 
         if (orders) {
           totalOrders = orders.length;
-          
-          const now = new Date();
-          const oneWeek = 7 * 24 * 60 * 60 * 1000;
 
           orders.forEach((order) => {
             if (order.status !== 'cancelled') {
@@ -58,9 +78,29 @@ export default function DashboardPage() {
               totalRevenue += amount;
               
               const orderDate = new Date(order.created_at);
+              const orderMonth = orderDate.getMonth();
+              const orderYear = orderDate.getFullYear();
+
+              // Current month weekly breakdown
+              if (orderMonth === currentMonth && orderYear === currentYear) {
+                const dayOfMonth = orderDate.getDate();
+                const weekIndex = Math.min(Math.floor((dayOfMonth - 1) / 7), 3);
+                currentMonthWeekly[weekIndex] += amount;
+              }
+
+              // Previous month weekly breakdown
+              if (orderMonth === prevMonth && orderYear === prevMonthYear) {
+                const dayOfMonth = orderDate.getDate();
+                const weekIndex = Math.min(Math.floor((dayOfMonth - 1) / 7), 3);
+                prevMonthWeekly[weekIndex] += amount;
+                prevMonthRevenue += amount;
+                prevMonthOrders++;
+              }
+
+              // Last 4 weeks (for legacy)
+              const oneWeek = 7 * 24 * 60 * 60 * 1000;
               const diffTime = Math.abs(now.getTime() - orderDate.getTime());
               const diffWeeks = Math.floor(diffTime / oneWeek);
-              
               if (diffWeeks < 4) {
                 weeklyRevenue[3 - diffWeeks] += amount;
               }
@@ -68,13 +108,30 @@ export default function DashboardPage() {
           });
         }
 
+        // Calculate real trend percentages
+        const currentMonthTotal = currentMonthWeekly.reduce((s, v) => s + v, 0);
+
         if (isMounted) {
           setStats({
             revenue: totalRevenue,
             orders: totalOrders,
             customers: customersCount || 0,
             weeklyRevenue,
+            monthlyData: {
+              current: currentMonthWeekly,
+              previous: prevMonthWeekly,
+              currentMonth,
+              currentYear,
+            },
+            prevMonthRevenue,
+            prevMonthOrders,
+            prevMonthCustomers: 0, // Would need historical data
           });
+
+          // Store recent orders for the sidebar
+          if (orders && orders.length > 0) {
+            setRecentOrders(orders.slice(0, 5));
+          }
         }
       } catch (error) {
         console.error("Error fetching stats:", error);
@@ -86,6 +143,18 @@ export default function DashboardPage() {
     return () => { isMounted = false; };
   }, []);
 
+  // Calculate real trends
+  const currentMonthRev = stats.monthlyData.current.reduce((s, v) => s + v, 0);
+  const revenueTrend = stats.prevMonthRevenue > 0 
+    ? `${currentMonthRev >= stats.prevMonthRevenue ? '+' : ''}${(((currentMonthRev - stats.prevMonthRevenue) / stats.prevMonthRevenue) * 100).toFixed(0)}%`
+    : currentMonthRev > 0 ? '+100%' : '0%';
+  
+  const ordersTrend = stats.prevMonthOrders > 0
+    ? `${stats.orders >= stats.prevMonthOrders ? '+' : ''}${(((stats.orders - stats.prevMonthOrders) / stats.prevMonthOrders) * 100).toFixed(0)}%`
+    : stats.orders > 0 ? '+100%' : '0%';
+
+  const formatINR = (amount: number) => `₹${amount.toLocaleString('en-IN')}`;
+
   return (
     <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
       <div className="flex justify-between items-end mb-8">
@@ -96,9 +165,24 @@ export default function DashboardPage() {
         <div className="flex gap-3">
           <button 
             onClick={() => downloadProfessionalReport(stats, 'dashboard_report')}
-            className="px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-sm font-medium hover:bg-white/10 transition-colors"
+            className="px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-sm font-medium hover:bg-white/10 transition-colors flex items-center gap-2"
           >
-            Download Report
+            <FileText size={15} /> Download Report
+          </button>
+          <button
+            onClick={() => downloadCSV([{
+              'Total Revenue': stats.revenue,
+              'Total Orders': stats.orders,
+              'Active Customers': stats.customers,
+              'Current Month Revenue': currentMonthRev,
+              'Week 1': stats.monthlyData.current[0],
+              'Week 2': stats.monthlyData.current[1],
+              'Week 3': stats.monthlyData.current[2],
+              'Week 4': stats.monthlyData.current[3],
+            }], 'analytics_export')}
+            className="px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-sm font-medium hover:bg-white/10 transition-colors flex items-center gap-2"
+          >
+            <Download size={15} /> Export CSV
           </button>
           <Link href="/dashboard/inventory" className="px-4 py-2 rounded-xl bg-cyan text-navy-dark text-sm font-bold hover:scale-105 transition-transform shadow-neon-cyan flex items-center gap-2">
             Add Product <ArrowRight size={16} />
@@ -110,30 +194,30 @@ export default function DashboardPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         <StatCard 
           title="Total Revenue"
-          value={`₹${stats.revenue.toLocaleString('en-IN')}`}
-          trend="+12%"
-          isPositive={true}
+          value={formatINR(stats.revenue)}
+          trend={revenueTrend}
+          isPositive={!revenueTrend.startsWith('-')}
           icon={IndianRupee}
         />
         <StatCard 
           title="Total Orders"
           value={stats.orders.toString()}
-          trend="+5%"
-          isPositive={true}
+          trend={ordersTrend}
+          isPositive={!ordersTrend.startsWith('-')}
           icon={ShoppingCart}
         />
         <StatCard 
           title="Active Customers"
           value={stats.customers.toString()}
-          trend="+18%"
-          isPositive={true}
+          trend={stats.customers > 0 ? `+${stats.customers}` : '0'}
+          isPositive={stats.customers > 0}
           icon={Users}
         />
         <StatCard 
           title="Conversion Rate"
-          value={stats.orders > 0 ? "3.2%" : "0%"}
-          trend="+1%"
-          isPositive={true}
+          value={stats.orders > 0 && stats.customers > 0 ? `${((stats.orders / Math.max(stats.customers, 1)) * 100).toFixed(1)}%` : "0%"}
+          trend={stats.orders > 0 ? '+' : '0%'}
+          isPositive={stats.orders > 0}
           icon={TrendingUp}
         />
       </div>
@@ -141,29 +225,50 @@ export default function DashboardPage() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
         {/* Main Chart */}
         <div className="lg:col-span-2 min-h-[400px]">
-          <RevenueChart data={stats.weeklyRevenue} />
+          <RevenueChart data={stats.weeklyRevenue} monthlyData={stats.monthlyData} />
         </div>
 
         {/* Recent Orders / Activity */}
         <div className="glass-card p-6 border-white/5 h-full flex flex-col">
           <h3 className="text-white font-bold text-lg mb-6">Recent Orders</h3>
           
-          <div className="flex-1 flex flex-col items-center justify-center text-center px-4 opacity-70">
-            <div className="w-16 h-16 rounded-full bg-white/5 border border-white/10 flex items-center justify-center mb-4">
-              <PackageX size={28} className="text-white/40" />
+          {recentOrders.length > 0 ? (
+            <div className="flex-1 space-y-3 overflow-y-auto">
+              {recentOrders.map((order, i) => (
+                <div key={i} className="flex items-center justify-between p-3 rounded-xl bg-white/5 border border-white/5 hover:bg-white/10 transition-colors">
+                  <div>
+                    <p className="text-white text-sm font-semibold">{order.customer_name || 'Customer'}</p>
+                    <p className="text-white/40 text-xs">{new Date(order.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}</p>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-cyan font-bold text-sm">{formatINR(Number(order.total_amount))}</p>
+                    <span className={`text-[10px] font-bold uppercase px-2 py-0.5 rounded-full ${
+                      order.status === 'completed' ? 'bg-emerald-500/20 text-emerald-400' :
+                      order.status === 'cancelled' ? 'bg-red-500/20 text-red-400' :
+                      'bg-amber-500/20 text-amber-400'
+                    }`}>{order.status}</span>
+                  </div>
+                </div>
+              ))}
             </div>
-            <h4 className="text-white font-semibold mb-1">
-              {stats.orders > 0 ? "Orders incoming!" : "No orders yet"}
-            </h4>
-            <p className="text-white/40 text-sm mb-6">
-              {stats.orders > 0 
-                ? "Your customers are starting to buy your products." 
-                : "When you receive orders, they will show up here."}
-            </p>
-            <Link href="/dashboard/store" className="px-4 py-2 rounded-lg border border-cyan/40 text-cyan text-sm font-medium hover:bg-cyan/10 transition-colors">
-              Go to Store Builder
-            </Link>
-          </div>
+          ) : (
+            <div className="flex-1 flex flex-col items-center justify-center text-center px-4 opacity-70">
+              <div className="w-16 h-16 rounded-full bg-white/5 border border-white/10 flex items-center justify-center mb-4">
+                <PackageX size={28} className="text-white/40" />
+              </div>
+              <h4 className="text-white font-semibold mb-1">
+                {stats.orders > 0 ? "Orders incoming!" : "No orders yet"}
+              </h4>
+              <p className="text-white/40 text-sm mb-6">
+                {stats.orders > 0 
+                  ? "Your customers are starting to buy your products." 
+                  : "When you receive orders, they will show up here."}
+              </p>
+              <Link href="/dashboard/store" className="px-4 py-2 rounded-lg border border-cyan/40 text-cyan text-sm font-medium hover:bg-cyan/10 transition-colors">
+                Go to Store Builder
+              </Link>
+            </div>
+          )}
         </div>
       </div>
     </div>

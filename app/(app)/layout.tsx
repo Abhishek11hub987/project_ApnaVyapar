@@ -22,15 +22,18 @@ export default function AppLayout({
     }
   }, [user, isAuthenticated, isLoading, pathname, router]);
 
+  // Dashboard has its own layout with sidebar
+  const isDashboard = pathname.startsWith('/dashboard');
+
   return (
-    <div className="flex flex-col min-h-screen bg-slate-50 dark:bg-slate-950">
-      <Header />
+    <div className="flex flex-col min-h-screen bg-navy text-white">
+      {!isDashboard && <Header />}
       
-      <main className="flex-1 overflow-y-auto pb-20 md:pb-0">
+      <main className={`flex-1 overflow-y-auto ${isDashboard ? '' : 'pb-20 md:pb-0'}`}>
         {children}
       </main>
       
-      <BottomNav />
+      {!isDashboard && <BottomNav />}
     </div>
   );
 }
