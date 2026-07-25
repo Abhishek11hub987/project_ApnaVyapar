@@ -14,12 +14,10 @@ export function RevenueChart() {
       <div className="flex justify-between items-center mb-8">
         <div>
           <h3 className="text-white font-bold text-lg mb-1">Revenue Overview</h3>
-          <p className="text-white/40 text-sm">Last 30 days vs previous period</p>
+          <p className="text-white/40 text-sm">Waiting for first sale...</p>
         </div>
-        <select className="bg-navy border border-white/10 rounded-lg px-3 py-1.5 text-sm text-white/70 outline-none focus:border-cyan transition-colors">
+        <select className="bg-navy border border-white/10 rounded-lg px-3 py-1.5 text-sm text-white/70 outline-none opacity-50 cursor-not-allowed" disabled>
           <option>Last 30 Days</option>
-          <option>This Quarter</option>
-          <option>This Year</option>
         </select>
       </div>
 
@@ -40,47 +38,22 @@ export function RevenueChart() {
           ))}
         </div>
 
-        {/* Chart SVG */}
+        {/* Chart SVG (Empty flatline at 0) */}
         <div className="absolute left-12 right-0 top-0 bottom-10 z-10 overflow-hidden">
           {mounted && (
             <svg viewBox="0 0 100 100" preserveAspectRatio="none" className="w-full h-full overflow-visible">
-              <defs>
-                <linearGradient id="chartGlow" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#00D4FF" stopOpacity="0.3" />
-                  <stop offset="100%" stopColor="#00D4FF" stopOpacity="0" />
-                </linearGradient>
-              </defs>
-              
-              {/* Previous period line (subtle) */}
-              <path 
-                d="M 0,80 Q 20,70 30,85 T 60,65 T 100,75" 
-                fill="none" 
-                stroke="rgba(255,255,255,0.1)" 
-                strokeWidth="2"
-                strokeDasharray="4 4"
-                vectorEffect="non-scaling-stroke"
-              />
-
-              {/* Current period line */}
+              {/* Flatline at 0 (bottom) */}
               <path 
                 className="animate-[draw-line_2s_ease-out_forwards]"
-                d="M 0,60 Q 15,40 30,50 T 60,20 T 100,10" 
+                d="M 0,100 L 100,100" 
                 fill="none" 
                 stroke="#00D4FF" 
-                strokeWidth="3"
-                strokeDasharray="300"
-                strokeDashoffset="300"
+                strokeWidth="2"
+                strokeDasharray="100"
+                strokeDashoffset="100"
                 strokeLinecap="round"
                 vectorEffect="non-scaling-stroke"
-                style={{ filter: 'drop-shadow(0px 4px 12px rgba(0,212,255,0.5))' }}
-              />
-              
-              {/* Area fill */}
-              <path 
-                className="animate-[draw-line_2s_ease-out_forwards] opacity-0"
-                style={{ animation: 'fade-in 1s ease-out 1s forwards' }}
-                d="M 0,60 Q 15,40 30,50 T 60,20 T 100,10 L 100,100 L 0,100 Z" 
-                fill="url(#chartGlow)" 
+                style={{ opacity: 0.5 }}
               />
             </svg>
           )}
