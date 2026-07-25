@@ -15,7 +15,9 @@ import {
   LogOut,
   Lightbulb,
   MessageSquare,
-  ShieldAlert
+  ShieldAlert,
+  Menu,
+  X
 } from "lucide-react";
 
 const NAV_ITEMS = [
@@ -32,6 +34,12 @@ export function DashboardSidebar() {
   const pathname = usePathname();
   const router = useRouter();
   const [isAdmin, setIsAdmin] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  // Close mobile menu on route change
+  useEffect(() => {
+    setMobileMenuOpen(false);
+  }, [pathname]);
 
   useEffect(() => {
     async function checkAdmin() {
@@ -56,13 +64,19 @@ export function DashboardSidebar() {
     router.push("/");
   };
 
-  return (
-    <aside className="w-64 bg-navy-dark border-r border-white/10 h-screen sticky top-0 flex flex-col hidden md:flex">
+  const SidebarContent = (
+    <>
       {/* Brand */}
-      <div className="h-16 flex items-center px-6 border-b border-white/10">
+      <div className="h-16 flex items-center justify-between px-6 border-b border-white/10 shrink-0">
         <Link href="/" className="hover:opacity-90 transition-opacity">
           <Logo iconSize={24} />
         </Link>
+        <button 
+          className="md:hidden p-2 text-white/70 hover:text-white"
+          onClick={() => setMobileMenuOpen(false)}
+        >
+          <X size={24} />
+        </button>
       </div>
 
       {/* Navigation */}
@@ -91,7 +105,7 @@ export function DashboardSidebar() {
       </nav>
 
       {/* Bottom Settings */}
-      <div className="p-4 border-t border-white/10">
+      <div className="p-4 border-t border-white/10 shrink-0">
         {isAdmin && (
           <Link
             href="/dashboard/admin/messages"
@@ -120,6 +134,40 @@ export function DashboardSidebar() {
           <span className="font-medium text-sm">Log out</span>
         </button>
       </div>
-    </aside>
+    </>
+  );
+
+  return (
+    <>
+      {/* Mobile Top Bar */}
+      <div className="md:hidden fixed top-0 left-0 right-0 h-16 bg-navy border-b border-white/10 z-40 flex items-center justify-between px-4">
+        <Link href="/" className="hover:opacity-90 transition-opacity">
+          <Logo iconSize={24} />
+        </Link>
+        <button 
+          onClick={() => setMobileMenuOpen(true)}
+          className="p-2 text-white/70 hover:text-white focus:outline-none"
+        >
+          <Menu size={24} />
+        </button>
+      </div>
+
+      {/* Mobile Overlay */}
+      {mobileMenuOpen && (
+        <div 
+          className="md:hidden fixed inset-0 bg-black/60 z-40 backdrop-blur-sm"
+          onClick={() => setMobileMenuOpen(false)}
+        />
+      )}
+
+      {/* Sidebar Drawer */}
+      <aside className={`
+        fixed md:sticky top-0 left-0 h-screen w-64 bg-navy-dark border-r border-white/10 flex flex-col z-50
+        transition-transform duration-300 ease-in-out
+        ${mobileMenuOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}
+      `}>
+        {SidebarContent}
+      </aside>
+    </>
   );
 }
