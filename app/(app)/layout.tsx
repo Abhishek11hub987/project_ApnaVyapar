@@ -34,7 +34,7 @@ export default function AppLayout({
         </div>
       )}
       
-      <main className={`flex-1 overflow-y-auto ${isDashboard ? '' : isChat ? 'pb-0 md:pb-20' : 'pb-20 md:pb-0'}`}>
+      <main className={`flex-1 flex flex-col ${isDashboard ? '' : isChat ? 'pb-0 md:pb-20' : 'pb-20 md:pb-0'}`}>
         {children}
       </main>
       
