@@ -14,12 +14,14 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { downloadCSV } from "@/lib/csv";
+import { downloadProfessionalReport } from "@/lib/report";
 
 export default function DashboardPage() {
   const [stats, setStats] = useState({
     revenue: 0,
     orders: 0,
     customers: 0,
+    weeklyRevenue: [0, 0, 0, 0],
   });
   const [loading, setLoading] = useState(true);
 
@@ -35,23 +37,35 @@ export default function DashboardPage() {
           .from("customers")
           .select("*", { count: "exact", head: true });
 
-        // Fetch all orders to calculate total revenue
+        // Fetch all orders to calculate total revenue and weekly data
         const { data: orders } = await supabase
           .from("orders")
-          .select("total_amount, status");
+          .select("total_amount, status, created_at");
 
         let totalRevenue = 0;
         let totalOrders = 0;
+        let weeklyRevenue = [0, 0, 0, 0];
 
         if (orders) {
           totalOrders = orders.length;
-          totalRevenue = orders.reduce((sum, order) => {
-            // Only sum up non-cancelled orders if you prefer, or all of them.
+          
+          const now = new Date();
+          const oneWeek = 7 * 24 * 60 * 60 * 1000;
+
+          orders.forEach((order) => {
             if (order.status !== 'cancelled') {
-              return sum + Number(order.total_amount);
+              const amount = Number(order.total_amount);
+              totalRevenue += amount;
+              
+              const orderDate = new Date(order.created_at);
+              const diffTime = Math.abs(now.getTime() - orderDate.getTime());
+              const diffWeeks = Math.floor(diffTime / oneWeek);
+              
+              if (diffWeeks < 4) {
+                weeklyRevenue[3 - diffWeeks] += amount;
+              }
             }
-            return sum;
-          }, 0);
+          });
         }
 
         if (isMounted) {
@@ -59,6 +73,7 @@ export default function DashboardPage() {
             revenue: totalRevenue,
             orders: totalOrders,
             customers: customersCount || 0,
+            weeklyRevenue,
           });
         }
       } catch (error) {
@@ -80,7 +95,7 @@ export default function DashboardPage() {
         </div>
         <div className="flex gap-3">
           <button 
-            onClick={() => downloadCSV([stats], 'dashboard_report')}
+            onClick={() => downloadProfessionalReport(stats, 'dashboard_report')}
             className="px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-sm font-medium hover:bg-white/10 transition-colors"
           >
             Download Report
@@ -126,7 +141,7 @@ export default function DashboardPage() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
         {/* Main Chart */}
         <div className="lg:col-span-2 min-h-[400px]">
-          <RevenueChart />
+          <RevenueChart data={stats.weeklyRevenue} />
         </div>
 
         {/* Recent Orders / Activity */}
