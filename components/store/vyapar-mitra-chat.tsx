@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import { MessageCircle, X, Send, Bot, User, GripHorizontal } from "lucide-react";
 import { Product } from "@/components/dashboard/inventory-table";
-import { motion } from "framer-motion";
+import { motion, useDragControls } from "framer-motion";
 
 type Message = {
   role: "user" | "assistant";
@@ -16,6 +16,7 @@ export function VyaparMitraChat({ store, products }: { store: any, products: Pro
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const dragControls = useDragControls();
 
   // Auto-scroll to bottom
   useEffect(() => {
@@ -131,13 +132,15 @@ export function VyaparMitraChat({ store, products }: { store: any, products: Pro
         <motion.div 
           drag
           dragMomentum={false}
-          dragHandle=".drag-handle"
+          dragControls={dragControls}
+          dragListener={false}
           className="fixed bottom-6 right-6 w-full max-w-sm h-[500px] max-h-[80vh] bg-white rounded-2xl shadow-2xl flex flex-col z-50 overflow-hidden border border-slate-200"
         >
           
           {/* Header */}
           <div 
-            className="drag-handle cursor-grab active:cursor-grabbing p-4 flex items-center justify-between text-white shadow-md relative z-10"
+            onPointerDown={(e) => dragControls.start(e)}
+            className="cursor-grab active:cursor-grabbing p-4 flex items-center justify-between text-white shadow-md relative z-10"
             style={{ backgroundColor: store.theme_color || '#00D4FF' }}
           >
             <div className="flex items-center gap-3 text-white">
