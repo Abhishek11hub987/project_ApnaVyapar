@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import Logo from "@/components/logo";
+import { ContactForm } from "@/components/contact-form";
 
 const PAGE_CONTENT: Record<string, { title: string; subtitle: string; content: React.ReactNode }> = {
   "inventory-management": {
@@ -151,7 +152,7 @@ const PAGE_CONTENT: Record<string, { title: string; subtitle: string; content: R
     subtitle: "Apna Vyapar in the news.",
     content: (
       <div className="space-y-6">
-        <p>For press inquiries, media kits, or interview requests, please contact our PR team at press@apnavyapar.com.</p>
+        <p>For press inquiries, media kits, or interview requests, please contact our PR team via GitHub at <a href="https://github.com/Abhishek11hub987" target="_blank" rel="noopener noreferrer">https://github.com/Abhishek11hub987</a>.</p>
       </div>
     )
   },
@@ -161,8 +162,10 @@ const PAGE_CONTENT: Record<string, { title: string; subtitle: string; content: R
     content: (
       <div className="space-y-6">
         <p>Have a question or need help setting up your store?</p>
-        <p>Email us at: support@apnavyapar.com</p>
-        <p>Call us: +91 98765 43210</p>
+        <p>Developer: <a href="https://github.com/Abhishek11hub987" target="_blank" rel="noopener noreferrer">https://github.com/Abhishek11hub987</a></p>
+        <div className="mt-12 pt-12 border-t border-white/10">
+          <ContactForm />
+        </div>
       </div>
     )
   },
@@ -177,11 +180,15 @@ const PAGE_CONTENT: Record<string, { title: string; subtitle: string; content: R
     )
   },
   "help-center": {
-    title: "Help Center",
+    title: "Help Center & FAQ",
     subtitle: "Find answers fast.",
     content: (
       <div className="space-y-6">
         <p>Browse our comprehensive guides and tutorials to learn how to get the most out of your Apna Vyapar dashboard.</p>
+        <div className="mt-12 pt-12 border-t border-white/10">
+          <h2 className="text-2xl font-bold mb-6">Still need help? Ask the Admin directly!</h2>
+          <ContactForm />
+        </div>
       </div>
     )
   },

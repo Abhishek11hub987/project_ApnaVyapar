@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import Logo from "@/components/logo";
+import { useState, useEffect } from "react";
 import { 
   LayoutDashboard, 
   Package, 
@@ -13,7 +14,8 @@ import {
   Store,
   LogOut,
   Lightbulb,
-  MessageSquare
+  MessageSquare,
+  ShieldAlert
 } from "lucide-react";
 
 const NAV_ITEMS = [
@@ -29,6 +31,25 @@ const NAV_ITEMS = [
 export function DashboardSidebar() {
   const pathname = usePathname();
   const router = useRouter();
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  useEffect(() => {
+    async function checkAdmin() {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) return;
+      
+      const { data } = await supabase
+        .from("profiles")
+        .select("is_admin")
+        .eq("id", session.user.id)
+        .single();
+        
+      if (data?.is_admin) {
+        setIsAdmin(true);
+      }
+    }
+    checkAdmin();
+  }, []);
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
@@ -71,6 +92,19 @@ export function DashboardSidebar() {
 
       {/* Bottom Settings */}
       <div className="p-4 border-t border-white/10">
+        {isAdmin && (
+          <Link
+            href="/dashboard/admin/messages"
+            className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200 mb-2 ${
+              pathname === "/dashboard/admin/messages"
+                ? "bg-red-500/10 text-red-400 border border-red-500/20"
+                : "text-red-400/70 hover:bg-red-500/10 hover:text-red-400 border border-transparent"
+            }`}
+          >
+            <ShieldAlert size={18} className={pathname === "/dashboard/admin/messages" ? "" : "opacity-70"} />
+            <span className="font-medium text-sm">Admin Inbox</span>
+          </Link>
+        )}
         <Link
           href="/dashboard/settings"
           className="flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200 text-white/60 hover:bg-white/5 hover:text-white"
