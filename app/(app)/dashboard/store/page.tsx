@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
-import { Save, Store, Globe, Palette } from "lucide-react";
+import { Save, Store, Globe, Palette, Share2, Copy } from "lucide-react";
 import Link from "next/link";
 
 export default function StoreBuilderPage() {
@@ -249,14 +249,34 @@ export default function StoreBuilderPage() {
 
           <div className="flex justify-end gap-3">
             {storeUrl && formData.id && (
-              <a
-                href={storeUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="px-6 py-3 rounded-xl border border-white/10 text-white font-medium hover:bg-white/5 transition-colors flex items-center gap-2"
-              >
-                View Store <Globe size={16} />
-              </a>
+              <>
+                <button
+                  type="button"
+                  onClick={() => {
+                    navigator.clipboard.writeText(storeUrl);
+                    alert("Store link copied to clipboard!");
+                  }}
+                  className="px-4 py-3 rounded-xl border border-white/10 text-white font-medium hover:bg-white/5 transition-colors flex items-center gap-2"
+                >
+                  <Copy size={16} /> <span className="hidden sm:inline">Copy Link</span>
+                </button>
+                <a
+                  href={`https://wa.me/?text=Check%20out%20my%20new%20store:%20${encodeURIComponent(storeUrl)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-4 py-3 rounded-xl border border-green-500/30 text-green-400 font-medium hover:bg-green-500/10 transition-colors flex items-center gap-2"
+                >
+                  <Share2 size={16} /> <span className="hidden sm:inline">WhatsApp</span>
+                </a>
+                <a
+                  href={storeUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-6 py-3 rounded-xl border border-cyan/30 text-cyan font-medium hover:bg-cyan/10 transition-colors flex items-center gap-2"
+                >
+                  View Store <Globe size={16} />
+                </a>
+              </>
             )}
             <button
               type="submit"

@@ -9,14 +9,18 @@ import {
   FileText, 
   Settings, 
   Store,
-  LogOut
+  LogOut,
+  Lightbulb,
+  MessageSquare
 } from "lucide-react";
 
 const NAV_ITEMS = [
   { name: "Analytics", href: "/dashboard", icon: LayoutDashboard },
+  { name: "Business Plan", href: "/ideas", icon: Lightbulb },
+  { name: "AI Chat", href: "/chat", icon: MessageSquare },
   { name: "Inventory", href: "/dashboard/inventory", icon: Package },
   { name: "Customers", href: "/dashboard/customers", icon: Users },
-  { name: "Invoices", href: "/dashboard/invoices", icon: FileText },
+  { name: "Orders", href: "/dashboard/orders", icon: FileText },
   { name: "Store Builder", href: "/dashboard/store", icon: Store },
 ];
 
