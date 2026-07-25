@@ -20,7 +20,7 @@ export default function SuccessStories({ stories }: SuccessStoriesProps) {
             <Quote className="absolute top-4 right-4 w-10 h-10 text-slate-200 dark:text-slate-700/50 rotate-180" />
             
             <p className="text-sm text-slate-700 dark:text-slate-300 relative z-10 italic mb-4">
-              "{story.story}"
+              &quot;{story.story}&quot;
             </p>
             
             <div className="flex items-center gap-3">

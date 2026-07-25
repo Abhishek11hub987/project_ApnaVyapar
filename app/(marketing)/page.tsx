@@ -14,6 +14,7 @@ import { BharatMap } from '@/components/bharat-map';
 import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
 import { motion, Variants } from 'framer-motion';
+import { ScrollAnimation } from '@/components/scroll-animation';
 
 // ─── Feature list ────────────────────────────────────────────────────
 const FEATURES = [
@@ -142,69 +143,7 @@ export default function Home() {
     <main className="min-h-screen pb-28 overflow-x-hidden">
 
       {/* ── HERO ─────────────────────────────────────────────────── */}
-      <section className="relative pt-16 pb-10 px-4">
-        {/* Soft ambient — visible in both modes */}
-        <div className="pointer-events-none absolute inset-0 overflow-hidden">
-          <div className="absolute -top-32 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-teal-400/10 dark:bg-teal-500/10 rounded-full blur-[100px]" />
-          <div className="absolute top-10 right-0 w-[350px] h-[350px] bg-amber-400/8 dark:bg-amber-500/8 rounded-full blur-[80px]" />
-        </div>
-
-        <div className="max-w-4xl mx-auto text-center relative z-10">
-          {/* Badge */}
-          <motion.div
-            initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}
-            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-teal-300 dark:border-teal-400/30 bg-teal-50 dark:bg-teal-400/5 mb-5"
-          >
-            <span className="w-2 h-2 rounded-full bg-teal-500 dark:bg-teal-400 animate-pulse" />
-            <span className="text-teal-700 dark:text-teal-400 text-xs font-bold tracking-widest uppercase">
-              AI-Powered Business Navigator for India
-            </span>
-          </motion.div>
-
-          <GuruGyaan context="landing" />
-
-          {/* Headline */}
-          <motion.h1
-            variants={fadeUp} initial="hidden" animate="show"
-            className="mt-6 text-5xl md:text-7xl font-black text-slate-900 dark:text-white leading-[1.08] tracking-tight"
-          >
-            {t('hero.title1')}{' '}
-            <span className="bg-gradient-to-r from-teal-500 via-emerald-400 to-amber-500 bg-clip-text text-transparent">
-              {t('hero.title2')}
-            </span>
-          </motion.h1>
-
-          <motion.p
-            variants={fadeUp} initial="hidden" animate="show"
-            className="mt-5 text-slate-600 dark:text-slate-400 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed"
-          >
-            {t('hero.subtitle')}
-          </motion.p>
-
-          {/* CTA — using plain Link + styled anchor, NOT button inside Link */}
-          <motion.div
-            variants={fadeUp} initial="hidden" animate="show"
-            className="mt-8 flex flex-col sm:flex-row gap-3 justify-center"
-          >
-            <PrimaryBtn href="/ideas" variant="teal">
-              {t('hero.cta.ideas')} <ArrowRight size={16} />
-            </PrimaryBtn>
-            <PrimaryBtn href="/chat" variant="amber" requireAuth>
-              Ask Mitra AI <Bot size={16} />
-            </PrimaryBtn>
-          </motion.div>
-
-          {/* Real count pill */}
-          {ideaCount !== null && (
-            <motion.p
-              initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.6 }}
-              className="mt-5 text-sm text-slate-500 dark:text-slate-400"
-            >
-              ✅ <strong className="text-slate-700 dark:text-slate-200">{ideaCount} curated business ideas</strong> ready to explore — completely free.
-            </motion.p>
-          )}
-        </div>
-      </section>
+      <ScrollAnimation />
 
       {/* ── HOW IT WORKS ─────────────────────────────────────────── */}
       <section className="px-4 max-w-5xl mx-auto mb-14">

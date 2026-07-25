@@ -48,7 +48,7 @@ function IdeaCard({
   // Check if image_url is an actual URL or just an emoji
   const isEmoji = idea.image_url && !idea.image_url.startsWith('http') && !idea.image_url.startsWith('/');
 
-  // Fallback gradient if no image or if it's an emoji
+  // Fallback gradient if no image or if it&apos;s an emoji
   const fallbackGradients = [
     'from-teal-900 to-slate-900',
     'from-amber-900 to-slate-900',

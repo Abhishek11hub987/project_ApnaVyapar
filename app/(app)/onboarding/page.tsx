@@ -96,7 +96,7 @@ export default function OnboardingPage() {
       case 1:
         return (
           <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-6">
-            <h2 className="text-2xl font-extrabold text-slate-800 dark:text-white">Welcome! Let's get to know you.</h2>
+            <h2 className="text-2xl font-extrabold text-slate-800 dark:text-white">Welcome! Let&apos;s get to know you.</h2>
             <div className="space-y-4">
               <div>
                 <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">Full Name</label>

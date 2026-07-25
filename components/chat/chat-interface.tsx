@@ -96,7 +96,7 @@ function ChatContent() {
 
   useEffect(() => {
     // If we are in the middle of submitting a message and setting a new session ID, 
-    // don't fetch from DB because it will overwrite the AI's streaming response
+    // don&apos;t fetch from DB because it will overwrite the AI's streaming response
     if (isSubmittingRef.current) return;
 
     if (sessionId) {
@@ -269,7 +269,7 @@ function ChatContent() {
             <div className="w-16 h-16 bg-teal-100 dark:bg-teal-900/40 text-teal-700 dark:text-teal-400 rounded-full flex items-center justify-center mx-auto mb-4 shadow-sm">
               <Bot size={32} />
             </div>
-            <p className="font-semibold text-slate-800 dark:text-slate-200 mb-1 text-lg">Welcome! I'm Vyapar Mitra.</p>
+            <p className="font-semibold text-slate-800 dark:text-slate-200 mb-1 text-lg">Welcome! I&apos;m Vyapar Mitra.</p>
             <p className="text-sm max-w-xs mx-auto">I can help you validate your ideas, explain legal terms simply, and build a launch roadmap.</p>
             <div className="mt-8 flex justify-center">
               <QuickActions onSelect={(txt) => handleSubmit(undefined, txt)} />
