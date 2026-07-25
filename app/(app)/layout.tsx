@@ -24,16 +24,25 @@ export default function AppLayout({
 
   // Dashboard has its own layout with sidebar
   const isDashboard = pathname.startsWith('/dashboard');
+  const isChat = pathname === '/chat';
 
   return (
     <div className="flex flex-col min-h-screen bg-navy text-white">
-      {!isDashboard && <Header />}
+      {!isDashboard && (
+        <div className={isChat ? 'hidden md:block' : ''}>
+          <Header />
+        </div>
+      )}
       
-      <main className={`flex-1 overflow-y-auto ${isDashboard ? '' : 'pb-20 md:pb-0'}`}>
+      <main className={`flex-1 overflow-y-auto ${isDashboard ? '' : isChat ? 'pb-0 md:pb-20' : 'pb-20 md:pb-0'}`}>
         {children}
       </main>
       
-      {!isDashboard && <BottomNav />}
+      {!isDashboard && (
+        <div className={isChat ? 'hidden md:block' : ''}>
+          <BottomNav />
+        </div>
+      )}
     </div>
   );
 }

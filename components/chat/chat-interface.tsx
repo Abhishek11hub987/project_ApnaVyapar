@@ -1,14 +1,15 @@
 'use client';
 import { useState, useRef, useEffect, Suspense } from 'react';
-import { Send, Globe, Bot, MapPin, Mic, MicOff, History } from 'lucide-react';
+import { Send, Globe, Bot, MapPin, Mic, MicOff, History, ArrowLeft } from 'lucide-react';
 import { useChat } from '@/hooks/use-chat';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
 import MessageBubble from './message-bubble';
 import QuickActions from './quick-actions';
 import ChatHistorySidebar from './chat-history-sidebar';
 
 function ChatContent() {
   const searchParams = useSearchParams();
+  const router = useRouter();
   const businessIdeaId = searchParams.get('idea');
   const { messages, isLoading, language, sessionId, addMessage, updateLastMessage, setLanguage, setLoading, setSessionId, setMessages } = useChat();
   const [input, setInput] = useState('');
@@ -216,15 +217,21 @@ function ChatContent() {
   }, []);
 
   return (
-    <div className="flex flex-col h-[calc(100vh-140px)] md:h-[calc(100vh-200px)] bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden shadow-sm transition-colors">
+    <div className="flex flex-col h-full md:h-[calc(100vh-200px)] bg-slate-50 dark:bg-slate-950 md:border md:border-slate-200 dark:md:border-slate-800 md:rounded-2xl overflow-hidden shadow-sm transition-colors">
       {/* Header */}
-      <div className="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-4 py-3 flex justify-between items-center z-10">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-teal-100 dark:bg-teal-900/40 text-teal-700 dark:text-teal-400 rounded-full flex items-center justify-center">
+      <div className="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-4 py-3 flex justify-between items-center z-10 shrink-0">
+        <div className="flex items-center gap-2 md:gap-3">
+          <button 
+            onClick={() => router.push('/')}
+            className="md:hidden p-2 -ml-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400"
+          >
+            <ArrowLeft size={20} />
+          </button>
+          <div className="hidden md:flex w-10 h-10 bg-teal-100 dark:bg-teal-900/40 text-teal-700 dark:text-teal-400 rounded-full items-center justify-center">
             <Bot size={20} />
           </div>
           <div>
-            <h2 className="font-bold text-slate-800 dark:text-slate-100 leading-tight">Vyapar Mitra</h2>
+            <h2 className="font-bold text-slate-800 dark:text-slate-100 leading-tight text-lg md:text-base">Vyapar Mitra</h2>
             <p className="text-xs text-slate-500 dark:text-slate-400">Your AI Business Advisor</p>
           </div>
         </div>
