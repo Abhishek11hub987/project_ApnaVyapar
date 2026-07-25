@@ -30,7 +30,7 @@ export default function Header() {
         </Link>
         
         {/* Desktop Navigation — always centered */}
-        <nav className="hidden md:flex items-center justify-center gap-1 bg-slate-50/50 dark:bg-slate-800/30 p-1.5 px-3 rounded-full border border-slate-200/50 dark:border-slate-700/50 shadow-sm">
+        <nav className="hidden md:flex items-center justify-center gap-1 bg-slate-50/50 dark:bg-slate-800/30 p-1.5 px-5 rounded-full border border-slate-200/50 dark:border-slate-700/50 shadow-sm">
           <Link href="/" className={`font-medium text-sm transition-all px-4 py-1.5 rounded-full ${pathname === '/' ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-black/5 dark:hover:bg-white/5'}`}>
             Home
           </Link>
