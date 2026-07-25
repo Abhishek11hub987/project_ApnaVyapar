@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { Package, MoreVertical, Edit2, Trash2, Tag, AlertCircle } from "lucide-react";
+import Link from "next/link";
+import { supabase } from "@/lib/supabase";
 
 export type Product = {
   id: string;
@@ -93,10 +95,28 @@ export function InventoryTable({ initialProducts }: { initialProducts: Product[]
                 </td>
                 <td className="px-6 py-4">
                   <div className="flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <button className="p-2 hover:bg-white/10 rounded-lg text-white/60 hover:text-white transition-colors" title="Edit">
+                    <Link 
+                      href={`/dashboard/inventory/${product.id}`}
+                      className="p-2 hover:bg-white/10 rounded-lg text-white/60 hover:text-white transition-colors" 
+                      title="Edit"
+                    >
                       <Edit2 size={16} />
-                    </button>
-                    <button className="p-2 hover:bg-red-500/10 rounded-lg text-white/60 hover:text-red-400 transition-colors" title="Delete">
+                    </Link>
+                    <button 
+                      onClick={async () => {
+                        if (confirm(`Are you sure you want to delete ${product.name}?`)) {
+                          try {
+                            const { error } = await supabase.from('products').delete().eq('id', product.id);
+                            if (error) throw error;
+                            setProducts(prev => prev.filter(p => p.id !== product.id));
+                          } catch (err: any) {
+                            alert(`Failed to delete: ${err.message}`);
+                          }
+                        }
+                      }}
+                      className="p-2 hover:bg-red-500/10 rounded-lg text-white/60 hover:text-red-400 transition-colors" 
+                      title="Delete"
+                    >
                       <Trash2 size={16} />
                     </button>
                   </div>

@@ -1,8 +1,9 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { MessageCircle, X, Send, Bot, User } from "lucide-react";
+import { MessageCircle, X, Send, Bot, User, GripHorizontal } from "lucide-react";
 import { Product } from "@/components/dashboard/inventory-table";
+import { motion } from "framer-motion";
 
 type Message = {
   role: "user" | "assistant";
@@ -108,24 +109,39 @@ export function VyaparMitraChat({ store, products }: { store: any, products: Pro
     <>
       {/* Floating Action Button */}
       {!isOpen && (
-        <button
-          onClick={() => setIsOpen(true)}
-          className="fixed bottom-6 right-6 w-14 h-14 rounded-full bg-cyan text-navy-dark shadow-neon-cyan flex items-center justify-center hover:scale-110 active:scale-95 transition-all z-50 group"
+        <motion.div
+          drag
+          dragMomentum={false}
+          className="fixed bottom-6 right-6 z-50 cursor-grab active:cursor-grabbing"
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
         >
-          <MessageCircle size={24} className="group-hover:rotate-12 transition-transform" />
-        </button>
+          <button
+            onClick={() => setIsOpen(true)}
+            className="rounded-full bg-cyan text-navy-dark shadow-neon-cyan flex items-center justify-center hover:scale-105 active:scale-95 transition-transform group px-4 py-3 gap-2"
+          >
+            <MessageCircle size={20} className="group-hover:rotate-12 transition-transform" />
+            <span className="font-bold text-sm">Ask Vyapar Mitra</span>
+          </button>
+        </motion.div>
       )}
 
       {/* Chat Window */}
       {isOpen && (
-        <div className="fixed bottom-6 right-6 w-full max-w-sm h-[500px] max-h-[80vh] bg-white rounded-2xl shadow-2xl flex flex-col z-50 overflow-hidden animate-in slide-in-from-bottom-8 duration-300 border border-slate-200">
+        <motion.div 
+          drag
+          dragMomentum={false}
+          dragHandle=".drag-handle"
+          className="fixed bottom-6 right-6 w-full max-w-sm h-[500px] max-h-[80vh] bg-white rounded-2xl shadow-2xl flex flex-col z-50 overflow-hidden border border-slate-200"
+        >
           
           {/* Header */}
           <div 
-            className="p-4 flex items-center justify-between text-white shadow-md relative z-10"
+            className="drag-handle cursor-grab active:cursor-grabbing p-4 flex items-center justify-between text-white shadow-md relative z-10"
             style={{ backgroundColor: store.theme_color || '#00D4FF' }}
           >
-            <div className="flex items-center gap-2 text-white">
+            <div className="flex items-center gap-3 text-white">
+              <GripHorizontal size={16} className="opacity-50" />
               <Bot size={20} />
               <div>
                 <h3 className="font-bold text-sm leading-tight text-white">Store Assistant</h3>
@@ -192,7 +208,7 @@ export function VyaparMitraChat({ store, products }: { store: any, products: Pro
             </button>
           </form>
           
-        </div>
+        </motion.div>
       )}
     </>
   );
