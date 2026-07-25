@@ -11,6 +11,7 @@ export type Product = {
   stock_quantity: number;
   sku: string | null;
   status: 'active' | 'draft' | 'out_of_stock';
+  image_url: string | null;
   created_at: string;
 };
 
@@ -50,8 +51,12 @@ export function InventoryTable({ initialProducts }: { initialProducts: Product[]
               <tr key={product.id} className="hover:bg-white/5 transition-colors group">
                 <td className="px-6 py-4">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-lg bg-navy border border-white/10 flex items-center justify-center shrink-0">
-                      <Tag size={16} className="text-white/40" />
+                    <div className="w-10 h-10 rounded-lg bg-navy border border-white/10 flex items-center justify-center shrink-0 overflow-hidden">
+                      {product.image_url ? (
+                        <img src={product.image_url} alt={product.name} className="w-full h-full object-cover" />
+                      ) : (
+                        <Tag size={16} className="text-white/40" />
+                      )}
                     </div>
                     <div>
                       <p className="font-semibold text-white group-hover:text-cyan transition-colors">{product.name}</p>

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
-import { ArrowLeft, Save } from "lucide-react";
+import { ArrowLeft, Save, Upload, Image as ImageIcon } from "lucide-react";
 import Link from "next/link";
 
 export default function AddProductPage() {
@@ -19,6 +19,8 @@ export default function AddProductPage() {
     sku: "",
     status: "active",
   });
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -31,6 +33,25 @@ export default function AddProductPage() {
         throw new Error("You must be logged in to add a product.");
       }
 
+      let imageUrl = null;
+
+      if (imageFile) {
+        const fileExt = imageFile.name.split('.').pop();
+        const fileName = `${userData.user.id}-${Math.random().toString(36).substring(2)}-${Date.now()}.${fileExt}`;
+        
+        const { error: uploadError, data } = await supabase.storage
+          .from("product-images")
+          .upload(fileName, imageFile);
+
+        if (uploadError) throw uploadError;
+
+        const { data: publicUrlData } = supabase.storage
+          .from("product-images")
+          .getPublicUrl(fileName);
+          
+        imageUrl = publicUrlData.publicUrl;
+      }
+
       const { error: insertError } = await supabase.from("products").insert({
         user_id: userData.user.id,
         name: formData.name,
@@ -39,6 +60,7 @@ export default function AddProductPage() {
         stock_quantity: parseInt(formData.stock_quantity, 10),
         sku: formData.sku,
         status: formData.status,
+        image_url: imageUrl,
       });
 
       if (insertError) throw insertError;
@@ -76,6 +98,38 @@ export default function AddProductPage() {
           <div className="space-y-4">
             <h3 className="text-lg font-bold text-white border-b border-white/10 pb-2">Basic Information</h3>
             
+            {/* Image Upload */}
+            <div>
+              <label className="block text-sm font-medium text-white/70 mb-1.5">Product Image</label>
+              <div className="flex items-center gap-6">
+                <div className="w-24 h-24 rounded-xl bg-navy border border-white/10 flex items-center justify-center overflow-hidden flex-shrink-0">
+                  {imagePreview ? (
+                    <img src={imagePreview} alt="Preview" className="w-full h-full object-cover" />
+                  ) : (
+                    <ImageIcon size={32} className="text-white/20" />
+                  )}
+                </div>
+                <div className="flex-1">
+                  <label className="cursor-pointer px-4 py-2 rounded-lg border border-white/10 text-white text-sm font-medium hover:bg-white/5 transition-colors inline-flex items-center gap-2">
+                    <Upload size={16} /> Choose Image
+                    <input 
+                      type="file" 
+                      accept="image/*" 
+                      className="hidden" 
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (file) {
+                          setImageFile(file);
+                          setImagePreview(URL.createObjectURL(file));
+                        }
+                      }}
+                    />
+                  </label>
+                  <p className="text-white/40 text-xs mt-2">Recommended: Square image, max 2MB. (Requires 'product-images' bucket)</p>
+                </div>
+              </div>
+            </div>
+
             <div>
               <label className="block text-sm font-medium text-white/70 mb-1.5">Product Name *</label>
               <input

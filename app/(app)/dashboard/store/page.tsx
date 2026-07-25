@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
-import { Save, Store, Globe, Palette, Share2, Copy } from "lucide-react";
+import { Save, Store, Globe, Palette, Share2, Copy, PhoneCall, Mail, Type } from "lucide-react";
 import Link from "next/link";
 
 export default function StoreBuilderPage() {
@@ -17,7 +17,10 @@ export default function StoreBuilderPage() {
     store_name: "",
     slug: "",
     theme_color: "#00D4FF",
-    is_active: true
+    is_active: true,
+    support_email: "",
+    support_phone: "",
+    hero_text: "",
   });
 
   const addLog = (msg: string) => {
@@ -58,7 +61,10 @@ export default function StoreBuilderPage() {
             store_name: data.store_name,
             slug: data.slug,
             theme_color: data.theme_color,
-            is_active: data.is_active
+            is_active: data.is_active,
+            support_email: data.support_email || "",
+            support_phone: data.support_phone || "",
+            hero_text: data.hero_text || "",
           });
         }
       } catch (err: any) {
@@ -98,7 +104,10 @@ export default function StoreBuilderPage() {
             store_name: formData.store_name,
             slug: formData.slug,
             theme_color: formData.theme_color,
-            is_active: formData.is_active
+            is_active: formData.is_active,
+            support_email: formData.support_email,
+            support_phone: formData.support_phone,
+            hero_text: formData.hero_text,
           })
           .eq("id", formData.id);
         if (error) throw error;
@@ -111,7 +120,10 @@ export default function StoreBuilderPage() {
             store_name: formData.store_name,
             slug: formData.slug,
             theme_color: formData.theme_color,
-            is_active: formData.is_active
+            is_active: formData.is_active,
+            support_email: formData.support_email,
+            support_phone: formData.support_phone,
+            hero_text: formData.hero_text,
           })
           .select()
           .single();
@@ -200,6 +212,55 @@ export default function StoreBuilderPage() {
                     Your store will be live at: <a href={storeUrl} target="_blank" rel="noopener noreferrer" className="text-cyan hover:underline">{storeUrl}</a>
                   </p>
                 )}
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-white/70 mb-1.5 flex items-center gap-2">
+                  <Type size={14} className="text-white/40" /> Hero Subtitle Text
+                </label>
+                <input
+                  type="text"
+                  value={formData.hero_text}
+                  onChange={(e) => setFormData({ ...formData, hero_text: e.target.value })}
+                  className="w-full bg-navy border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-cyan transition-colors"
+                  placeholder="e.g. Welcome to the best shop in India!"
+                />
+              </div>
+            </div>
+
+            {/* Contact Details */}
+            <div className="space-y-4">
+              <div className="flex items-center gap-2 border-b border-white/10 pb-2 mb-4">
+                <PhoneCall size={18} className="text-cyan" />
+                <h3 className="text-lg font-bold text-white">Contact & Support</h3>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-white/70 mb-1.5 flex items-center gap-2">
+                    <Mail size={14} className="text-white/40" /> Support Email
+                  </label>
+                  <input
+                    type="email"
+                    value={formData.support_email}
+                    onChange={(e) => setFormData({ ...formData, support_email: e.target.value })}
+                    className="w-full bg-navy border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-cyan transition-colors"
+                    placeholder="help@myshop.com"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-white/70 mb-1.5 flex items-center gap-2">
+                    <PhoneCall size={14} className="text-white/40" /> Support Phone
+                  </label>
+                  <input
+                    type="tel"
+                    value={formData.support_phone}
+                    onChange={(e) => setFormData({ ...formData, support_phone: e.target.value })}
+                    className="w-full bg-navy border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-cyan transition-colors"
+                    placeholder="+91 9876543210"
+                  />
+                </div>
               </div>
             </div>
 
