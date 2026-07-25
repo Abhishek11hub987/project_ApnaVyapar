@@ -113,7 +113,7 @@ export function VyaparMitraChat({ store, products }: { store: any, products: Pro
         <motion.div
           drag
           dragMomentum={false}
-          className="fixed bottom-6 right-6 z-50 cursor-grab active:cursor-grabbing"
+          className="fixed bottom-6 left-6 z-50 cursor-grab active:cursor-grabbing"
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
         >
@@ -134,7 +134,7 @@ export function VyaparMitraChat({ store, products }: { store: any, products: Pro
           dragMomentum={false}
           dragControls={dragControls}
           dragListener={false}
-          className="fixed bottom-6 right-6 w-full max-w-sm h-[500px] max-h-[80vh] bg-white rounded-2xl shadow-2xl flex flex-col z-50 overflow-hidden border border-slate-200"
+          className="fixed bottom-6 left-6 w-full max-w-sm h-[500px] max-h-[80vh] bg-white rounded-2xl shadow-2xl flex flex-col z-50 overflow-hidden border border-slate-200"
         >
           
           {/* Header */}

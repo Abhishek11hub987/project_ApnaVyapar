@@ -178,7 +178,7 @@ export function StorefrontClient({ store, products }: { store: any, products: Pr
       <Header store={store} />
       <ProductGrid products={products} />
       <Footer store={store} />
-      <CartDrawer />
+      <CartDrawer store={store} />
     </CartProvider>
   );
 }

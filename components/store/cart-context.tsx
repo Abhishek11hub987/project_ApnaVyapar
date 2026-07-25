@@ -16,6 +16,7 @@ type CartContextType = {
   isCartOpen: boolean;
   setIsCartOpen: (isOpen: boolean) => void;
   cartTotal: number;
+  storeId: string;
 };
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -94,6 +95,7 @@ export function CartProvider({ children, storeId }: { children: React.ReactNode;
         isCartOpen,
         setIsCartOpen,
         cartTotal,
+        storeId,
       }}
     >
       {children}

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
-import { Save, Store, Globe, Palette, Share2, Copy, PhoneCall, Mail, Type, ShieldCheck, FileText, Image as ImageIcon, Upload } from "lucide-react";
+import { Save, Store, Globe, Palette, Share2, Copy, PhoneCall, Mail, Type, ShieldCheck, FileText, Image as ImageIcon, Upload, Banknote } from "lucide-react";
 import Link from "next/link";
 
 export default function StoreBuilderPage() {
@@ -23,6 +23,7 @@ export default function StoreBuilderPage() {
     logo_url: "",
     privacy_policy: "",
     terms_conditions: "",
+    payment_instructions: "",
   });
   
   const [logoFile, setLogoFile] = useState<File | null>(null);
@@ -65,6 +66,15 @@ Prices for our products are subject to change without notice. We reserve the rig
 **Contact Information**
 Questions about the Terms of Service should be sent to us via the contact details provided in our store.`;
 
+  const defaultPaymentInstructions = `**Payment Instructions**
+
+Please make your payment directly to our bank account or via UPI.
+
+**UPI ID:** yourname@upi
+**Bank Transfer:** Account No: 123456789 | IFSC: ABCD0123456
+
+Your order will not be shipped until the funds have cleared in our account. Once you place the order, we will contact you to verify payment.`;
+
   useEffect(() => {
     let isMounted = true;
     
@@ -97,6 +107,7 @@ Questions about the Terms of Service should be sent to us via the contact detail
             logo_url: data.logo_url || "",
             privacy_policy: data.privacy_policy || defaultPrivacyPolicy,
             terms_conditions: data.terms_conditions || defaultTermsConditions,
+            payment_instructions: data.payment_instructions || defaultPaymentInstructions,
           });
           if (data.logo_url) {
             setLogoPreview(data.logo_url);
@@ -106,7 +117,8 @@ Questions about the Terms of Service should be sent to us via the contact detail
           setFormData(prev => ({
             ...prev,
             privacy_policy: defaultPrivacyPolicy,
-            terms_conditions: defaultTermsConditions
+            terms_conditions: defaultTermsConditions,
+            payment_instructions: defaultPaymentInstructions
           }));
         }
       } catch (err: any) {
@@ -168,6 +180,7 @@ Questions about the Terms of Service should be sent to us via the contact detail
             logo_url: uploadedLogoUrl,
             privacy_policy: formData.privacy_policy,
             terms_conditions: formData.terms_conditions,
+            payment_instructions: formData.payment_instructions,
           })
           .eq("id", formData.id);
         if (error) throw error;
@@ -187,6 +200,7 @@ Questions about the Terms of Service should be sent to us via the contact detail
             logo_url: uploadedLogoUrl,
             privacy_policy: formData.privacy_policy,
             terms_conditions: formData.terms_conditions,
+            payment_instructions: formData.payment_instructions,
           })
           .select()
           .single();
@@ -356,6 +370,19 @@ Questions about the Terms of Service should be sent to us via the contact detail
                   onChange={(e) => setFormData({ ...formData, terms_conditions: e.target.value })}
                   className="w-full bg-navy border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-cyan transition-colors resize-y font-mono text-sm"
                   placeholder="Enter your terms and conditions..."
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-white/70 mb-1.5 flex items-center gap-2">
+                  <Banknote size={14} className="text-white/40" /> Payment Instructions
+                </label>
+                <textarea
+                  rows={6}
+                  value={formData.payment_instructions}
+                  onChange={(e) => setFormData({ ...formData, payment_instructions: e.target.value })}
+                  className="w-full bg-navy border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-cyan transition-colors resize-y font-mono text-sm"
+                  placeholder="Enter payment instructions (e.g. UPI ID or Bank Details)..."
                 />
               </div>
             </div>
