@@ -23,7 +23,18 @@ const PROVERBS = [
   { text: "Aam ke aam, guthliyon ke daam", meaning: "Profit from the mango AND its seeds. Maximise every asset's utility.", context: "finance" },
   { text: "Jo sota hai, wo khota hai", meaning: "One who sleeps (is idle) falls behind. Stay alert and proactive.", context: "general" },
   { text: "Ghar ka bhedi Lanka dhave", meaning: "An insider can cause the most damage. Choose partners and employees carefully.", context: "risk" },
-  { text: "Sher ke muh mein jaane ka ek hi raasta hai", meaning: "There's only one way into a lion's mouth. Don't take unnecessary risks.", context: "risk" }
+  { text: "Sher ke muh mein jaane ka ek hi raasta hai", meaning: "There's only one way into a lion's mouth. Don't take unnecessary risks.", context: "risk" },
+  { text: "Kharbooje ko dekh kar kharbooja rang badalta hai", meaning: "A melon changes color seeing another melon. Surround yourself with successful people.", context: "general" },
+  { text: "Lalach buri bala hai", meaning: "Greed is a bad disease. Focus on sustainable growth, not quick scams.", context: "finance" },
+  { text: "Sasta roye baar baar, mehnga roye ek baar", meaning: "The cheap buyer cries often, the expensive buyer cries once. Invest in quality.", context: "finance" },
+  { text: "Jal mein reh kar magar se bair nahi", meaning: "You cannot live in the water and be enemies with the crocodile. Build good relationships with local authorities and partners.", context: "risk" },
+  { text: "Oonchi dukaan phika pakwaan", meaning: "Tall shop, tasteless sweets. Don't just focus on marketing; ensure your product is actually good.", context: "landing" },
+  { text: "Apna haath Jagannath", meaning: "Your own hand is your Lord. Self-reliance is the best reliance.", context: "general" },
+  { text: "Bhes ke aage been bajana", meaning: "Playing the flute in front of a buffalo. Don't waste your pitch on the wrong target audience.", context: "landing" },
+  { text: "Sui ki jagah talwar ka kaam nahi", meaning: "A sword cannot do the work of a needle. Use the right tools for the right job.", context: "checklist" },
+  { text: "Aage daud pichhe chaud", meaning: "Running forward while leaving the back empty. Don't scale too fast without securing your current operations.", context: "risk" },
+  { text: "Rassi jal gayi par aithan nahi gayi", meaning: "The rope burned but the twist remains. Be flexible and willing to pivot your business model.", context: "general" },
+  { text: "Naach na jaane aangan tedha", meaning: "Not knowing how to dance and blaming the crooked floor. Take responsibility for your business outcomes.", context: "general" }
 ];
 
 export function GuruGyaan({ context = 'general' }: { context?: string }) {
@@ -32,18 +43,36 @@ export function GuruGyaan({ context = 'general' }: { context?: string }) {
 
   useEffect(() => {
     const relevant = PROVERBS.filter(p => p.context === context || p.context === 'general');
-    const random = relevant[Math.floor(Math.random() * relevant.length)];
-    setProverb(random);
+    
+    // Initial proverb
+    const initialRandom = relevant[Math.floor(Math.random() * relevant.length)];
+    setProverb(initialRandom);
     setMounted(true);
+
+    // Auto-Agent interval to change proverb every 12 seconds
+    const intervalId = setInterval(() => {
+      setProverb(current => {
+        let nextRandom;
+        do {
+          nextRandom = relevant[Math.floor(Math.random() * relevant.length)];
+        } while (nextRandom.text === current.text && relevant.length > 1);
+        return nextRandom;
+      });
+    }, 12000);
+
+    return () => clearInterval(intervalId);
   }, [context]);
 
   if (!mounted) return null;
 
   return (
-    <AnimatePresence>
+    <AnimatePresence mode="wait">
       <motion.div 
+        key={proverb.text}
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -10 }}
+        transition={{ duration: 0.5 }}
         className="w-full max-w-2xl mx-auto my-6"
       >
         <div className="relative p-[1px] rounded-xl overflow-hidden bg-gradient-to-r from-teal-500/20 via-amber-500/20 to-teal-500/20 animate-pulse">
