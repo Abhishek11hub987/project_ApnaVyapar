@@ -29,12 +29,25 @@ export async function GET(req: Request) {
       ...(businessIdeas?.map(i => i.title) || [])
     ].join(', ');
 
+    // 2.5 Fetch recent user locations to personalize ideas
+    const { data: userLocations } = await supabaseAdmin
+      .from('profiles')
+      .select('city, state')
+      .not('city', 'is', null)
+      .order('created_at', { ascending: false })
+      .limit(50);
+      
+    const uniqueLocations = [...new Set(userLocations?.map(l => `${l.city}, ${l.state}`) || [])];
+    const targetLocation = uniqueLocations.length > 0 
+      ? uniqueLocations[Math.floor(Math.random() * uniqueLocations.length)] 
+      : 'a growing Tier-2 or Tier-3 city in India';
+
     // 3. Construct the prompt
     const prompt = `You are a visionary business analyst specializing in emerging Indian markets.
-Brainstorm a COMPLETELY UNIQUE, highly profitable, and trendy business idea tailored for India.
+Brainstorm a COMPLETELY UNIQUE, highly profitable, and trendy business idea specifically tailored for ${targetLocation} based on the newest 2026 consumer trends in India.
 DO NOT use any of these existing ideas: ${existingTitles || 'None'}.
 
-The idea should be modern, scalable, and tap into current consumer behavior (e.g. D2C, health-tech, sustainable living, quick commerce, gig economy, pet care, tier-2 city growth).
+The idea should be modern, scalable, and tap into current local behavior in ${targetLocation} (e.g. D2C, health-tech, sustainable living, quick commerce, gig economy, pet care, local tier-2 city growth).
 
 You MUST respond with ONLY valid JSON (no markdown, no code fences, no intro/outro text).
 
