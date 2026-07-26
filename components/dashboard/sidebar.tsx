@@ -70,7 +70,7 @@ export function DashboardSidebar() {
       {/* Brand */}
       <div className="h-16 flex items-center justify-between px-6 border-b border-white/10 shrink-0">
         <div className="flex items-center gap-3">
-          <Link href="/" className="p-1 -ml-1 text-white/40 hover:text-white hover:bg-white/10 rounded-lg transition-colors" title="Back to main site">
+          <Link href="/ideas" className="p-1 -ml-1 text-white/40 hover:text-white hover:bg-white/10 rounded-lg transition-colors" title="Back to Business Ideas">
             <ArrowLeft size={18} />
           </Link>
           <Link href="/" className="hover:opacity-90 transition-opacity">
@@ -148,7 +148,7 @@ export function DashboardSidebar() {
       {/* Mobile Top Bar */}
       <div className="md:hidden fixed top-0 left-0 right-0 h-16 bg-navy border-b border-white/10 z-40 flex items-center justify-between px-4">
         <div className="flex items-center gap-2">
-          <Link href="/" className="p-2 -ml-2 text-white/60 hover:text-white hover:bg-white/10 rounded-lg transition-colors" title="Back to main site">
+          <Link href="/ideas" className="p-2 -ml-2 text-white/60 hover:text-white hover:bg-white/10 rounded-lg transition-colors" title="Back to Business Ideas">
             <ArrowLeft size={20} />
           </Link>
           <Link href="/" className="hover:opacity-90 transition-opacity">
