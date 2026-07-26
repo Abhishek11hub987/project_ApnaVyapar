@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import {
   AreaChart,
   Area,
@@ -10,54 +10,65 @@ import {
   Tooltip,
   ResponsiveContainer
 } from 'recharts';
-
-type ChartPeriod = 'current' | 'previous' | 'projection';
+import { Calendar } from "lucide-react";
 
 const MONTH_NAMES = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
-export function RevenueChart({ data, monthlyData }: { data?: number[]; monthlyData?: { current: number[]; previous: number[]; currentMonth: number; currentYear: number } }) {
+export function RevenueChart({ orders = [] }: { orders?: any[] }) {
   const [mounted, setMounted] = useState(false);
-  const [period, setPeriod] = useState<ChartPeriod>('current');
+  
+  const now = new Date();
+  const currentYYYYMM = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+  const [selectedMonth, setSelectedMonth] = useState<string>(currentYYYYMM);
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  const now = new Date();
-  const currentMonthName = monthlyData ? MONTH_NAMES[monthlyData.currentMonth] : MONTH_NAMES[now.getMonth()];
-  const prevMonthName = monthlyData ? MONTH_NAMES[(monthlyData.currentMonth - 1 + 12) % 12] : MONTH_NAMES[(now.getMonth() - 1 + 12) % 12];
-  const nextMonthName = monthlyData ? MONTH_NAMES[(monthlyData.currentMonth + 1) % 12] : MONTH_NAMES[(now.getMonth() + 1) % 12];
-  const year = monthlyData?.currentYear || now.getFullYear();
-
-  // Get active data based on selected period
-  const getActiveData = (): number[] => {
-    if (!monthlyData) return data || [0, 0, 0, 0];
+  // 1. Extract unique months from orders for the dropdown
+  const availableMonths = useMemo(() => {
+    const months = new Set<string>();
+    months.add(currentYYYYMM); // Always include current month
     
-    switch (period) {
-      case 'current':
-        return monthlyData.current;
-      case 'previous':
-        return monthlyData.previous;
-      case 'projection': {
-        const curr = monthlyData.current;
-        const total = curr.reduce((s, v) => s + v, 0);
-        const daysElapsed = now.getDate();
-        const dailyAvg = daysElapsed > 0 ? total / daysElapsed : 0;
-        return [
-          Math.round(dailyAvg * 7 * 1.05),
-          Math.round(dailyAvg * 7 * 1.1),
-          Math.round(dailyAvg * 7 * 1.08),
-          Math.round(dailyAvg * 7 * 1.12),
-        ];
-      }
-      default:
-        return data || [0, 0, 0, 0];
-    }
-  };
+    orders.forEach(order => {
+      const d = new Date(order.created_at);
+      const yyyymm = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+      months.add(yyyymm);
+    });
+    
+    // Sort descending
+    return Array.from(months).sort((a, b) => b.localeCompare(a));
+  }, [orders, currentYYYYMM]);
 
-  const activeData = getActiveData();
-  const hasData = activeData.some(v => v > 0);
-  const totalRevenue = activeData.reduce((s, v) => s + v, 0);
+  // 2. Compute daily data for the selected month
+  const chartData = useMemo(() => {
+    const [yearStr, monthStr] = selectedMonth.split('-');
+    const year = parseInt(yearStr);
+    const month = parseInt(monthStr) - 1;
+    
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    
+    // Initialize array with 0 for each day
+    const dailyData = Array.from({ length: daysInMonth }, (_, i) => ({
+      name: `${i + 1}`,
+      fullDate: `${MONTH_NAMES[month]} ${i + 1}, ${year}`,
+      revenue: 0,
+    }));
+
+    orders.forEach(order => {
+      if (order.status === 'cancelled') return;
+      const d = new Date(order.created_at);
+      if (d.getFullYear() === year && d.getMonth() === month) {
+        const dayIndex = d.getDate() - 1;
+        dailyData[dayIndex].revenue += Number(order.total_amount || 0);
+      }
+    });
+    
+    return dailyData;
+  }, [orders, selectedMonth]);
+
+  const hasData = chartData.some(d => d.revenue > 0);
+  const totalRevenue = chartData.reduce((s, d) => s + d.revenue, 0);
 
   const formatCurrency = (v: number) => {
     if (v >= 100000) return `₹${(v / 100000).toFixed(1)}L`;
@@ -65,26 +76,17 @@ export function RevenueChart({ data, monthlyData }: { data?: number[]; monthlyDa
     return `₹${v.toFixed(0)}`;
   };
 
-  const getPeriodLabel = () => {
-    switch (period) {
-      case 'current': return `${currentMonthName} ${year}`;
-      case 'previous': return `${prevMonthName} ${year}`;
-      case 'projection': return `${nextMonthName} ${year} (Projected)`;
-    }
+  const formatMonthLabel = (yyyymm: string) => {
+    const [y, m] = yyyymm.split('-');
+    return `${MONTH_NAMES[parseInt(m) - 1]} ${y}`;
   };
 
-  // Prepare data for recharts
-  const chartData = activeData.map((val, i) => ({
-    name: `Week ${i + 1}`,
-    revenue: val,
-  }));
-
   // Tooltip formatter
-  const CustomTooltip = ({ active, payload, label }: any) => {
+  const CustomTooltip = ({ active, payload }: any) => {
     if (active && payload && payload.length) {
       return (
-        <div className="bg-slate-900/90 backdrop-blur-md border border-white/10 rounded-xl p-3 shadow-xl">
-          <p className="text-white/60 text-xs font-semibold mb-1">{label}</p>
+        <div className="bg-slate-900/90 backdrop-blur-md border border-white/10 rounded-xl p-3 shadow-xl z-50">
+          <p className="text-white/60 text-xs font-semibold mb-1">{payload[0].payload.fullDate}</p>
           <p className="text-white font-bold text-lg">
             {formatCurrency(payload[0].value)}
           </p>
@@ -94,48 +96,37 @@ export function RevenueChart({ data, monthlyData }: { data?: number[]; monthlyDa
     return null;
   };
 
-  const strokeColor = period === 'projection' ? '#10B981' : '#00D4FF';
+  const strokeColor = '#00D4FF';
 
   return (
-    <div className="glass-card p-4 sm:p-6 border-white/5 h-full flex flex-col w-full overflow-hidden">
+    <div className="glass-card p-4 sm:p-6 border-white/5 h-full flex flex-col w-full overflow-hidden relative z-10">
       <div className="flex flex-col sm:flex-row justify-between items-start gap-4 mb-6">
         <div className="w-full">
           <h3 className="text-white font-bold text-lg mb-1">Revenue Overview</h3>
           <p className="text-white/40 text-sm">
-            {hasData ? getPeriodLabel() : "Waiting for first sale..."}
+            {hasData ? "Daily earnings breakdown" : "Waiting for sales in this month..."}
           </p>
-          {hasData && (
-            <p className="text-2xl font-extrabold text-cyan mt-2">
-              {formatCurrency(totalRevenue)}
-              {period === 'projection' && <span className="text-xs text-white/30 font-normal ml-2">estimated</span>}
-            </p>
-          )}
+          <p className="text-2xl font-extrabold text-cyan mt-2">
+            {formatCurrency(totalRevenue)}
+          </p>
         </div>
-        <div className="flex flex-wrap gap-1 bg-navy/80 rounded-xl p-1 border border-white/5 shrink-0">
-          <button
-            onClick={() => setPeriod('previous')}
-            className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
-              period === 'previous' ? 'bg-white/10 text-white' : 'text-white/40 hover:text-white/70'
-            }`}
+        
+        <div className="shrink-0 relative">
+          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <Calendar size={14} className="text-cyan" />
+          </div>
+          <select
+            value={selectedMonth}
+            onChange={(e) => setSelectedMonth(e.target.value)}
+            className="pl-9 pr-8 py-2 bg-navy/80 border border-white/10 rounded-xl text-sm font-semibold text-white appearance-none cursor-pointer hover:bg-white/5 transition-colors focus:outline-none focus:border-cyan/50"
           >
-            {prevMonthName.slice(0, 3)}
-          </button>
-          <button
-            onClick={() => setPeriod('current')}
-            className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
-              period === 'current' ? 'bg-cyan/20 text-cyan border border-cyan/30' : 'text-white/40 hover:text-white/70'
-            }`}
-          >
-            {currentMonthName.slice(0, 3)}
-          </button>
-          <button
-            onClick={() => setPeriod('projection')}
-            className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
-              period === 'projection' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' : 'text-white/40 hover:text-white/70'
-            }`}
-          >
-            {nextMonthName.slice(0, 3)} ✨
-          </button>
+            {availableMonths.map(m => (
+              <option key={m} value={m} className="bg-navy text-white">{formatMonthLabel(m)}</option>
+            ))}
+          </select>
+          <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+            <svg className="w-4 h-4 text-white/40" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
+          </div>
         </div>
       </div>
 
@@ -156,7 +147,10 @@ export function RevenueChart({ data, monthlyData }: { data?: number[]; monthlyDa
                 fontSize={12} 
                 tickLine={false} 
                 axisLine={false} 
-                dy={10} 
+                dy={10}
+                tick={{fill: 'rgba(255,255,255,0.4)'}}
+                interval="preserveStartEnd"
+                minTickGap={20}
               />
               <YAxis 
                 stroke="rgba(255,255,255,0.2)" 
@@ -164,17 +158,19 @@ export function RevenueChart({ data, monthlyData }: { data?: number[]; monthlyDa
                 tickLine={false} 
                 axisLine={false} 
                 tickFormatter={(value) => formatCurrency(value)}
+                allowDecimals={false}
+                domain={hasData ? ['auto', 'auto'] : [0, 5000]}
               />
               <Tooltip content={<CustomTooltip />} cursor={{ stroke: 'rgba(255,255,255,0.1)', strokeWidth: 2, strokeDasharray: '4 4' }} />
               <Area 
                 type="monotone" 
                 dataKey="revenue" 
                 stroke={strokeColor} 
-                strokeWidth={3}
+                strokeWidth={2.5}
                 fillOpacity={1} 
                 fill="url(#colorRevenue)" 
-                activeDot={{ r: 6, fill: strokeColor, stroke: '#1e293b', strokeWidth: 2 }}
-                animationDuration={1500}
+                activeDot={{ r: 5, fill: strokeColor, stroke: '#1e293b', strokeWidth: 2 }}
+                animationDuration={1000}
               />
             </AreaChart>
           </ResponsiveContainer>

@@ -36,6 +36,7 @@ export default function DashboardPage() {
   });
   const [loading, setLoading] = useState(true);
   const [recentOrders, setRecentOrders] = useState<any[]>([]);
+  const [allOrders, setAllOrders] = useState<any[]>([]);
 
   useEffect(() => {
     let isMounted = true;
@@ -84,6 +85,7 @@ export default function DashboardPage() {
         const prevMonthYear = currentMonth === 0 ? currentYear - 1 : currentYear;
 
         if (orders) {
+          if (isMounted) setAllOrders(orders);
           totalOrders = orders.length;
 
           orders.forEach((order) => {
@@ -239,7 +241,7 @@ export default function DashboardPage() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
         {/* Main Chart */}
         <div className="lg:col-span-2 min-h-[400px]">
-          <RevenueChart data={stats.weeklyRevenue} monthlyData={stats.monthlyData} />
+          <RevenueChart orders={allOrders} />
         </div>
 
         {/* Recent Orders / Activity */}
