@@ -1,5 +1,4 @@
-import { Bot, User } from 'lucide-react';
-import LocationMapCard from './location-map-card';
+import { Bot, User, MapPin } from 'lucide-react';
 
 export default function MessageBubble({ role, content }: { role: 'user' | 'assistant' | 'system', content: string }) {
   if (role === 'system') return null;
@@ -20,7 +19,18 @@ export default function MessageBubble({ role, content }: { role: 'user' | 'assis
               content.split(/(\[MAP:[^\]]+\])/).map((part, i) => {
                 if (part.startsWith('[MAP:') && part.endsWith(']')) {
                   const query = part.replace('[MAP:', '').replace(']', '');
-                  return <LocationMapCard key={i} typeQuery={query} />;
+                  return (
+                    <a
+                      key={i}
+                      href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 px-3 py-2 my-2 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-900/50 transition-colors border border-blue-200 dark:border-blue-800 no-underline font-semibold text-sm"
+                    >
+                      <MapPin size={16} />
+                      View "{query}" on Google Maps
+                    </a>
+                  );
                 }
                 return <span key={i}>{part}</span>;
               })
