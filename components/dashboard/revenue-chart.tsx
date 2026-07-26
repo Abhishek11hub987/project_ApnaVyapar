@@ -1,6 +1,15 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import {
+  AreaChart,
+  Area,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer
+} from 'recharts';
 
 type ChartPeriod = 'current' | 'previous' | 'projection';
 
@@ -9,7 +18,6 @@ const MONTH_NAMES = ['January', 'February', 'March', 'April', 'May', 'June', 'Ju
 export function RevenueChart({ data, monthlyData }: { data?: number[]; monthlyData?: { current: number[]; previous: number[]; currentMonth: number; currentYear: number } }) {
   const [mounted, setMounted] = useState(false);
   const [period, setPeriod] = useState<ChartPeriod>('current');
-  const [hoveredPoint, setHoveredPoint] = useState<number | null>(null);
 
   useEffect(() => {
     setMounted(true);
@@ -31,12 +39,10 @@ export function RevenueChart({ data, monthlyData }: { data?: number[]; monthlyDa
       case 'previous':
         return monthlyData.previous;
       case 'projection': {
-        // Project next month based on current month's trend
         const curr = monthlyData.current;
         const total = curr.reduce((s, v) => s + v, 0);
         const daysElapsed = now.getDate();
         const dailyAvg = daysElapsed > 0 ? total / daysElapsed : 0;
-        // Project 4 weeks of next month
         return [
           Math.round(dailyAvg * 7 * 1.05),
           Math.round(dailyAvg * 7 * 1.1),
@@ -51,39 +57,12 @@ export function RevenueChart({ data, monthlyData }: { data?: number[]; monthlyDa
 
   const activeData = getActiveData();
   const hasData = activeData.some(v => v > 0);
-  const maxVal = hasData ? Math.max(...activeData) * 1.3 : 100000;
   const totalRevenue = activeData.reduce((s, v) => s + v, 0);
 
   const formatCurrency = (v: number) => {
     if (v >= 100000) return `₹${(v / 100000).toFixed(1)}L`;
     if (v >= 1000) return `₹${(v / 1000).toFixed(0)}k`;
     return `₹${v.toFixed(0)}`;
-  };
-
-  // Generate smooth SVG path points
-  const points = activeData.map((val, i) => ({
-    x: (i / (activeData.length - 1)) * 100,
-    y: hasData ? 100 - (val / maxVal) * 100 : 100,
-  }));
-
-  // Build smooth curve path
-  const buildPath = () => {
-    if (points.length < 2) return "M 0,100 L 100,100";
-    let d = `M ${points[0].x},${points[0].y}`;
-    for (let i = 0; i < points.length - 1; i++) {
-      const cp1x = points[i].x + (points[i + 1].x - points[i].x) / 3;
-      const cp1y = points[i].y;
-      const cp2x = points[i + 1].x - (points[i + 1].x - points[i].x) / 3;
-      const cp2y = points[i + 1].y;
-      d += ` C ${cp1x},${cp1y} ${cp2x},${cp2y} ${points[i + 1].x},${points[i + 1].y}`;
-    }
-    return d;
-  };
-
-  // Area fill path (closes to bottom)
-  const buildAreaPath = () => {
-    const linePath = buildPath();
-    return `${linePath} L 100,100 L 0,100 Z`;
   };
 
   const getPeriodLabel = () => {
@@ -94,8 +73,31 @@ export function RevenueChart({ data, monthlyData }: { data?: number[]; monthlyDa
     }
   };
 
+  // Prepare data for recharts
+  const chartData = activeData.map((val, i) => ({
+    name: `Week ${i + 1}`,
+    revenue: val,
+  }));
+
+  // Tooltip formatter
+  const CustomTooltip = ({ active, payload, label }: any) => {
+    if (active && payload && payload.length) {
+      return (
+        <div className="bg-slate-900/90 backdrop-blur-md border border-white/10 rounded-xl p-3 shadow-xl">
+          <p className="text-white/60 text-xs font-semibold mb-1">{label}</p>
+          <p className="text-white font-bold text-lg">
+            {formatCurrency(payload[0].value)}
+          </p>
+        </div>
+      );
+    }
+    return null;
+  };
+
+  const strokeColor = period === 'projection' ? '#10B981' : '#00D4FF';
+
   return (
-    <div className="glass-card p-6 border-white/5 h-full flex flex-col w-full overflow-hidden">
+    <div className="glass-card p-4 sm:p-6 border-white/5 h-full flex flex-col w-full overflow-hidden">
       <div className="flex flex-col sm:flex-row justify-between items-start gap-4 mb-6">
         <div className="w-full">
           <h3 className="text-white font-bold text-lg mb-1">Revenue Overview</h3>
@@ -137,97 +139,46 @@ export function RevenueChart({ data, monthlyData }: { data?: number[]; monthlyDa
         </div>
       </div>
 
-      <div className="flex-1 relative flex items-end min-h-[220px]">
-        {/* Y-axis labels */}
-        <div className="absolute left-0 top-0 bottom-8 w-14 flex flex-col justify-between text-xs text-white/30 font-medium z-10">
-          <span>{formatCurrency(maxVal)}</span>
-          <span>{formatCurrency(maxVal * 0.75)}</span>
-          <span>{formatCurrency(maxVal * 0.5)}</span>
-          <span>{formatCurrency(maxVal * 0.25)}</span>
-          <span>₹0</span>
-        </div>
-
-        {/* Grid lines */}
-        <div className="absolute left-14 right-0 top-1 bottom-10 flex flex-col justify-between z-0">
-          {[...Array(5)].map((_, i) => (
-            <div key={i} className="w-full border-b border-white/5" />
-          ))}
-        </div>
-
-        {/* Chart SVG */}
-        <div className="absolute left-14 right-0 top-0 bottom-10 z-10 overflow-visible">
-          {mounted && (
-            <svg viewBox="0 0 100 100" preserveAspectRatio="none" className="w-full h-full overflow-visible">
+      <div className="flex-1 w-full min-h-[250px] -ml-4">
+        {mounted && (
+          <ResponsiveContainer width="100%" height="100%">
+            <AreaChart data={chartData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
               <defs>
-                <linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor={period === 'projection' ? '#10B981' : '#00D4FF'} stopOpacity="0.3" />
-                  <stop offset="100%" stopColor={period === 'projection' ? '#10B981' : '#00D4FF'} stopOpacity="0.02" />
+                <linearGradient id="colorRevenue" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor={strokeColor} stopOpacity={0.3} />
+                  <stop offset="95%" stopColor={strokeColor} stopOpacity={0} />
                 </linearGradient>
               </defs>
-              
-              {/* Area fill */}
-              {hasData && (
-                <path 
-                  d={buildAreaPath()} 
-                  fill="url(#areaGrad)"
-                  style={{ transition: 'all 0.8s ease-out' }}
-                />
-              )}
-              
-              {/* Line */}
-              <path 
-                d={buildPath()} 
-                fill="none" 
-                stroke={period === 'projection' ? '#10B981' : '#00D4FF'}
-                strokeWidth="2.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                vectorEffect="non-scaling-stroke"
-                style={{ 
-                  opacity: hasData ? 1 : 0.3,
-                  transition: 'all 0.8s ease-out',
-                  filter: hasData ? `drop-shadow(0 0 6px ${period === 'projection' ? '#10B98180' : '#00D4FF80'})` : 'none'
-                }}
+              <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
+              <XAxis 
+                dataKey="name" 
+                stroke="rgba(255,255,255,0.2)" 
+                fontSize={12} 
+                tickLine={false} 
+                axisLine={false} 
+                dy={10} 
               />
-            </svg>
-          )}
-
-          {/* Data point dots with tooltips */}
-          {mounted && hasData && points.map((pt, i) => (
-            <div
-              key={i}
-              className="absolute z-20"
-              style={{
-                left: `${pt.x}%`,
-                top: `${pt.y}%`,
-                transform: 'translate(-50%, -50%)',
-              }}
-              onMouseEnter={() => setHoveredPoint(i)}
-              onMouseLeave={() => setHoveredPoint(null)}
-            >
-              <div className={`w-3 h-3 rounded-full border-2 transition-all duration-300 ${
-                period === 'projection' 
-                  ? 'bg-emerald-400 border-emerald-300 shadow-[0_0_8px_rgba(16,185,129,0.5)]' 
-                  : 'bg-cyan border-cyan-300 shadow-[0_0_8px_rgba(0,212,255,0.5)]'
-              } ${hoveredPoint === i ? 'scale-150' : 'scale-100'}`} />
-              
-              {hoveredPoint === i && (
-                <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-slate-800 border border-white/10 rounded-lg px-3 py-1.5 text-xs font-bold text-white whitespace-nowrap shadow-xl z-30 pointer-events-none">
-                  {formatCurrency(activeData[i])}
-                  <div className="absolute top-full left-1/2 -translate-x-1/2 w-2 h-2 bg-slate-800 border-r border-b border-white/10 transform rotate-45 -mt-1" />
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
-
-        {/* X-axis labels */}
-        <div className="absolute left-14 right-0 bottom-0 h-8 flex justify-between items-end text-xs text-white/30 font-medium">
-          <span>Week 1</span>
-          <span>Week 2</span>
-          <span>Week 3</span>
-          <span>Week 4</span>
-        </div>
+              <YAxis 
+                stroke="rgba(255,255,255,0.2)" 
+                fontSize={12} 
+                tickLine={false} 
+                axisLine={false} 
+                tickFormatter={(value) => formatCurrency(value)}
+              />
+              <Tooltip content={<CustomTooltip />} cursor={{ stroke: 'rgba(255,255,255,0.1)', strokeWidth: 2, strokeDasharray: '4 4' }} />
+              <Area 
+                type="monotone" 
+                dataKey="revenue" 
+                stroke={strokeColor} 
+                strokeWidth={3}
+                fillOpacity={1} 
+                fill="url(#colorRevenue)" 
+                activeDot={{ r: 6, fill: strokeColor, stroke: '#1e293b', strokeWidth: 2 }}
+                animationDuration={1500}
+              />
+            </AreaChart>
+          </ResponsiveContainer>
+        )}
       </div>
     </div>
   );
