@@ -36,8 +36,7 @@ export async function GET(req: Request) {
       .not('city', 'is', null)
       .order('created_at', { ascending: false })
       .limit(50);
-      
-    const uniqueLocations = [...new Set(userLocations?.map(l => `${l.city}, ${l.state}`) || [])];
+    const uniqueLocations = Array.from(new Set(userLocations?.map(l => `${l.city}, ${l.state}`) || []));
     const targetLocation = uniqueLocations.length > 0 
       ? uniqueLocations[Math.floor(Math.random() * uniqueLocations.length)] 
       : 'a growing Tier-2 or Tier-3 city in India';
