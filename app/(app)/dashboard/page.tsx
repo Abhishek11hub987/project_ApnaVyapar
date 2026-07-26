@@ -249,12 +249,12 @@ export default function DashboardPage() {
           {recentOrders.length > 0 ? (
             <div className="flex-1 space-y-3 overflow-y-auto">
               {recentOrders.map((order, i) => (
-                <div key={i} className="flex items-center justify-between p-3 rounded-xl bg-white/5 border border-white/5 hover:bg-white/10 transition-colors">
-                  <div>
-                    <p className="text-white text-sm font-semibold">{order.customers?.name || 'Customer'}</p>
-                    <p className="text-white/40 text-xs">{new Date(order.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}</p>
+                <div key={i} className="flex items-center justify-between p-3 rounded-xl bg-white/5 border border-white/5 hover:bg-white/10 transition-colors gap-2">
+                  <div className="min-w-0 flex-1">
+                    <p className="text-white text-sm font-semibold truncate">{order.customers?.name || 'Customer'}</p>
+                    <p className="text-white/40 text-xs truncate">{new Date(order.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}</p>
                   </div>
-                  <div className="text-right">
+                  <div className="text-right shrink-0">
                     <p className="text-cyan font-bold text-sm">{formatINR(Number(order.total_amount))}</p>
                     <span className={`text-[10px] font-bold uppercase px-2 py-0.5 rounded-full ${
                       order.status === 'delivered' ? 'bg-emerald-500/20 text-emerald-400' :
