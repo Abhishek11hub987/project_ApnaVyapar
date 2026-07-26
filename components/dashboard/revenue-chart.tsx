@@ -95,9 +95,9 @@ export function RevenueChart({ data, monthlyData }: { data?: number[]; monthlyDa
   };
 
   return (
-    <div className="glass-card p-6 border-white/5 h-full flex flex-col">
-      <div className="flex justify-between items-start mb-6">
-        <div>
+    <div className="glass-card p-6 border-white/5 h-full flex flex-col w-full overflow-hidden">
+      <div className="flex flex-col sm:flex-row justify-between items-start gap-4 mb-6">
+        <div className="w-full">
           <h3 className="text-white font-bold text-lg mb-1">Revenue Overview</h3>
           <p className="text-white/40 text-sm">
             {hasData ? getPeriodLabel() : "Waiting for first sale..."}
@@ -109,7 +109,7 @@ export function RevenueChart({ data, monthlyData }: { data?: number[]; monthlyDa
             </p>
           )}
         </div>
-        <div className="flex gap-1 bg-navy/80 rounded-xl p-1 border border-white/5">
+        <div className="flex flex-wrap gap-1 bg-navy/80 rounded-xl p-1 border border-white/5 shrink-0">
           <button
             onClick={() => setPeriod('previous')}
             className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${

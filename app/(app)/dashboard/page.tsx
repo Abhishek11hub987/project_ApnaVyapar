@@ -170,13 +170,13 @@ export default function DashboardPage() {
   const formatINR = (amount: number) => `₹${amount.toLocaleString('en-IN')}`;
 
   return (
-    <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <div className="flex justify-between items-end mb-8">
-        <div>
-          <h1 className="text-3xl font-extrabold text-white tracking-tight mb-2">Analytics Overview</h1>
-          <p className="text-white/60">Welcome back! Here's what's happening with your store today.</p>
+    <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 overflow-hidden w-full">
+      <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-6 mb-8 w-full">
+        <div className="max-w-full">
+          <h1 className="text-3xl font-extrabold text-white tracking-tight mb-2 break-words">Analytics Overview</h1>
+          <p className="text-white/60 text-sm md:text-base">Welcome back! Here's what's happening with your store today.</p>
         </div>
-        <div className="flex gap-3">
+        <div className="flex flex-wrap gap-2 sm:gap-3 w-full lg:w-auto">
           <button 
             onClick={() => downloadProfessionalReport(stats, 'dashboard_report')}
             className="px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-sm font-medium hover:bg-white/10 transition-colors flex items-center gap-2"
