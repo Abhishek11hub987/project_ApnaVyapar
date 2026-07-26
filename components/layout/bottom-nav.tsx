@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, Lightbulb, MessageSquare, CheckSquare, User } from 'lucide-react';
+import { Home, Lightbulb, MessageSquare, CheckSquare, User, LayoutDashboard } from 'lucide-react';
 import { useAuth } from '@/hooks/use-auth';
 import { useEffect, useState } from 'react';
 import ProtectedLink from '@/components/auth/protected-link';
@@ -22,6 +22,7 @@ export default function BottomNav() {
   ];
 
   const protectedItems = [
+    { name: 'Dash', href: '/dashboard', icon: LayoutDashboard },
     { name: 'Mitra', href: '/chat', icon: MessageSquare },
     { name: 'Tasks', href: '/tasks', icon: CheckSquare },
     { name: 'Profile', href: '/profile', icon: User },
@@ -42,7 +43,7 @@ export default function BottomNav() {
             <Link
               key={item.name + idx}
               href={item.href}
-              className={`flex flex-col items-center justify-center w-16 h-12 rounded-xl transition-all ${
+              className={`flex flex-col items-center justify-center flex-1 h-12 rounded-xl transition-all ${
                 isActive
                   ? 'text-teal-700 dark:text-teal-400 font-bold scale-105'
                   : 'text-slate-500 dark:text-slate-400 hover:text-teal-600 dark:hover:text-teal-300 font-medium hover:bg-slate-50 dark:hover:bg-slate-800'
@@ -62,7 +63,7 @@ export default function BottomNav() {
             <ProtectedLink
               key={item.name + idx}
               href={item.href}
-              className={`flex flex-col items-center justify-center w-16 h-12 rounded-xl transition-all ${
+              className={`flex flex-col items-center justify-center flex-1 h-12 rounded-xl transition-all ${
                 isActive
                   ? 'text-teal-700 dark:text-teal-400 font-bold scale-105'
                   : 'text-slate-500 dark:text-slate-400 hover:text-teal-600 dark:hover:text-teal-300 font-medium hover:bg-slate-50 dark:hover:bg-slate-800'

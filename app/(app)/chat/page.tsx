@@ -10,7 +10,7 @@ export const metadata = {
 
 export default function ChatPage() {
   return (
-    <main className="flex flex-col h-[100dvh] md:h-auto md:min-h-screen container mx-auto px-0 md:px-4 py-0 md:py-6 max-w-5xl">
+    <main className="flex flex-col fixed inset-0 z-50 bg-slate-50 dark:bg-slate-950 md:relative md:z-auto md:inset-auto md:bg-transparent md:h-auto md:min-h-screen container mx-auto px-0 md:px-4 py-0 md:py-6 max-w-5xl">
       {/* Desktop Header */}
       <div className="hidden md:block mb-6">
         <h1 className="text-3xl font-bold text-slate-800 dark:text-slate-100">Vyapar Mitra</h1>
