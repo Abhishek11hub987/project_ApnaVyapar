@@ -1,7 +1,7 @@
 "use client";
 
 import {
-  Package, Share2, BarChart3, Users, FileText, Headphones,
+  Package, Share2, BarChart3, Users, FileText, MessageSquare,
 } from "lucide-react";
 import { useEffect, useRef } from "react";
 import Link from "next/link";
@@ -38,10 +38,10 @@ const FEATURES = [
     slug: "automated-invoicing",
   },
   {
-    icon: Headphones,
-    title: "24/7 Support",
-    desc: "Real humans, real help, anytime you need. Chat, call, or email — we are always here.",
-    slug: "24-7-support",
+    icon: MessageSquare,
+    title: "Community Support",
+    desc: "Join our active GitHub Discussions to ask questions, report issues, and interact with the community.",
+    slug: "community-support",
   },
 ];
 

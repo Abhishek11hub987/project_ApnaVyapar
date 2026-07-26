@@ -75,13 +75,14 @@ const PAGE_CONTENT: Record<string, { title: string; subtitle: string; content: R
       </div>
     )
   },
-  "24-7-support": {
-    title: "24/7 Support",
-    subtitle: "Real humans, real help, anytime you need.",
+  "community-support": {
+    title: "Community Support",
+    subtitle: "Real humans, real help, powered by GitHub.",
     content: (
       <div className="space-y-6">
-        <p>While this feature is currently in rollout, our goal is to provide round-the-clock support for all merchants.</p>
-        <p>Currently, you can reach our dedicated support team during business hours via email or WhatsApp, and expect a response within minutes.</p>
+        <p>As a solo developer building Apna Vyapar, I cannot provide 24/7 call support, but I am highly active in our community discussions!</p>
+        <p>For any queries, feature requests, or bug reports, please head over to our GitHub Discussions page.</p>
+        <p><a href="https://github.com/Abhishek11hub987/project_ApnaVyapar/discussions" target="_blank" rel="noopener noreferrer">Join the Discussion on GitHub</a></p>
       </div>
     )
   },
