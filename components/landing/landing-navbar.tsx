@@ -4,12 +4,16 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import Logo from "@/components/logo";
 import { useAuth } from "@/hooks/use-auth";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Moon, Sun, Languages } from "lucide-react";
+import { useTheme } from "next-themes";
+import { useLanguage } from "@/lib/language-context";
 
 export function LandingNavbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { isAuthenticated } = useAuth();
+  const { theme, setTheme } = useTheme();
+  const { language, setLanguage } = useLanguage();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -53,6 +57,26 @@ export function LandingNavbar() {
               Log in
             </Link>
           )}
+          
+          {/* Theme & Language Toggles (Desktop) */}
+          <div className="hidden md:flex items-center gap-2 border-l border-white/10 pl-4 ml-2">
+            <button
+              onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+              className="p-2 rounded-full text-white/70 hover:text-white hover:bg-white/10 transition-colors focus-ring"
+              aria-label="Toggle theme"
+            >
+              {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
+            </button>
+            <button
+              onClick={() => setLanguage(language === 'en' ? 'hi' : 'en')}
+              className="p-2 rounded-full text-white/70 hover:text-white hover:bg-white/10 transition-colors focus-ring flex items-center gap-1"
+              aria-label="Toggle language"
+            >
+              <Languages size={18} />
+              <span className="text-xs font-bold uppercase">{language}</span>
+            </button>
+          </div>
+
           <Link
             href="/ideas"
             className="text-sm font-semibold bg-gradient-to-r from-cyan to-cyan-dark text-white px-4 md:px-5 py-2 md:py-2.5 rounded-full hover:scale-105 transition-transform shadow-neon-cyan focus-ring"
@@ -86,6 +110,23 @@ export function LandingNavbar() {
               Log in
             </Link>
           )}
+          
+          <div className="pt-4 flex items-center gap-4 border-t border-white/5">
+            <button
+              onClick={() => { setTheme(theme === 'dark' ? 'light' : 'dark'); setMobileMenuOpen(false); }}
+              className="flex items-center gap-2 text-white/80 hover:text-white py-2"
+            >
+              {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
+              <span className="text-sm">Theme</span>
+            </button>
+            <button
+              onClick={() => { setLanguage(language === 'en' ? 'hi' : 'en'); setMobileMenuOpen(false); }}
+              className="flex items-center gap-2 text-white/80 hover:text-white py-2"
+            >
+              <Languages size={18} />
+              <span className="text-sm uppercase">{language}</span>
+            </button>
+          </div>
         </div>
       )}
     </nav>

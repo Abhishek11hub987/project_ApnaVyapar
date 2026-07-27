@@ -22,9 +22,9 @@ export function HeroSection() {
         </div>
 
         {/* Heading */}
-        <h1 className="animate-in fade-in slide-in-from-bottom-6 duration-700 delay-200 fill-mode-both text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black tracking-tight mb-6 max-w-5xl leading-[1.1]">
-          <span className="text-white drop-shadow-[0_0_20px_rgba(255,255,255,0.1)]">Apna Vyapar:</span> <br className="hidden md:block" />
-          <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan to-blue-500 drop-shadow-[0_0_30px_rgba(0,212,255,0.3)]">The Future of Commerce</span>
+        <h1 className="animate-in fade-in slide-in-from-bottom-6 duration-700 delay-200 fill-mode-both flex flex-col items-center text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black tracking-tight mb-6 max-w-5xl leading-[1.1]">
+          <span className="text-white drop-shadow-[0_0_20px_rgba(255,255,255,0.1)] mb-1 sm:mb-2">Apna Vyapar</span>
+          <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan to-blue-500 drop-shadow-[0_0_30px_rgba(0,212,255,0.3)] px-2">The Future of Commerce</span>
         </h1>
 
         {/* Subtitle */}

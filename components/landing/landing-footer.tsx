@@ -3,29 +3,20 @@
 import Link from "next/link";
 
 const FOOTER_LINKS = {
-  Products: [
-    { label: "Store Builder", href: "/p/store-builder" },
-    { label: "Analytics", href: "/p/analytics" },
-    { label: "Payments", href: "/p/payments" },
-    { label: "Inventory", href: "/p/inventory" },
+  Platform: [
+    { label: "Store Builder", href: "/features" },
+    { label: "Vyapar Mitra (AI)", href: "/features#vyapar-mitra" },
+    { label: "Business Ideas", href: "/ideas" },
+    { label: "Setup Checklist", href: "/features#checklist" },
   ],
   Company: [
-    { label: "About Us", href: "/p/about-us" },
-    { label: "Careers", href: "/p/careers" },
-    { label: "Press", href: "/p/press" },
-    { label: "Contact", href: "/p/contact" },
-  ],
-  Resources: [
-    { label: "Blog", href: "/p/blog" },
-    { label: "Help Center", href: "/p/help-center" },
-    { label: "API Docs", href: "/p/api-docs" },
-    { label: "Community", href: "/p/community" },
+    { label: "About Apna Vyapar", href: "/about" },
+    { label: "Open Source", href: "https://github.com/Abhishek11hub987/project_ApnaVyapar" },
+    { label: "Community", href: "https://github.com/Abhishek11hub987/project_ApnaVyapar/discussions" },
   ],
   Legal: [
-    { label: "Privacy", href: "/p/privacy" },
-    { label: "Terms", href: "/p/terms" },
-    { label: "Cookies", href: "/p/cookies" },
-    { label: "Security", href: "/p/security" },
+    { label: "Privacy Policy", href: "/p/privacy" },
+    { label: "Terms of Service", href: "/p/terms" },
   ],
 };
 
@@ -33,7 +24,7 @@ export function LandingFooter() {
   return (
     <footer className="bg-navy-dark py-16 px-4 border-t border-white/5">
       <div className="max-w-6xl mx-auto">
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-8 mb-12">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12">
           {/* Brand */}
           <div className="col-span-2 md:col-span-1">
             <div className="flex items-center gap-2 mb-4">

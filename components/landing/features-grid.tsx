@@ -1,47 +1,47 @@
 "use client";
 
 import {
-  Package, Share2, BarChart3, Users, FileText, MessageSquare,
+  Package, Share2, BarChart3, Users, FileText, MessageSquare, Bot, ListChecks, Lightbulb, UserCircle
 } from "lucide-react";
 import { useEffect, useRef } from "react";
 import Link from "next/link";
 
 const FEATURES = [
   {
-    icon: Package,
-    title: "Inventory Management",
-    desc: "Real-time stock tracking with low-stock alerts and automatic reorder suggestions.",
-    slug: "inventory-management",
+    icon: Bot,
+    title: "Vyapar Mitra (AI Assistant)",
+    desc: "Your personal 24/7 AI business advisor to help you grow, manage, and scale your operations.",
+    slug: "vyapar-mitra",
   },
   {
-    icon: Share2,
-    title: "Multi-Channel Selling",
-    desc: "Sell on WhatsApp, Instagram, and your own website — all from one dashboard.",
-    slug: "multi-channel-selling",
+    icon: Lightbulb,
+    title: "Business Ideas Generator",
+    desc: "Discover profitable, tailored business ideas with complete roadmaps based on your skills and budget.",
+    slug: "ideas",
+  },
+  {
+    icon: ListChecks,
+    title: "Smart Setup Checklist",
+    desc: "A personalized step-by-step guide to get your business legally registered, funded, and launched.",
+    slug: "checklist",
+  },
+  {
+    icon: Package,
+    title: "Inventory & Store Builder",
+    desc: "Real-time stock tracking with a drag-and-drop store builder to create beautiful storefronts.",
+    slug: "store-builder",
   },
   {
     icon: BarChart3,
     title: "Analytics Dashboard",
     desc: "Beautiful charts that actually make sense. Track revenue, growth, and customer trends.",
-    slug: "analytics-dashboard",
+    slug: "analytics",
   },
   {
-    icon: Users,
-    title: "Customer CRM",
-    desc: "Know your customers, build lasting relationships, and increase repeat purchases.",
-    slug: "customer-crm",
-  },
-  {
-    icon: FileText,
-    title: "Automated Invoicing",
-    desc: "GST-compliant bills generated automatically. Send via WhatsApp or email instantly.",
-    slug: "automated-invoicing",
-  },
-  {
-    icon: MessageSquare,
-    title: "Community Support",
-    desc: "Join our active GitHub Discussions to ask questions, report issues, and interact with the community.",
-    slug: "community-support",
+    icon: UserCircle,
+    title: "Digital Profile",
+    desc: "Manage your business identity, track your progress, and showcase your brand to the community.",
+    slug: "profile",
   },
 ];
 
@@ -98,7 +98,7 @@ export function FeaturesGrid() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {FEATURES.map((f) => (
             <Link
-              href={`/p/${f.slug}`}
+              href={`/${f.slug === 'ideas' ? 'ideas' : 'features#' + f.slug}`}
               key={f.title}
               className="feature-card glass-card p-8 opacity-0 group block hover:scale-[1.02] transition-transform duration-300"
             >

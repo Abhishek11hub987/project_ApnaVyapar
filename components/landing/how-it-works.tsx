@@ -1,23 +1,23 @@
 "use client";
 
-import { UserPlus, Palette, Rocket } from "lucide-react";
+import { UserPlus, Lightbulb, Rocket, ListChecks } from "lucide-react";
 import { useEffect, useRef } from "react";
 
 const STEPS = [
   {
-    icon: UserPlus,
-    title: "Sign Up",
-    desc: "Create your account in under 2 minutes with just your phone number.",
+    icon: Lightbulb,
+    title: "1. Discover Ideas",
+    desc: "Use our AI generator to find profitable, tailored business ideas.",
   },
   {
-    icon: Palette,
-    title: "Customize",
-    desc: "Design your store with our intuitive drag-and-drop builder.",
+    icon: ListChecks,
+    title: "2. Follow Checklist",
+    desc: "Complete your customized setup steps with the help of Vyapar Mitra.",
   },
   {
     icon: Rocket,
-    title: "Launch",
-    desc: "Go live instantly and start selling to customers across India.",
+    title: "3. Launch & Grow",
+    desc: "Publish your store, manage inventory, and track analytics from one dashboard.",
   },
 ];
 
@@ -120,7 +120,7 @@ export function HowItWorks() {
                 </div>
 
                 <h3 className="text-xl font-bold text-white mb-2">
-                  {step.title}
+                  {step.title.substring(3)}
                 </h3>
                 <p className="text-white/50 text-sm leading-relaxed max-w-xs mx-auto">
                   {step.desc}
