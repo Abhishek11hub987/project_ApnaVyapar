@@ -10,7 +10,7 @@ const FOOTER_LINKS = {
     { label: "Setup Checklist", href: "/features#checklist" },
   ],
   Company: [
-    { label: "About Apna Vyapar", href: "/about" },
+    { label: "About Apna Vyapar", href: "/about-us" },
     { label: "Open Source", href: "https://github.com/Abhishek11hub987/project_ApnaVyapar" },
     { label: "Community", href: "https://github.com/Abhishek11hub987/project_ApnaVyapar/discussions" },
   ],
