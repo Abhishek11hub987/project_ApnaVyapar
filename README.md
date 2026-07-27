@@ -2,8 +2,7 @@
   <img src="public/logo.png" width="300" height="300" alt="Apna Vyapar 3D Logo">
   <h1>🚀 Apna Vyapar (अपना व्यापार)</h1>
   <p><strong>An AI‑powered platform empowering aspiring Indian entrepreneurs to discover, evaluate, and launch high‑impact businesses.</strong></p>
-  
-  [![Live Demo](https://img.shields.io/badge/Live%20Demo-Visit%20Now-brightgreen?style=for-the-badge)](https://project-apna-vyapar-fxk4.vercel.app)
+  [![Live Demo](https://img.shields.io/badge/Live%20Demo-Visit%20Now-brightgreen?style=for-the-badge)](https://apnavyapar.vercel.app)
   
   <p>
     <a href="#overview">Overview</a> &nbsp;|&nbsp; 
