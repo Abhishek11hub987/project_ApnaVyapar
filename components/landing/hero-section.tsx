@@ -60,7 +60,7 @@ export function HeroSection() {
             <div className="w-6 h-6 rounded-full bg-cyan/20 flex items-center justify-center border border-cyan/30">
               <Users size={14} className="text-cyan-light" />
             </div>
-            <span>Community Driven</span>
+            <span>Solo Developer Built</span>
           </div>
           <div className="flex items-center gap-2 bg-white/5 px-4 py-2 rounded-full border border-white/5 hover:border-white/10 hover:bg-white/10 transition-colors">
             <div className="w-6 h-6 rounded-full bg-purple-500/20 flex items-center justify-center border border-purple-500/30">
@@ -110,7 +110,7 @@ export function HeroSection() {
                 </div>
               </div>
               <p className="text-white/60 leading-relaxed text-sm">
-                Supported by a passionate community of developers. Constant updates, deep integrations with Indian payment gateways, and WhatsApp support out of the box.
+                Built and maintained by a passionate solo developer. Constant updates, modern tech stack, and WhatsApp support out of the box.
               </p>
             </div>
 
@@ -119,7 +119,7 @@ export function HeroSection() {
               <div className="absolute inset-0 bg-gradient-to-t from-cyan/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               <h3 className="text-2xl font-bold text-white mb-4 relative z-10">Transparent Open Source</h3>
               <p className="text-white/60 max-w-lg mb-6 relative z-10">
-                You can audit every line of code. We have nothing to hide. Join our community on GitHub to request features or report bugs directly to the creators.
+                You can audit every line of code. We have nothing to hide. Connect with me on GitHub to request features or report bugs directly.
               </p>
               <a href="https://github.com/Abhishek11hub987/project_ApnaVyapar" target="_blank" rel="noopener noreferrer" className="relative z-10 inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white/5 border border-white/10 text-white font-medium hover:bg-white/10 transition-colors">
                 <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path fillRule="evenodd" clipRule="evenodd" d="M12 2C6.477 2 2 6.48 2 12c0 4.42 2.865 8.166 6.839 9.489.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.026 2.747-1.026.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12c0-5.52-4.477-10-10-10z"/></svg>

@@ -11,8 +11,7 @@ const FOOTER_LINKS = {
   ],
   Company: [
     { label: "About Apna Vyapar", href: "/about-us" },
-    { label: "Open Source", href: "https://github.com/Abhishek11hub987/project_ApnaVyapar" },
-    { label: "Community", href: "https://github.com/Abhishek11hub987/project_ApnaVyapar/discussions" },
+    { label: "Open Source", href: "https://github.com/Abhishek11hub987" },
   ],
   Legal: [
     { label: "Privacy Policy", href: "/p/privacy" },

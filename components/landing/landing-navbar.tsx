@@ -40,9 +40,6 @@ export function LandingNavbar() {
           <a href="#features" className="text-sm text-white/60 hover:text-white transition-colors focus-ring">
             Features
           </a>
-          <a href="#pricing" className="text-sm text-white/60 hover:text-white transition-colors focus-ring">
-            Pricing
-          </a>
           <a href="#how-it-works" className="text-sm text-white/60 hover:text-white transition-colors focus-ring">
             How it Works
           </a>
@@ -98,9 +95,6 @@ export function LandingNavbar() {
         <div className="md:hidden bg-navy-dark/95 backdrop-blur-xl border-b border-white/10 px-4 py-4 space-y-4">
           <a href="#features" onClick={() => setMobileMenuOpen(false)} className="block text-white/80 font-medium hover:text-white py-2 border-b border-white/5">
             Features
-          </a>
-          <a href="#pricing" onClick={() => setMobileMenuOpen(false)} className="block text-white/80 font-medium hover:text-white py-2 border-b border-white/5">
-            Pricing
           </a>
           <a href="#how-it-works" onClick={() => setMobileMenuOpen(false)} className="block text-white/80 font-medium hover:text-white py-2 border-b border-white/5">
             How it Works

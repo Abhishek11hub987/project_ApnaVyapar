@@ -4,7 +4,6 @@ import { CartProvider, useCart } from "./cart-context";
 import { CartDrawer } from "./cart-drawer";
 import { ShoppingBag, Search, X, ShieldAlert, FileText, Scale } from "lucide-react";
 import { Product } from "@/components/dashboard/inventory-table";
-import { useState } from "react";
 import Link from "next/link";
 import Logo from "../logo";
 
@@ -176,8 +175,6 @@ function ProductGrid({ products }: { products: Product[] }) {
 }
 
 function Footer({ store }: { store: any }) {
-  const [activePolicy, setActivePolicy] = useState<'privacy' | 'terms' | null>(null);
-
   return (
     <footer className="bg-navy-dark relative z-10 border-t border-white/5 mt-auto">
       {/* Top subtle gradient line */}
@@ -218,12 +215,12 @@ function Footer({ store }: { store: any }) {
         <div className="md:col-span-5 lg:col-span-4 flex flex-col md:items-end">
           <h4 className="text-white font-bold text-sm mb-6">Legal & Policies</h4>
           <div className="flex flex-col gap-3 mb-10 w-full md:items-end">
-            <button onClick={() => setActivePolicy('privacy')} className="text-sm text-white/50 hover:text-cyan transition-colors flex items-center gap-2 justify-start md:justify-end w-fit">
+            <Link href={`/store/${store.slug}/privacy`} className="text-sm text-white/50 hover:text-cyan transition-colors flex items-center gap-2 justify-start md:justify-end w-fit">
               <ShieldAlert size={14} /> Privacy Policy
-            </button>
-            <button onClick={() => setActivePolicy('terms')} className="text-sm text-white/50 hover:text-cyan transition-colors flex items-center gap-2 justify-start md:justify-end w-fit">
+            </Link>
+            <Link href={`/store/${store.slug}/terms`} className="text-sm text-white/50 hover:text-cyan transition-colors flex items-center gap-2 justify-start md:justify-end w-fit">
               <Scale size={14} /> Terms of Service
-            </button>
+            </Link>
           </div>
           
           <div className="mt-auto pt-6 border-t border-white/5 w-full md:text-right">
@@ -252,36 +249,6 @@ function Footer({ store }: { store: any }) {
           </div>
         </div>
       </div>
-
-      {/* Policy Modal */}
-      {activePolicy && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-navy/80 backdrop-blur-md animate-in fade-in duration-300">
-          <div className="bg-navy-light border border-white/10 rounded-2xl shadow-2xl w-full max-w-2xl max-h-[85vh] flex flex-col overflow-hidden animate-in slide-in-from-bottom-8 duration-500">
-            <div className="relative p-6 border-b border-white/5 flex items-center justify-between">
-              <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-cyan via-emerald-400 to-cyan" />
-              <h3 className="font-bold text-xl text-white flex items-center gap-2">
-                {activePolicy === 'privacy' ? <ShieldAlert size={20} className="text-cyan" /> : <Scale size={20} className="text-cyan" />}
-                {activePolicy === 'privacy' ? 'Privacy Policy' : 'Terms of Service'}
-              </h3>
-              <button onClick={() => setActivePolicy(null)} className="w-8 h-8 rounded-lg bg-white/5 hover:bg-white/10 flex items-center justify-center transition-colors text-white/50 hover:text-white">
-                <X size={16} />
-              </button>
-            </div>
-            
-            <div className="p-6 overflow-y-auto whitespace-pre-wrap font-mono text-xs text-white/60 leading-loose custom-scrollbar">
-              {activePolicy === 'privacy' 
-                ? (store.privacy_policy || `Privacy Policy\n\nLast updated: ${new Date().toLocaleDateString()}\n\nPersonal Information We Collect\nWhen you visit the store, we collect certain information about your device, your interaction with the store, and information necessary to process your purchases.\n\nHow Do We Use Your Personal Information?\nWe use the Order Information that we collect generally to fulfill any orders placed through the store (including processing your payment information, arranging for shipping, and providing you with invoices and/or order confirmations).\n\nApna Vyapar Platform\nOur store is hosted on Apna Vyapar. They provide us with the online e-commerce platform that allows us to sell our products and services to you. Your data is stored through Apna Vyapar's data storage, databases, and the general Apna Vyapar application.\n\nContact Us\nFor more information about our privacy practices, if you have questions, or if you would like to make a complaint, please contact us by e-mail or phone provided in the store contact details.`) 
-                : (store.terms_conditions || `Terms and Conditions\n\nLast updated: ${new Date().toLocaleDateString()}\n\nOverview\nThis website is operated by the merchant. Throughout the site, the terms "we", "us" and "our" refer to the merchant. The merchant offers this website, including all information, tools and services available from this site to you, the user, conditioned upon your acceptance of all terms, conditions, policies and notices stated here.\n\nSection 1 - Platform Disclaimer\nOur store is hosted on the Apna Vyapar platform. Apna Vyapar provides the e-commerce software that allows us to sell our products. Apna Vyapar is NOT responsible for the products, services, or content of this store, and is not liable for any disputes, refunds, or fulfillment issues. All transactions and agreements are strictly between you (the customer) and us (the merchant).\n\nSection 2 - Online Store Terms\nBy agreeing to these Terms of Service, you represent that you are at least the age of majority in your state or province of residence.\n\nSection 3 - Modifications to the Service and Prices\nPrices for our products are subject to change without notice. We reserve the right at any time to modify or discontinue the Service (or any part or content thereof) without notice at any time.\n\nContact Information\nQuestions about the Terms of Service should be sent to us via the contact details provided in our store.`)}
-            </div>
-            
-            <div className="p-4 border-t border-white/5 bg-white/5 flex justify-end">
-              <button onClick={() => setActivePolicy(null)} className="px-6 py-2.5 bg-white/10 hover:bg-white/20 text-white font-bold rounded-xl transition-colors text-sm">
-                Acknowledge & Close
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </footer>
   );
 }

@@ -16,8 +16,8 @@ const CARDS = [
   },
   {
     icon: Shield,
-    title: "Secure Payments",
-    desc: "Bank-grade encryption for every transaction. UPI, cards, and net banking supported.",
+    title: "Complete Security",
+    desc: "Built-in encryption and safety protocols to protect you and your customers out of the box.",
   },
 ];
 

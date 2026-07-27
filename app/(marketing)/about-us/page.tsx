@@ -3,7 +3,7 @@
 import { LandingNavbar } from "@/components/landing/landing-navbar";
 import { LandingFooter } from "@/components/landing/landing-footer";
 import { FinalCTA } from "@/components/landing/final-cta";
-import { Bot, Lightbulb, ListChecks, UserCircle, Heart, Users, Sparkles } from "lucide-react";
+import { Bot, Lightbulb, ListChecks, UserCircle, Heart, GithubIcon, Sparkles, Mail } from "lucide-react";
 
 export default function AboutPage() {
   return (
@@ -153,13 +153,16 @@ export default function AboutPage() {
           </div>
           <h2 className="text-3xl md:text-5xl font-bold mb-6">Open Source & Proud</h2>
           <p className="text-white/60 text-lg mb-8 leading-relaxed">
-            Apna Vyapar is built by developers who believe that technology should enable, not exploit. 
+            Apna Vyapar is built by a solo developer (Abhishek Yadav) who believes that technology should enable, not exploit. 
             There are no hidden fees, no vendor lock-ins, and no commissions. 
-            Join our community to contribute, suggest features, or just to say hi!
+            If you need any help, have suggestions, or just want to say hi, feel free to reach out!
           </p>
-          <div className="flex items-center justify-center gap-4">
-            <a href="https://github.com/Abhishek11hub987/project_ApnaVyapar" target="_blank" rel="noopener noreferrer" className="px-6 py-3 rounded-xl bg-white/5 border border-white/10 text-white font-medium hover:bg-white/10 transition-colors flex items-center gap-2">
-               <Users size={18} /> Join on GitHub
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <a href="https://github.com/Abhishek11hub987" target="_blank" rel="noopener noreferrer" className="px-6 py-3 rounded-xl bg-white/5 border border-white/10 text-white font-medium hover:bg-white/10 transition-colors flex items-center gap-2">
+               <GithubIcon size={18} /> @Abhishek11hub987
+            </a>
+            <a href="mailto:paradoxhq3@gmail.com" className="px-6 py-3 rounded-xl bg-cyan text-navy-dark font-bold hover:scale-105 transition-transform shadow-neon-cyan flex items-center gap-2">
+               <Mail size={18} /> paradoxhq3@gmail.com
             </a>
           </div>
         </div>
