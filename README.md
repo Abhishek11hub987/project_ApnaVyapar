@@ -6,9 +6,10 @@
   [![Live Demo](https://img.shields.io/badge/Live%20Demo-Visit%20Now-brightgreen?style=for-the-badge)](https://project-apna-vyapar-fxk4.vercel.app)
   
   <p>
-    <a href="#-for-users">🧑‍💼 For Users</a> &nbsp;|&nbsp; 
-    <a href="#-for-developers">💻 For Developers</a> &nbsp;|&nbsp; 
-    <a href="CONTRIBUTING.md">🤝 Contribute</a>
+    <a href="#-overview">Overview</a> &nbsp;|&nbsp; 
+    <a href="#-key-features">Key Features</a> &nbsp;|&nbsp; 
+    <a href="#-tech-stack">Tech Stack</a> &nbsp;|&nbsp; 
+    <a href="#-contact">Contact</a>
   </p>
 </div>
 
@@ -18,79 +19,48 @@
 
 **Apna Vyapar** is a premium SaaS-style web application built specifically for the Indian market. It guides first-time founders from zero to launch with curated business ideas, interactive data visualization, and an intelligent AI co-pilot. 
 
-The entire platform features a stunning **Project Aethereal** glassmorphism aesthetic—complete with dynamic neon glows, adaptive light/dark modes, and smooth micro-animations.
-
----
-
-## 🏗️ Architecture & Technologies Used
-
-Apna Vyapar is built using a modern, scalable, and highly interactive stack tailored for high performance and excellent user experience:
-
-### 1. Frontend Architecture
-- **Framework:** Next.js 14 (App Router) using React 18 and strict TypeScript.
-- **Styling:** Tailwind CSS combined with custom glassmorphism utilities for the Aethereal design.
-- **State Management:** `zustand` for lightweight global state (e.g., chat history, user points) and React Context API for themes and languages.
-- **Animations:** `framer-motion` for fluid swipe cards, page transitions, and staggered list animations.
-- **PWA Capabilities:** `@ducanh2912/next-pwa` allows users to install the app natively on their mobile devices.
-
-### 2. Backend & Data Layer
-- **Database:** Supabase (PostgreSQL) acts as the primary data store for business ideas, user profiles, chat sessions, and generated roadmaps.
-- **Authentication:** Supabase Auth for seamless user login and registration.
-- **Security:** Row-Level Security (RLS) ensures that users can only access their own checklists and chat logs.
-
-### 3. AI & Integrations
-- **AI Engine:** Groq API (running `llama-3.3-70b-versatile`) acts as the brain for **Vyapar Mitra**. It is deeply integrated via a custom API route (`/api/chat`) that streams tokens directly to the frontend.
-- **Dynamic Context Injection:** Before the AI answers, the backend automatically injects the user's selected business idea, their current task checklist progress, and their preferred language (English or Hinglish) into the system prompt.
-- **Maps:** `react-simple-maps` paired with a standard WGS84 GeoJSON map of India for an interactive, accurate SVG heatmap.
+The entire platform features a stunning **Project Aethereal** glassmorphism aesthetic—complete with dynamic neon glows, adaptive light/dark modes, and smooth micro-animations, providing a world-class user experience.
 
 ---
 
 ## 🌟 Key Features
 
-- **🔥 25+ Curated Ideas** – Hand-picked opportunities tailored for Indian demographics, budgets, and trends.
-- **🗺️ Bharat Heatmap** – Interactive, state-by-state geographic visualization of trending business sectors.
-- **🤖 Mitra AI Assistant** – Your 24/7 AI business advisor for compliance, market size, and budget breakdowns.
-- **🎲 Idea Roulette** – Tinder-style swipe interface to discover and save business ideas.
-- **📈 Vyapar Score** – Gamified XP and progress tracking system.
-- **🚨 Sarkari Alerts** – Real-time updates on MSME government schemes (e.g., Mudra Yojana, Stand-Up India).
-- **🗂️ Actionable Roadmaps** – Auto‑generated step-by-step checklists to launch your chosen idea.
-- **🇮🇳 Multi‑Language Support** – Seamless switching between English and Hindi.
+### 🤖 Vyapar Mitra (AI Assistant)
+Your personal 24/7 AI business advisor. Built directly into the platform, Vyapar Mitra helps you navigate Indian compliance laws, understand GST, find government MSME loans, and optimize your inventory.
+
+### 💡 Business Ideas Generator
+Struggling to find the right business? Our AI-driven engine generates highly profitable, tailored business concepts perfectly suited for the Indian market based on your exact budget, location, and skills.
+
+### 📝 Smart Setup Checklist
+Once you choose an idea, Apna Vyapar generates a personalized, step-by-step roadmap to get your business legally registered, funded, and launched without the stress.
+
+### 🏪 Inventory & Store Builder
+Real-time stock tracking paired with a beautiful, zero-code drag-and-drop storefront builder. Launch your digital dukaan (shop) in minutes and start accepting orders immediately.
+
+### 📊 Analytics Dashboard
+Professional-grade data visualization. Download comprehensive PDF reports, track revenue growth, monitor customer trends, and make data-driven decisions to scale your business.
+
+### 🎲 Idea Roulette & Bharat Heatmap
+Swipe through business ideas Tinder-style to save what you love. Explore the interactive map of India to see which business sectors are currently trending in your specific state!
 
 ---
 
-## 🧑‍💼 For Users
+## 🏗️ Tech Stack
 
-Welcome to Apna Vyapar! If you are an aspiring entrepreneur looking to start your first business in India, you are in the right place. **[Click here to visit the Live App!](https://project-apna-vyapar-fxk4.vercel.app)**
+Apna Vyapar is built using a modern, highly scalable, and production-ready architecture:
 
-### What you can do here:
-
-<details>
-<summary><b>🎲 Swipe through Business Ideas (Idea Roulette)</b></summary>
-Like Tinder, but for your career! Swipe right to save curated business ideas that match your budget and interests. Each swipe earns you Vyapar XP!
-</details>
-
-<details>
-<summary><b>🗺️ Explore the Bharat Heatmap</b></summary>
-Not sure what works in your state? Hover over our interactive map of India to see the most profitable and trending business sectors in your region.
-</details>
-
-<details>
-<summary><b>🤖 Chat with Mitra AI</b></summary>
-Got questions about legal registrations, GST, or startup capital? Talk to **Vyapar Mitra**, our 24/7 AI business advisor designed to answer your specific queries.
-</details>
-
-<details>
-<summary><b>🚨 Stay updated on Sarkari Yojanas (Govt Schemes)</b></summary>
-Get real-time alerts on MSME loans like Mudra Yojana or Stand-Up India, so you never miss out on financial support.
-</details>
+- **Framework:** Next.js 14 (App Router) with React 18
+- **Language:** strict TypeScript
+- **Styling:** Tailwind CSS with custom Aethereal glassmorphism utilities & CSS variables
+- **Database & Auth:** Supabase (PostgreSQL) with Row-Level Security (RLS)
+- **AI Integration:** Groq API running `llama-3.3-70b-versatile` for high-speed, accurate AI reasoning
+- **Animations:** Framer Motion & GSAP for fluid scroll effects and micro-interactions
+- **Charts & Maps:** Recharts & react-simple-maps for data visualization
+- **PDF Generation:** jsPDF for auto-generating professional business reports
 
 ---
 
-## 💻 For Developers
-
-Want to look under the hood, contribute, or run the app locally? Here is everything you need to know.
-
-### Local Installation
+## 💻 Local Installation
 
 Follow these steps to run the Apna Vyapar development server on your machine:
 
@@ -118,15 +88,14 @@ npm run dev
 # Visit http://localhost:3000
 ```
 
-### Contributing
-We welcome all contributions! Please read our [**CONTRIBUTING.md**](CONTRIBUTING.md) file for detailed instructions on how to submit code, ideas, or translations.
-
 ---
 
-## 📜 License
+## 🤝 Contact & Support
 
-Distributed under the **Apna Vyapar Proprietary & Non-Commercial License**. 
-This project is strictly for educational and personal use. **Commercial use, monetization, or copying the core concept to build a competing product is strictly prohibited.** See the [**LICENSE**](LICENSE) file for full details.
+This project is built and maintained by a solo developer. I am always open to feedback, bug reports, and exciting new ideas to make Apna Vyapar better for everyone!
+
+📧 **Email:** [paradoxhq3@gmail.com](mailto:paradoxhq3@gmail.com)  
+🐙 **GitHub:** [Abhishek11hub987](https://github.com/Abhishek11hub987)
 
 ---
 

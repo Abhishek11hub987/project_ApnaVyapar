@@ -21,9 +21,10 @@ export function HeroSection() {
           </div>
         </div>
 
-        {/* Heading */}
         <h1 className="animate-in fade-in slide-in-from-bottom-6 duration-700 delay-200 fill-mode-both flex flex-col items-center text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black tracking-tight mb-6 max-w-5xl leading-[1.1]">
-          <span className="text-white drop-shadow-[0_0_20px_rgba(255,255,255,0.1)] mb-1 sm:mb-2">Apna Vyapar</span>
+          <span className="drop-shadow-[0_0_20px_rgba(255,255,255,0.1)] mb-1 sm:mb-2">
+            <span className="text-[#429095]">Apna</span> <span className="text-[#F19D2A]">Vyapar</span>
+          </span>
           <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan to-blue-500 drop-shadow-[0_0_30px_rgba(0,212,255,0.3)] px-2">The Future of Commerce</span>
         </h1>
 
@@ -35,13 +36,13 @@ export function HeroSection() {
         {/* CTAs */}
         <div className="animate-in fade-in slide-in-from-bottom-10 duration-700 delay-400 fill-mode-both flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
           <Link
-            href="/p/ideas"
+            href="/ideas"
             className="w-full sm:w-auto px-8 py-4 rounded-xl bg-cyan text-navy-dark font-black text-lg hover:scale-105 active:scale-95 transition-all shadow-[0_0_40px_rgba(0,212,255,0.4)] hover:shadow-[0_0_60px_rgba(0,212,255,0.6)] flex items-center justify-center gap-2"
           >
             Start Your Journey <ArrowRight size={20} />
           </Link>
           <Link
-            href="/features"
+            href="#features"
             className="w-full sm:w-auto px-8 py-4 rounded-xl bg-white/5 border border-white/10 text-white font-bold text-lg hover:bg-white/10 hover:border-white/20 transition-all flex items-center justify-center gap-2 backdrop-blur-sm shadow-[0_4px_20px_rgba(255,255,255,0.05)] hover:shadow-[0_4px_30px_rgba(255,255,255,0.1)]"
           >
             Explore Features
