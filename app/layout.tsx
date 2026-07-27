@@ -24,7 +24,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Apna Vyapar - Start Your Business Journey",
     description: "Get AI-powered guidance, business ideas, and step-by-step roadmaps to launch your dream business.",
-    url: "https://project-apna-vyapar-fxk4.vercel.app",
+    url: "https://apnavyapar.vercel.app",
     siteName: "Apna Vyapar",
     images: [
       {
