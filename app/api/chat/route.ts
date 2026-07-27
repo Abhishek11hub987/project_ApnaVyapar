@@ -2,13 +2,9 @@ import { NextResponse } from 'next/server';
 import { createServerClient } from '@supabase/ssr';
 import { cookies } from 'next/headers';
 import { checkRateLimit } from '@/lib/utils/rate-limit';
-
-interface ChatMessage {
-  role: 'user' | 'assistant' | 'system';
-  content: string;
-}
-
-const SYSTEM_PROMPT = `You are Vyapar Mitra, an expert Indian business advisor...`;
+import { streamGroqResponse } from '@/lib/ai/stream';
+import type { ChatMessage } from '@/lib/ai/stream';
+import { VYAPAR_MITRA_SYSTEM_PROMPT } from '@/lib/ai/prompts';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000',
@@ -34,7 +30,6 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Invalid business idea ID' }, { status: 400, headers: corsHeaders });
     }
 
-    // 1. Auth check
     const cookieStore = cookies();
     const supabase = createServerClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -48,13 +43,11 @@ export async function POST(req: Request) {
     }
     const userId = session.user.id;
 
-    // 2. Rate limiting
     const isAllowed = await checkRateLimit(userId);
     if (!isAllowed) {
       return NextResponse.json({ error: 'Rate limit exceeded (50 msgs/hr).' }, { status: 429, headers: corsHeaders });
     }
 
-    // 3. Fetch user profile
     const { data: profile } = await supabase.from('profiles').select('*').eq('id', userId).single();
 
     let contextStr = `[User Context]\n`;
@@ -67,7 +60,6 @@ export async function POST(req: Request) {
       ? `- INSTRUCTION: You MUST reply in conversational Hinglish.`
       : `- INSTRUCTION: You MUST reply in clear, professional Standard English.`;
 
-    // 4. Save user message immediately — prevents data loss on tab close
     let currentSessionId = sessionId;
     if (!currentSessionId) {
       const userMessage = messages.find(m => m.role === 'user');
@@ -94,11 +86,7 @@ export async function POST(req: Request) {
         .eq('id', currentSessionId)
         .single();
       const existingMessages: ChatMessage[] = existingSession?.messages || [];
-
-      const newMessages = [
-        ...existingMessages,
-        ...messages.slice(existingMessages.length),
-      ];
+      const newMessages = [...existingMessages, ...messages.slice(existingMessages.length)];
       const { error: updateError } = await supabase
         .from('chat_sessions')
         .update({ messages: newMessages })
@@ -106,7 +94,6 @@ export async function POST(req: Request) {
       if (updateError) console.error('Error saving user messages:', updateError);
     }
 
-    // 5. Fetch business idea context if provided
     let businessContext = '';
     if (businessIdeaId) {
       const { data: idea } = await supabase
@@ -115,7 +102,7 @@ export async function POST(req: Request) {
         .eq('id', businessIdeaId)
         .single();
       if (idea) {
-        businessContext = `\n[Selected Business Idea]\n- Name: ${idea.title}\n...`;
+        businessContext = `\n[Selected Business Idea]\n- Name: ${idea.title}\n- Category: ${idea.category}\n- Investment: ₹${idea.investment_min.toLocaleString('en-IN')} - ₹${idea.investment_max.toLocaleString('en-IN')}\n- Description: ${idea.description}\n- Licenses Needed: ${idea.required_licenses?.join(', ') || 'None'}\n- Pros: ${idea.pros?.join(', ') || 'N/A'}\n- Cons: ${idea.cons?.join(', ') || 'N/A'}`;
         const { data: checklist } = await supabase
           .from('checklists')
           .select('id')
@@ -136,86 +123,37 @@ export async function POST(req: Request) {
       }
     }
 
-    const groqMessages = [
-      { role: 'system', content: `${SYSTEM_PROMPT}\n\n${contextStr}${businessContext}` },
+    const groqMessages: ChatMessage[] = [
+      { role: 'system', content: `${VYAPAR_MITRA_SYSTEM_PROMPT}\n\n${contextStr}${businessContext}` },
       ...messages,
     ];
 
-    // 6. Call Groq API with streaming
-    const groqRes = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${process.env.GROQ_API_KEY}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        model: 'llama-3.3-70b-versatile',
-        messages: groqMessages,
-        stream: true,
-        temperature: 0.7,
-        max_tokens: 1024,
-      }),
+    let fullResponse = '';
+    const { stream } = await streamGroqResponse(groqMessages, (token) => {
+      fullResponse += token;
     });
 
-    if (!groqRes.ok) {
-      throw new Error(`Groq API Error: ${await groqRes.text()}`);
+    const responseHeaders = new Headers();
+    if (currentSessionId) {
+      responseHeaders.set('X-Session-ID', currentSessionId);
     }
+    Object.entries(corsHeaders).forEach(([key, value]) => responseHeaders.set(key, value));
 
-    // 7. Proxy the stream with periodic auto-save
-    const reader = groqRes.body!.getReader();
-    const decoder = new TextDecoder();
-
-    const stream = new ReadableStream({
+    // Auto-save and final save handled via stream completion
+    const wrappedStream = new ReadableStream({
       async start(controller) {
-        let fullResponse = '';
-        let streamBuffer = '';
+        const reader = stream.getReader();
         let chunkCount = 0;
-        const allMessages = messages;
 
         try {
           while (true) {
             const { done, value } = await reader.read();
-            if (done) {
-              if (streamBuffer.trim()) {
-                const lines = streamBuffer.split('\n').filter(l => l.trim());
-                for (const line of lines) {
-                  if (line.startsWith('data: ')) {
-                    const data = line.replace('data: ', '');
-                    if (data === '[DONE]') continue;
-                    try {
-                      const parsed = JSON.parse(data);
-                      const token = parsed.choices[0]?.delta?.content || '';
-                      fullResponse += token;
-                    } catch { /* ignore */ }
-                  }
-                }
-              }
-              break;
-            }
-
+            if (done) break;
             controller.enqueue(value);
-            const chunk = decoder.decode(value, { stream: true });
-            streamBuffer += chunk;
-            const lines = streamBuffer.split('\n');
-            streamBuffer = lines.pop() || '';
             chunkCount++;
 
-            for (const line of lines) {
-              const trimmed = line.trim();
-              if (trimmed.startsWith('data: ')) {
-                const data = trimmed.replace('data: ', '');
-                if (data === '[DONE]') continue;
-                try {
-                  const parsed = JSON.parse(data);
-                  const token = parsed.choices[0]?.delta?.content || '';
-                  fullResponse += token;
-                } catch { /* ignore */ }
-              }
-            }
-
-            // Auto-save every 8 chunks — protects against tab close
             if (currentSessionId && fullResponse && chunkCount % 8 === 0) {
-              const partialMessages = [...allMessages, { role: 'assistant' as const, content: fullResponse }];
+              const partialMessages = [...messages, { role: 'assistant' as const, content: fullResponse }];
               supabase.from('chat_sessions')
                 .update({ messages: partialMessages, message_count: partialMessages.length })
                 .eq('id', currentSessionId)
@@ -223,15 +161,13 @@ export async function POST(req: Request) {
             }
           }
 
-          // Final save
           if (currentSessionId && fullResponse) {
-            const updatedMessages = [...allMessages, { role: 'assistant' as const, content: fullResponse }];
+            const updatedMessages = [...messages, { role: 'assistant' as const, content: fullResponse }];
             await supabase
               .from('chat_sessions')
               .update({ messages: updatedMessages, message_count: updatedMessages.length })
               .eq('id', currentSessionId);
 
-            // Check for <PUBLISH_IDEA> block
             const publishMatch = fullResponse.match(/<PUBLISH_IDEA>([\s\S]*?)<\/PUBLISH_IDEA>/);
             if (publishMatch && publishMatch[1]) {
               try {
@@ -256,13 +192,7 @@ export async function POST(req: Request) {
       },
     });
 
-    const headers = new Headers(groqRes.headers);
-    if (currentSessionId) {
-      headers.set('X-Session-ID', currentSessionId);
-    }
-    Object.entries(corsHeaders).forEach(([key, value]) => headers.set(key, value));
-
-    return new Response(stream, { status: 200, headers });
+    return new Response(wrappedStream, { status: 200, headers: responseHeaders });
 
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : 'Internal server error';

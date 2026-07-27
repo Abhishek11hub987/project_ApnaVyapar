@@ -1,7 +1,7 @@
 'use client';
 import { useState } from 'react';
 import Link from 'next/link';
-import { BusinessIdea } from '@/types/database';
+import type { BusinessIdea } from '@/types/idea';
 import { useLanguage } from '@/lib/i18n/language-context';
 import { Sparkles } from 'lucide-react';
 

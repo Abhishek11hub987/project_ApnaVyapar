@@ -1,4 +1,5 @@
-import { BusinessIdea, Profile } from '@/types/database';
+import type { BusinessIdea } from '@/types/idea';
+import type { Profile } from '@/types/profile';
 
 const BUDGET_RANGES: Record<string, { min: number; max: number }> = {
   'under-10k': { min: 0, max: 10000 },

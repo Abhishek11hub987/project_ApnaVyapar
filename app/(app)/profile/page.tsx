@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/hooks/use-auth';
-import { BusinessIdea } from '@/types/database';
+import type { BusinessIdea } from '@/types/idea';
 
 // Import our new modular components
 import ProfileHeader from '@/components/profile/profile-header';

@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import { supabase } from '@/lib/supabase';
-import { ResourceLocation } from '@/types/database';
+import type { ResourceLocation } from '@/types/location';
 import { MapPin, Building, Briefcase, Info } from 'lucide-react';
 
 const MapView = dynamic(() => import('@/components/map/map-view'), { 

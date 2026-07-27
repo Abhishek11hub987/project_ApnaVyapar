@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
-import { BusinessIdea } from '@/types/database';
+import type { BusinessIdea } from '@/types/idea';
 import IdeaCard from '@/components/ideas/idea-card';
 import IdeaFilters from '@/components/ideas/idea-filters';
 import ContributeIdeaModal from '@/components/ideas/contribute-idea-modal';

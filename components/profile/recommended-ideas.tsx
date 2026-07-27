@@ -1,6 +1,6 @@
 'use client';
 
-import { BusinessIdea } from '@/types/database';
+import type { BusinessIdea } from '@/types/idea';
 import { Sparkles } from 'lucide-react';
 import IdeaCard from '@/components/ideas/idea-card';
 import { GlassCard } from '@/components/ui/glass-card';

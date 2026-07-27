@@ -3,7 +3,7 @@ import { useRouter } from 'next/navigation';
 import { GlassCard } from '@/components/ui/glass-card';
 import { CheckCircle2 } from 'lucide-react';
 import IdeaCard from '@/components/ideas/idea-card';
-import { BusinessIdea } from '@/types/database';
+import type { BusinessIdea } from '@/types/idea';
 import { useLanguage } from '@/lib/i18n/language-context';
 
 interface LikedIdeasProps {

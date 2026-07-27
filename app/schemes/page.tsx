@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
-import { GovernmentScheme } from '@/types/database';
+import type { GovernmentScheme } from '@/types/scheme';
 import { Search, ExternalLink, IndianRupee, Building2, CheckCircle2 } from 'lucide-react';
 
 export default function SchemesPage() {

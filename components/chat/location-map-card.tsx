@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
-import { ResourceLocation } from '@/types/database';
+import type { ResourceLocation } from '@/types/location';
 import { MapPin, Phone, Building2, Map, ExternalLink } from 'lucide-react';
 import { useLanguage } from '@/lib/i18n/language-context';
 

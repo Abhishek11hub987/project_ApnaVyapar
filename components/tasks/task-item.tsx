@@ -1,4 +1,4 @@
-import { ChecklistTask } from '@/types/database';
+import type { ChecklistTask } from '@/types/checklist';
 import { CheckCircle2, Circle, Clock } from 'lucide-react';
 
 export default function TaskItem({ task, onStatusChange }: { task: ChecklistTask, onStatusChange: (id: string, status: string) => void }) {

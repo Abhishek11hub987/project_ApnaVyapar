@@ -1,7 +1,7 @@
 'use client';
 import { Bot, CheckCircle, FileText, MapPin, Briefcase, Clock, IndianRupee, ShieldAlert, ArrowLeft, Target, TrendingUp } from 'lucide-react';
 import Link from 'next/link';
-import { BusinessIdea } from '@/types/database';
+import type { BusinessIdea } from '@/types/idea';
 import { useLanguage } from '@/lib/i18n/language-context';
 import { CATEGORY_IMAGES, DEFAULT_IMAGE } from './idea-card';
 import MarketAnalysisCard from './market-analysis-card';

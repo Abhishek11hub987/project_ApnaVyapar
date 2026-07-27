@@ -3,7 +3,7 @@
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
-import { ResourceLocation } from '@/types/database';
+import type { ResourceLocation } from '@/types/location';
 
 // Fix leaflet default icons which break in Next.js
 const icon = typeof window !== 'undefined' ? L.icon({
