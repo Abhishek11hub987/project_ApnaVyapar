@@ -14,6 +14,7 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://apnavyapar.vercel.app"),
   title: "Apna Vyapar",
   description: "Get AI-powered guidance, business ideas, and step-by-step roadmaps to launch your dream.",
   icons: {
