@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { Users, MoreVertical, Edit2, Trash2, Mail, Phone, IndianRupee } from "lucide-react";
+import Link from "next/link";
+import { supabase } from "@/lib/supabase";
 
 export type Customer = {
   id: string;
@@ -16,6 +18,23 @@ export type Customer = {
 
 export function CustomersTable({ initialCustomers }: { initialCustomers: Customer[] }) {
   const [customers, setCustomers] = useState<Customer[]>(initialCustomers);
+  const [isDeleting, setIsDeleting] = useState<string | null>(null);
+
+  const handleDelete = async (id: string) => {
+    if (!confirm("Are you sure you want to delete this customer? This action cannot be undone.")) return;
+    
+    setIsDeleting(id);
+    try {
+      const { error } = await supabase.from('customers').delete().eq('id', id);
+      if (error) throw error;
+      setCustomers(customers.filter(c => c.id !== id));
+    } catch (error) {
+      console.error("Error deleting customer:", error);
+      alert("Failed to delete customer");
+    } finally {
+      setIsDeleting(null);
+    }
+  };
 
   if (customers.length === 0) {
     return (
@@ -97,11 +116,20 @@ export function CustomersTable({ initialCustomers }: { initialCustomers: Custome
                 </td>
                 <td className="px-6 py-4">
                   <div className="flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <button className="p-2 hover:bg-white/10 rounded-lg text-white/60 hover:text-white transition-colors" title="Edit Customer">
+                    <Link href={`/dashboard/customers/${customer.id}`} className="p-2 hover:bg-white/10 rounded-lg text-white/60 hover:text-white transition-colors" title="Edit Customer">
                       <Edit2 size={16} />
-                    </button>
-                    <button className="p-2 hover:bg-red-500/10 rounded-lg text-white/60 hover:text-red-400 transition-colors" title="Delete Customer">
-                      <Trash2 size={16} />
+                    </Link>
+                    <button 
+                      onClick={() => handleDelete(customer.id)}
+                      disabled={isDeleting === customer.id}
+                      className="p-2 hover:bg-red-500/10 rounded-lg text-white/60 hover:text-red-400 transition-colors disabled:opacity-50" 
+                      title="Delete Customer"
+                    >
+                      {isDeleting === customer.id ? (
+                        <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                      ) : (
+                        <Trash2 size={16} />
+                      )}
                     </button>
                   </div>
                 </td>
