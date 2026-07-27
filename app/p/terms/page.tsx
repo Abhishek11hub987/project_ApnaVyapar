@@ -157,9 +157,14 @@ export default function TermsOfServicePage() {
           <p className="text-white/60 mb-8 max-w-lg mx-auto">
             If you need clarification on any of the rules outlined in these Terms of Service, reach out to me.
           </p>
-          <a href="mailto:paradoxhq3@gmail.com" className="inline-flex items-center gap-2 px-8 py-4 rounded-xl bg-indigo-500 text-white font-bold hover:scale-105 transition-transform shadow-[0_0_20px_rgba(99,102,241,0.4)]">
-            Contact Abhishek
-          </a>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <a href="mailto:paradoxhq3@gmail.com" className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-indigo-500 text-white font-bold hover:scale-105 transition-transform shadow-[0_0_20px_rgba(99,102,241,0.4)] w-full sm:w-auto">
+              Email Me
+            </a>
+            <a href="https://github.com/Abhishek11hub987" target="_blank" className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-white/10 text-white font-bold border border-white/20 hover:bg-white/20 hover:scale-105 transition-all w-full sm:w-auto">
+              GitHub Profile
+            </a>
+          </div>
         </div>
       </main>
 

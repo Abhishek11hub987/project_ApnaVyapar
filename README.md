@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="public/logo.png" width="120" height="120" alt="Apna Vyapar 3D Logo">
+  <img src="public/logo.png" width="300" height="300" alt="Apna Vyapar 3D Logo">
   <h1>🚀 Apna Vyapar (अपना व्यापार)</h1>
   <p><strong>An AI‑powered platform empowering aspiring Indian entrepreneurs to discover, evaluate, and launch high‑impact businesses.</strong></p>
   
