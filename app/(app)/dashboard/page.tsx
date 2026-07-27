@@ -12,7 +12,9 @@ import {
   ArrowRight,
   PackageX,
   FileText,
-  Download
+  Download,
+  CalendarDays,
+  X
 } from "lucide-react";
 import Link from "next/link";
 import { downloadCSV } from "@/lib/csv";
@@ -37,6 +39,12 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true);
   const [recentOrders, setRecentOrders] = useState<any[]>([]);
   const [allOrders, setAllOrders] = useState<any[]>([]);
+  
+  // Calendar date range state
+  const [showCalendar, setShowCalendar] = useState(false);
+  const [startDate, setStartDate] = useState<string>('');
+  const [endDate, setEndDate] = useState<string>('');
+  const [activeFilter, setActiveFilter] = useState<string>('all');
 
   useEffect(() => {
     let isMounted = true;
@@ -171,6 +179,69 @@ export default function DashboardPage() {
 
   const formatINR = (amount: number) => `₹${amount.toLocaleString('en-IN')}`;
 
+  // Filter orders based on selected date range
+  const filteredOrders = allOrders.filter(order => {
+    if (!startDate && !endDate) return true;
+    const orderDate = new Date(order.created_at);
+    const start = startDate ? new Date(startDate + 'T00:00:00') : null;
+    const end = endDate ? new Date(endDate + 'T23:59:59') : null;
+    if (start && orderDate < start) return false;
+    if (end && orderDate > end) return false;
+    return true;
+  });
+
+  // Compute filtered stats
+  const filteredRevenue = filteredOrders
+    .filter(o => o.status !== 'cancelled')
+    .reduce((sum, o) => sum + Number(o.total_amount || 0), 0);
+  const filteredOrdersCount = filteredOrders.length;
+  const hasDateFilter = startDate || endDate;
+
+  const displayRevenue = hasDateFilter ? filteredRevenue : stats.revenue;
+  const displayOrders = hasDateFilter ? filteredOrdersCount : stats.orders;
+
+  const clearDateFilter = () => {
+    setStartDate('');
+    setEndDate('');
+    setActiveFilter('all');
+    setShowCalendar(false);
+  };
+
+  const applyQuickFilter = (filterKey: string) => {
+    const now = new Date();
+    setActiveFilter(filterKey);
+    switch (filterKey) {
+      case 'today': {
+        const today = now.toISOString().split('T')[0];
+        setStartDate(today);
+        setEndDate(today);
+        break;
+      }
+      case 'week': {
+        const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+        setStartDate(weekAgo.toISOString().split('T')[0]);
+        setEndDate(now.toISOString().split('T')[0]);
+        break;
+      }
+      case 'month': {
+        const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
+        setStartDate(firstDay.toISOString().split('T')[0]);
+        setEndDate(now.toISOString().split('T')[0]);
+        break;
+      }
+      case 'year': {
+        const firstDayOfYear = new Date(now.getFullYear(), 0, 1);
+        setStartDate(firstDayOfYear.toISOString().split('T')[0]);
+        setEndDate(now.toISOString().split('T')[0]);
+        break;
+      }
+      case 'all': {
+        clearDateFilter();
+        return;
+      }
+    }
+  };
+
   return (
     <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 overflow-hidden w-full">
       <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-6 mb-8 w-full">
@@ -206,18 +277,106 @@ export default function DashboardPage() {
         </div>
       </div>
 
+      {/* Date Range Filter */}
+      <div className="mb-8">
+        <div className="glass-card p-4 border-white/5">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+            {/* Quick Filter Buttons */}
+            <div className="flex flex-wrap gap-2">
+              {[
+                { key: 'all', label: 'All Time' },
+                { key: 'today', label: 'Today' },
+                { key: 'week', label: 'This Week' },
+                { key: 'month', label: 'This Month' },
+                { key: 'year', label: 'This Year' },
+              ].map(f => (
+                <button
+                  key={f.key}
+                  onClick={() => applyQuickFilter(f.key)}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
+                    activeFilter === f.key
+                      ? 'bg-cyan text-navy-dark shadow-neon-cyan'
+                      : 'bg-white/5 text-white/60 border border-white/10 hover:bg-white/10 hover:text-white'
+                  }`}
+                >
+                  {f.label}
+                </button>
+              ))}
+            </div>
+
+            {/* Divider */}
+            <div className="hidden sm:block w-px h-8 bg-white/10" />
+
+            {/* Custom Date Range */}
+            <div className="flex items-center gap-2 flex-wrap">
+              <button
+                onClick={() => setShowCalendar(!showCalendar)}
+                className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
+                  showCalendar
+                    ? 'bg-cyan/10 text-cyan border border-cyan/30'
+                    : 'bg-white/5 text-white/60 border border-white/10 hover:bg-white/10'
+                }`}
+              >
+                <CalendarDays size={14} />
+                Custom Range
+              </button>
+
+              {hasDateFilter && (
+                <button
+                  onClick={clearDateFilter}
+                  className="flex items-center gap-1 px-2 py-1 rounded-lg bg-red-500/10 text-red-400 text-xs font-bold border border-red-500/20 hover:bg-red-500/20 transition-colors"
+                >
+                  <X size={12} /> Clear
+                </button>
+              )}
+            </div>
+          </div>
+
+          {/* Expandable Calendar Inputs */}
+          {showCalendar && (
+            <div className="mt-4 pt-4 border-t border-white/10 flex flex-col sm:flex-row items-start sm:items-end gap-4 animate-in fade-in slide-in-from-top-2 duration-300">
+              <div className="flex-1 w-full sm:w-auto">
+                <label className="block text-xs font-bold text-white/40 uppercase tracking-wider mb-2">From Date</label>
+                <input
+                  type="date"
+                  value={startDate}
+                  onChange={(e) => { setStartDate(e.target.value); setActiveFilter('custom'); }}
+                  className="w-full px-4 py-2.5 rounded-xl bg-navy/80 border border-white/10 text-white text-sm font-medium focus:outline-none focus:border-cyan/50 transition-colors [color-scheme:dark]"
+                />
+              </div>
+              <div className="flex-1 w-full sm:w-auto">
+                <label className="block text-xs font-bold text-white/40 uppercase tracking-wider mb-2">To Date</label>
+                <input
+                  type="date"
+                  value={endDate}
+                  onChange={(e) => { setEndDate(e.target.value); setActiveFilter('custom'); }}
+                  className="w-full px-4 py-2.5 rounded-xl bg-navy/80 border border-white/10 text-white text-sm font-medium focus:outline-none focus:border-cyan/50 transition-colors [color-scheme:dark]"
+                />
+              </div>
+              {hasDateFilter && (
+                <div className="glass-card px-4 py-2.5 border-cyan/20 bg-cyan/5 w-full sm:w-auto">
+                  <p className="text-xs text-white/50 font-bold">Filtered Revenue</p>
+                  <p className="text-lg font-black text-cyan">{formatINR(filteredRevenue)}</p>
+                  <p className="text-[10px] text-white/30">{filteredOrdersCount} orders in range</p>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      </div>
+
       {/* Top Stats Row */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         <StatCard 
-          title="Total Revenue"
-          value={formatINR(stats.revenue)}
+          title={hasDateFilter ? 'Filtered Revenue' : 'Total Revenue'}
+          value={formatINR(displayRevenue)}
           trend={revenueTrend}
           isPositive={!revenueTrend.startsWith('-')}
           icon={IndianRupee}
         />
         <StatCard 
-          title="Total Orders"
-          value={stats.orders.toString()}
+          title={hasDateFilter ? 'Filtered Orders' : 'Total Orders'}
+          value={displayOrders.toString()}
           trend={ordersTrend}
           isPositive={!ordersTrend.startsWith('-')}
           icon={ShoppingCart}
@@ -231,9 +390,9 @@ export default function DashboardPage() {
         />
         <StatCard 
           title="Conversion Rate"
-          value={stats.orders > 0 && stats.customers > 0 ? `${((stats.orders / Math.max(stats.customers, 1)) * 100).toFixed(1)}%` : "0%"}
-          trend={stats.orders > 0 ? '+' : '0%'}
-          isPositive={stats.orders > 0}
+          value={displayOrders > 0 && stats.customers > 0 ? `${((displayOrders / Math.max(stats.customers, 1)) * 100).toFixed(1)}%` : "0%"}
+          trend={displayOrders > 0 ? '+' : '0%'}
+          isPositive={displayOrders > 0}
           icon={TrendingUp}
         />
       </div>
