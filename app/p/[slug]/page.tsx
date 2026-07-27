@@ -195,7 +195,7 @@ export default function PremiumFeaturePage({ params }: { params: { slug: string 
                <div className="absolute inset-[1px] rounded-[23px] bg-navy-light/90 backdrop-blur-xl flex items-center justify-center overflow-hidden">
                  {/* Shine effect */}
                  <div className="absolute inset-0 bg-gradient-to-tr from-white/0 via-white/20 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000 ease-in-out" />
-                 <Icon size={56} className={`text-transparent bg-clip-text bg-gradient-to-br ${data.gradientText} drop-shadow-[0_0_15px_rgba(255,255,255,0.3)]`} style={{ filter: "drop-shadow(0 0 20px rgba(255,255,255,0.2))" }} />
+                 <Icon size={56} className="text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.5)] relative z-10" />
                </div>
             </div>
           </div>

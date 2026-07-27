@@ -75,7 +75,7 @@ export function LandingNavbar() {
           </div>
 
           <Link
-            href="/ideas"
+            href="/p/ideas"
             className="text-sm font-semibold bg-gradient-to-r from-cyan to-cyan-dark text-white px-4 md:px-5 py-2 md:py-2.5 rounded-full hover:scale-105 transition-transform shadow-neon-cyan focus-ring"
           >
             Get Started

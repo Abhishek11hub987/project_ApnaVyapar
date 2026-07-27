@@ -35,7 +35,7 @@ export function HeroSection() {
         {/* CTAs */}
         <div className="animate-in fade-in slide-in-from-bottom-10 duration-700 delay-400 fill-mode-both flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
           <Link
-            href="/ideas"
+            href="/p/ideas"
             className="w-full sm:w-auto px-8 py-4 rounded-xl bg-cyan text-navy-dark font-black text-lg hover:scale-105 active:scale-95 transition-all shadow-[0_0_40px_rgba(0,212,255,0.4)] hover:shadow-[0_0_60px_rgba(0,212,255,0.6)] flex items-center justify-center gap-2"
           >
             Start Your Journey <ArrowRight size={20} />

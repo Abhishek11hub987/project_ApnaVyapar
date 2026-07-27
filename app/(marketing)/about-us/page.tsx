@@ -3,7 +3,7 @@
 import { LandingNavbar } from "@/components/landing/landing-navbar";
 import { LandingFooter } from "@/components/landing/landing-footer";
 import { FinalCTA } from "@/components/landing/final-cta";
-import { Bot, Lightbulb, ListChecks, UserCircle, Heart, GithubIcon, Sparkles, Mail } from "lucide-react";
+import { Bot, Lightbulb, ListChecks, UserCircle, Heart, GithubIcon, Sparkles, Mail, Package, ShoppingBag, BarChart3 } from "lucide-react";
 
 export default function AboutPage() {
   return (
@@ -142,6 +142,50 @@ export default function AboutPage() {
             </div>
           </div>
 
+        </div>
+      </section>
+
+      {/* Dashboard Features */}
+      <section className="py-24 px-6 relative bg-navy-light/50 border-t border-white/5">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-5xl font-bold mb-4">Powerful Dashboard</h2>
+            <p className="text-white/60 text-lg max-w-2xl mx-auto">
+              Everything you need to manage your day-to-day operations seamlessly from one single interface.
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="glass-card p-8 rounded-3xl border border-white/10 hover:border-cyan/30 transition-colors">
+              <div className="w-12 h-12 rounded-xl bg-cyan/20 flex items-center justify-center mb-6 border border-cyan/30">
+                <Package size={24} className="text-cyan" />
+              </div>
+              <h3 className="text-xl font-bold mb-3">Inventory Management</h3>
+              <p className="text-white/60 text-sm leading-relaxed">
+                Track stock levels in real-time. Add variations, manage pricing, and receive low-stock alerts before you run out of best-sellers.
+              </p>
+            </div>
+            
+            <div className="glass-card p-8 rounded-3xl border border-white/10 hover:border-blue-500/30 transition-colors">
+              <div className="w-12 h-12 rounded-xl bg-blue-500/20 flex items-center justify-center mb-6 border border-blue-500/30">
+                <ShoppingBag size={24} className="text-blue-400" />
+              </div>
+              <h3 className="text-xl font-bold mb-3">Order Processing</h3>
+              <p className="text-white/60 text-sm leading-relaxed">
+                Centralized view of all incoming orders. Change statuses from pending to shipped with a single click and notify your customers automatically.
+              </p>
+            </div>
+            
+            <div className="glass-card p-8 rounded-3xl border border-white/10 hover:border-purple-500/30 transition-colors">
+              <div className="w-12 h-12 rounded-xl bg-purple-500/20 flex items-center justify-center mb-6 border border-purple-500/30">
+                <BarChart3 size={24} className="text-purple-400" />
+              </div>
+              <h3 className="text-xl font-bold mb-3">Store Analytics</h3>
+              <p className="text-white/60 text-sm leading-relaxed">
+                Visual insights into your sales performance. Identify your top products, monitor daily revenue, and optimize your business strategy.
+              </p>
+            </div>
+          </div>
         </div>
       </section>
 

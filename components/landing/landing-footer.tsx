@@ -4,10 +4,10 @@ import Link from "next/link";
 
 const FOOTER_LINKS = {
   Platform: [
-    { label: "Store Builder", href: "/features" },
-    { label: "Vyapar Mitra (AI)", href: "/features#vyapar-mitra" },
-    { label: "Business Ideas", href: "/ideas" },
-    { label: "Setup Checklist", href: "/features#checklist" },
+    { label: "Store Builder", href: "/p/store-builder" },
+    { label: "Vyapar Mitra (AI)", href: "/p/vyapar-mitra" },
+    { label: "Business Ideas", href: "/p/ideas" },
+    { label: "Setup Checklist", href: "/p/checklist" },
   ],
   Company: [
     { label: "About Apna Vyapar", href: "/about-us" },
