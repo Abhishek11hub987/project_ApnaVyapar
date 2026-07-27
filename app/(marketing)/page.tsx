@@ -1,7 +1,7 @@
 "use client";
 
 import "@/styles/landing-animations.css";
-import { HeroScrollAnimation } from "@/components/landing/hero-scroll-animation";
+import { HeroSection } from "@/components/landing/hero-section";
 import { ValueProposition } from "@/components/landing/value-proposition";
 import { HowItWorks } from "@/components/landing/how-it-works";
 import { FeaturesGrid } from "@/components/landing/features-grid";
@@ -17,8 +17,8 @@ export default function Home() {
       {/* Fixed navbar */}
       <LandingNavbar />
 
-      {/* Section 1: Hero Scroll Animation (500vh pinned) */}
-      <HeroScrollAnimation />
+      {/* Section 1: Hero Section */}
+      <HeroSection />
 
       {/* Section 2: Value Proposition */}
       <ValueProposition />
