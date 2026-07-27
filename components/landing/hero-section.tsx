@@ -70,51 +70,63 @@ export function HeroSection() {
           </div>
         </div>
 
-        {/* Floating Terminal Mockup */}
-        <div className="animate-in fade-in slide-in-from-bottom-12 duration-1000 delay-500 fill-mode-both w-full max-w-4xl mx-auto mt-16 relative perspective-1000">
-          <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-navy to-transparent z-20 pointer-events-none" />
+        {/* Premium Bento Grid - Real Insights */}
+        <div className="animate-in fade-in slide-in-from-bottom-12 duration-1000 delay-500 fill-mode-both w-full max-w-5xl mx-auto mt-20 relative">
           
-          <div className="relative rounded-2xl border border-white/10 bg-[#0d1117]/90 backdrop-blur-3xl shadow-2xl shadow-cyan/20 overflow-hidden transform-gpu rotate-x-12 hover:rotate-x-0 transition-transform duration-700 ease-out group font-mono text-left">
-            {/* Terminal Header */}
-            <div className="flex gap-2 px-4 py-3 items-center border-b border-white/5 bg-[#161b22]/50">
-              <div className="w-3 h-3 rounded-full bg-[#ff5f56] shadow-[0_0_10px_rgba(255,95,86,0.5)]" />
-              <div className="w-3 h-3 rounded-full bg-[#ffbd2e] shadow-[0_0_10px_rgba(255,189,46,0.5)]" />
-              <div className="w-3 h-3 rounded-full bg-[#27c93f] shadow-[0_0_10px_rgba(39,201,63,0.5)]" />
-              <div className="ml-4 text-xs text-white/50 flex-1 flex justify-center items-center gap-2 pr-10 font-medium">
-                <svg className="w-4 h-4 text-white/60" viewBox="0 0 24 24" fill="currentColor"><path fillRule="evenodd" clipRule="evenodd" d="M12 2C6.477 2 2 6.48 2 12c0 4.42 2.865 8.166 6.839 9.489.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.026 2.747-1.026.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12c0-5.52-4.477-10-10-10z"/></svg>
-                <a href="https://github.com/Abhishek11hub987/project_ApnaVyapar" target="_blank" rel="noopener noreferrer" className="hover:text-cyan transition-colors">Abhishek11hub987 / project_ApnaVyapar</a>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            
+            {/* Card 1 */}
+            <div className="md:col-span-2 relative rounded-3xl border border-white/10 bg-gradient-to-br from-white/5 to-transparent backdrop-blur-md p-8 overflow-hidden group hover:border-cyan/30 transition-colors">
+              <div className="absolute top-0 right-0 p-8 opacity-20 group-hover:opacity-100 transition-opacity duration-500">
+                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="url(#cyan-grad)" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"><defs><linearGradient id="cyan-grad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stopColor="#00d2ff" /><stop offset="100%" stopColor="#3a7bd5" /></linearGradient></defs><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+              </div>
+              <h3 className="text-2xl font-bold text-white mb-3">100% Free Forever</h3>
+              <p className="text-white/60 leading-relaxed max-w-md">
+                Unlike other platforms that charge hefty monthly fees or take a cut of your sales, Apna Vyapar is completely free. We believe every Indian merchant deserves world-class digital tools without the premium price tag.
+              </p>
+              <div className="mt-8 flex items-center gap-4">
+                <div className="px-4 py-2 rounded-lg bg-green-500/10 border border-green-500/20 text-green-400 text-sm font-medium">0% Commission</div>
+                <div className="px-4 py-2 rounded-lg bg-cyan/10 border border-cyan/20 text-cyan text-sm font-medium">Unlimited Products</div>
               </div>
             </div>
-            
-            {/* Terminal Body */}
-            <div className="p-6 sm:p-8 text-sm sm:text-[15px] leading-relaxed text-white/80 overflow-x-auto pb-16">
-              <div className="flex text-cyan-400 font-semibold mb-1">
-                <span className="mr-3 text-green-400">➜</span>
-                <span className="text-blue-300">~</span>
-                <span className="mx-2 text-white/50">git clone</span>
-                <span className="text-white/90 break-all">https://github.com/Abhishek11hub987/project_ApnaVyapar.git</span>
+
+            {/* Card 2 */}
+            <div className="relative rounded-3xl border border-white/10 bg-gradient-to-bl from-white/5 to-transparent backdrop-blur-md p-8 overflow-hidden group hover:border-purple-500/30 transition-colors">
+              <div className="absolute -bottom-4 -right-4 p-8 opacity-10 group-hover:opacity-40 transition-opacity duration-500 transform group-hover:scale-110">
+                <svg width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" className="text-purple-400"><path strokeLinecap="round" strokeLinejoin="round" d="M12 11c0 3.517-1.009 6.799-2.753 9.571m-3.44-2.04l.054-.09A13.916 13.916 0 008 11a4 4 0 118 0c0 1.017-.07 2.019-.203 3m-2.118 6.844A21.88 21.88 0 0015.171 17m3.839 1.132c.645-2.266.99-4.659.99-7.132A8 8 0 008 4.07M3 15.364c.64-1.319 1-2.8 1-4.364 0-1.457.39-2.823 1.07-4"/></svg>
               </div>
-              <div className="text-white/40 mb-1">Cloning into 'project_ApnaVyapar'...</div>
-              <div className="text-white/40 mb-1">remote: Enumerating objects: 1420, done.</div>
-              <div className="text-white/40 mb-4">remote: Counting objects: 100% (1420/1420), done.</div>
-              
-              <div className="flex text-cyan-400 font-semibold mb-1">
-                <span className="mr-3 text-green-400">➜</span>
-                <span className="text-blue-300">project_ApnaVyapar</span>
-                <span className="mx-2 text-white/50">npm</span>
-                <span className="text-white/90">install &amp;&amp; npm run dev</span>
-              </div>
-              <div className="text-green-400 mb-1">✔ Packages installed successfully.</div>
-              <div className="text-[#ffbd2e] mb-2 font-bold">▲ Next.js 14.1.0</div>
-              <div className="text-white/70">- Local:        <span className="text-cyan underline decoration-cyan/30 underline-offset-4">http://localhost:3000</span></div>
-              <div className="text-white/70 mb-4">- Environments: <span className="text-white/90 font-semibold">.env.local loaded</span></div>
-              <div className="text-green-400 font-semibold opacity-0 group-hover:opacity-100 transition-opacity duration-700 delay-[400ms]">
-                ✨ Ready in 1250ms. Your free e-commerce platform is running.
-              </div>
+              <h3 className="text-xl font-bold text-white mb-3">Own Your Data</h3>
+              <p className="text-white/60 leading-relaxed text-sm">
+                As an open-source project, you are never locked in. Your customer data, inventory, and analytics belong entirely to you. Host it anywhere or use our managed service.
+              </p>
             </div>
-            
-            {/* Hover Glow */}
-            <div className="absolute inset-0 bg-gradient-to-tr from-cyan/10 via-transparent to-blue-600/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
+
+            {/* Card 3 */}
+            <div className="relative rounded-3xl border border-white/10 bg-gradient-to-tr from-white/5 to-transparent backdrop-blur-md p-8 overflow-hidden group hover:border-blue-500/30 transition-colors">
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="text-xl font-bold text-white">Built by India,<br/>For India</h3>
+                <div className="w-12 h-12 rounded-full bg-blue-500/20 flex items-center justify-center">
+                  <svg className="w-6 h-6 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                </div>
+              </div>
+              <p className="text-white/60 leading-relaxed text-sm">
+                Supported by a passionate community of developers. Constant updates, deep integrations with Indian payment gateways, and WhatsApp support out of the box.
+              </p>
+            </div>
+
+            {/* Card 4 */}
+            <div className="md:col-span-2 relative rounded-3xl border border-white/10 bg-[#0a192f]/80 backdrop-blur-md p-8 overflow-hidden group hover:border-cyan/30 transition-colors flex flex-col justify-center items-center text-center">
+              <div className="absolute inset-0 bg-gradient-to-t from-cyan/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <h3 className="text-2xl font-bold text-white mb-4 relative z-10">Transparent Open Source</h3>
+              <p className="text-white/60 max-w-lg mb-6 relative z-10">
+                You can audit every line of code. We have nothing to hide. Join our community on GitHub to request features or report bugs directly to the creators.
+              </p>
+              <a href="https://github.com/Abhishek11hub987/project_ApnaVyapar" target="_blank" rel="noopener noreferrer" className="relative z-10 inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white/5 border border-white/10 text-white font-medium hover:bg-white/10 transition-colors">
+                <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path fillRule="evenodd" clipRule="evenodd" d="M12 2C6.477 2 2 6.48 2 12c0 4.42 2.865 8.166 6.839 9.489.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.026 2.747-1.026.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12c0-5.52-4.477-10-10-10z"/></svg>
+                View on GitHub
+              </a>
+            </div>
+
           </div>
         </div>
       </div>
