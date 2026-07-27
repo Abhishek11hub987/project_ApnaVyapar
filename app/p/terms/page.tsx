@@ -155,10 +155,10 @@ export default function TermsOfServicePage() {
           <div className="absolute inset-0 bg-gradient-to-r from-indigo-500/0 via-indigo-500/10 to-indigo-500/0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
           <h3 className="text-2xl font-bold text-white mb-4">Questions about our Terms?</h3>
           <p className="text-white/60 mb-8 max-w-lg mx-auto">
-            If you need clarification on any of the rules outlined in our Terms of Service, reach out to us.
+            If you need clarification on any of the rules outlined in these Terms of Service, reach out to me.
           </p>
           <a href="mailto:paradoxhq3@gmail.com" className="inline-flex items-center gap-2 px-8 py-4 rounded-xl bg-indigo-500 text-white font-bold hover:scale-105 transition-transform shadow-[0_0_20px_rgba(99,102,241,0.4)]">
-            Contact Support
+            Contact Abhishek
           </a>
         </div>
       </main>

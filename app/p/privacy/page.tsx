@@ -181,10 +181,10 @@ export default function PrivacyPolicyPage() {
           <div className="absolute inset-0 bg-gradient-to-r from-cyan/0 via-cyan/10 to-cyan/0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
           <h3 className="text-2xl font-bold text-white mb-4">Have questions about your privacy?</h3>
           <p className="text-white/60 mb-8 max-w-lg mx-auto">
-            Our team is always here to clarify any doubts you might have regarding how we handle and protect your data.
+            I am always here to clarify any doubts you might have regarding how I handle and protect your data.
           </p>
-          <a href="mailto:privacy@apnavyapar.com" className="inline-flex items-center gap-2 px-8 py-4 rounded-xl bg-cyan text-navy-dark font-bold hover:scale-105 transition-transform shadow-neon-cyan">
-            Contact Privacy Team
+          <a href="mailto:paradoxhq3@gmail.com" className="inline-flex items-center gap-2 px-8 py-4 rounded-xl bg-cyan text-navy-dark font-bold hover:scale-105 transition-transform shadow-neon-cyan">
+            Contact Abhishek
           </a>
         </div>
       </main>
