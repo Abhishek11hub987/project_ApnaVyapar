@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
-import { Save, Store, Globe, Palette, Share2, Copy, PhoneCall, Mail, Type, ShieldCheck, FileText, Image as ImageIcon, Upload } from "lucide-react";
+import { Save, Store, Globe, Palette, Share2, Copy, Image as ImageIcon, Upload, CheckCircle2, Sparkles } from "lucide-react";
 import Link from "next/link";
 
 export default function StoreBuilderPage() {
@@ -17,53 +17,11 @@ export default function StoreBuilderPage() {
     slug: "",
     theme_color: "#00D4FF",
     is_active: true,
-    support_email: "",
-    support_phone: "",
-    hero_text: "",
     logo_url: "",
-    privacy_policy: "",
-    terms_conditions: "",
   });
   
   const [logoFile, setLogoFile] = useState<File | null>(null);
   const [logoPreview, setLogoPreview] = useState<string | null>(null);
-
-  const defaultPrivacyPolicy = `Privacy Policy
-
-Last updated: ${new Date().toLocaleDateString()}
-
-This Privacy Policy describes how your personal information is collected, used, and shared when you visit or make a purchase from this store.
-
-Personal Information We Collect
-When you visit the store, we collect certain information about your device, your interaction with the store, and information necessary to process your purchases.
-
-How Do We Use Your Personal Information?
-We use the Order Information that we collect generally to fulfill any orders placed through the store (including processing your payment information, arranging for shipping, and providing you with invoices and/or order confirmations).
-
-Apna Vyapar Platform
-Our store is hosted on Apna Vyapar. They provide us with the online e-commerce platform that allows us to sell our products and services to you. Your data is stored through Apna Vyapar's data storage, databases, and the general Apna Vyapar application.
-
-Contact Us
-For more information about our privacy practices, if you have questions, or if you would like to make a complaint, please contact us by e-mail or phone provided in the store contact details.`;
-
-  const defaultTermsConditions = `Terms and Conditions
-
-Last updated: ${new Date().toLocaleDateString()}
-
-Overview
-This website is operated by the merchant. Throughout the site, the terms "we", "us" and "our" refer to the merchant. The merchant offers this website, including all information, tools and services available from this site to you, the user, conditioned upon your acceptance of all terms, conditions, policies and notices stated here.
-
-Section 1 - Platform Disclaimer
-Our store is hosted on the Apna Vyapar platform. Apna Vyapar provides the e-commerce software that allows us to sell our products. Apna Vyapar is NOT responsible for the products, services, or content of this store, and is not liable for any disputes, refunds, or fulfillment issues. All transactions and agreements are strictly between you (the customer) and us (the merchant).
-
-Section 2 - Online Store Terms
-By agreeing to these Terms of Service, you represent that you are at least the age of majority in your state or province of residence.
-
-Section 3 - Modifications to the Service and Prices
-Prices for our products are subject to change without notice. We reserve the right at any time to modify or discontinue the Service (or any part or content thereof) without notice at any time.
-
-Contact Information
-Questions about the Terms of Service should be sent to us via the contact details provided in our store.`;
 
   useEffect(() => {
     let isMounted = true;
@@ -78,7 +36,7 @@ Questions about the Terms of Service should be sent to us via the contact detail
 
         const { data, error } = await supabase
           .from("store_settings")
-          .select("*")
+          .select("id, store_name, slug, theme_color, is_active, logo_url")
           .eq("user_id", userData.user.id)
           .single();
 
@@ -91,23 +49,11 @@ Questions about the Terms of Service should be sent to us via the contact detail
             slug: data.slug,
             theme_color: data.theme_color,
             is_active: data.is_active,
-            support_email: data.support_email || "",
-            support_phone: data.support_phone || "",
-            hero_text: data.hero_text || "",
             logo_url: data.logo_url || "",
-            privacy_policy: data.privacy_policy || defaultPrivacyPolicy,
-            terms_conditions: data.terms_conditions || defaultTermsConditions,
           });
           if (data.logo_url) {
             setLogoPreview(data.logo_url);
           }
-        } else {
-          // If no existing data, pre-fill with defaults
-          setFormData(prev => ({
-            ...prev,
-            privacy_policy: defaultPrivacyPolicy,
-            terms_conditions: defaultTermsConditions
-          }));
         }
       } catch (err: any) {
         console.error(err);
@@ -141,7 +87,7 @@ Questions about the Terms of Service should be sent to us via the contact detail
         const fileName = `${userData.user.id}-logo-${Math.random().toString(36).substring(2)}-${Date.now()}.${fileExt}`;
         
         const { error: uploadError } = await supabase.storage
-          .from("product-images") // Reusing product-images bucket for store assets
+          .from("product-images")
           .upload(fileName, logoFile);
 
         if (uploadError) throw uploadError;
@@ -154,7 +100,6 @@ Questions about the Terms of Service should be sent to us via the contact detail
       }
 
       if (formData.id) {
-        // Update existing
         const { error } = await supabase
           .from("store_settings")
           .update({
@@ -162,17 +107,11 @@ Questions about the Terms of Service should be sent to us via the contact detail
             slug: formData.slug,
             theme_color: formData.theme_color,
             is_active: formData.is_active,
-            support_email: formData.support_email,
-            support_phone: formData.support_phone,
-            hero_text: formData.hero_text,
             logo_url: uploadedLogoUrl,
-            privacy_policy: formData.privacy_policy,
-            terms_conditions: formData.terms_conditions,
           })
           .eq("id", formData.id);
         if (error) throw error;
       } else {
-        // Insert new
         const { data, error } = await supabase
           .from("store_settings")
           .insert({
@@ -181,12 +120,7 @@ Questions about the Terms of Service should be sent to us via the contact detail
             slug: formData.slug,
             theme_color: formData.theme_color,
             is_active: formData.is_active,
-            support_email: formData.support_email,
-            support_phone: formData.support_phone,
-            hero_text: formData.hero_text,
             logo_url: uploadedLogoUrl,
-            privacy_policy: formData.privacy_policy,
-            terms_conditions: formData.terms_conditions,
           })
           .select()
           .single();
@@ -205,107 +139,112 @@ Questions about the Terms of Service should be sent to us via the contact detail
   const storeUrl = formData.slug ? `${typeof window !== 'undefined' ? window.location.origin : ''}/store/${formData.slug}` : "";
 
   return (
-    <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 max-w-3xl mx-auto">
-      <div className="mb-8">
-        <h1 className="text-3xl font-extrabold text-white tracking-tight mb-2">Store Builder</h1>
-        <p className="text-white/60">Configure your public storefront where customers can view and buy your products.</p>
+    <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 max-w-4xl mx-auto pb-20">
+      <div className="mb-10 text-center">
+        <div className="inline-flex items-center justify-center p-3 bg-cyan/10 rounded-2xl mb-4 border border-cyan/20">
+          <Sparkles className="text-cyan w-8 h-8" />
+        </div>
+        <h1 className="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-white to-white/60 tracking-tight mb-3">
+          Store Builder
+        </h1>
+        <p className="text-white/60 text-lg max-w-lg mx-auto">
+          Design your storefront and bring your brand to life.
+        </p>
       </div>
 
       {loading ? (
-        <div className="glass-card p-12 flex justify-center items-center flex-col">
-          <div className="w-8 h-8 border-2 border-cyan/30 border-t-cyan rounded-full animate-spin mb-4" />
-          <button onClick={() => setLoading(false)} className="text-xs text-white/40 underline">Force Skip Loading</button>
+        <div className="glass-card p-16 flex justify-center items-center flex-col shadow-2xl shadow-cyan/5">
+          <div className="w-10 h-10 border-4 border-cyan/30 border-t-cyan rounded-full animate-spin mb-6" />
+          <p className="text-white/40 font-medium animate-pulse">Loading your store...</p>
         </div>
       ) : (
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="glass-card p-6 md:p-8 border-white/5 space-y-8">
-            
-            {error && (
-              <div className="bg-red-500/10 border border-red-500/20 text-red-400 p-4 rounded-xl text-sm font-medium">
-                {error}
-              </div>
-            )}
-            {success && (
-              <div className="bg-teal-500/10 border border-teal-500/20 text-teal-400 p-4 rounded-xl text-sm font-medium">
-                Store settings saved successfully!
-              </div>
-            )}
-
-            {/* Store Details */}
-            <div className="space-y-4">
-              <div className="flex items-center gap-2 border-b border-white/10 pb-2 mb-4">
-                <Store size={18} className="text-cyan" />
-                <h3 className="text-lg font-bold text-white">Store Identity</h3>
-              </div>
-              
-              <div>
-                <label className="block text-sm font-medium text-white/70 mb-1.5">Store Name *</label>
-                <input
-                  type="text"
-                  required
-                  value={formData.store_name}
-                  onChange={(e) => setFormData({ ...formData, store_name: e.target.value })}
-                  className="w-full bg-navy border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-cyan transition-colors"
-                  placeholder="e.g. My Awesome Shop"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-white/70 mb-1.5">Store URL (Slug) *</label>
-                <div className="flex bg-navy border border-white/10 rounded-xl overflow-hidden focus-within:border-cyan transition-colors">
-                  <span className="px-4 py-3 bg-white/5 text-white/40 border-r border-white/10 whitespace-nowrap">
-                    apnavyapar.com/store/
-                  </span>
-                  <input
-                    type="text"
-                    required
-                    value={formData.slug}
-                    onChange={(e) => setFormData({ ...formData, slug: e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '-') })}
-                    className="w-full bg-transparent px-4 py-3 text-white outline-none"
-                    placeholder="my-awesome-shop"
-                  />
-                </div>
-                {storeUrl && (
-                  <p className="mt-2 text-xs text-white/40">
-                    Your store will be live at: <a href={storeUrl} target="_blank" rel="noopener noreferrer" className="text-cyan hover:underline">{storeUrl}</a>
-                  </p>
-                )}
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-white/70 mb-1.5 flex items-center gap-2">
-                  <Type size={14} className="text-white/40" /> Hero Subtitle Text
-                </label>
-                <input
-                  type="text"
-                  value={formData.hero_text}
-                  onChange={(e) => setFormData({ ...formData, hero_text: e.target.value })}
-                  className="w-full bg-navy border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-cyan transition-colors"
-                  placeholder="e.g. Welcome to the best shop in India!"
-                />
-              </div>
+        <form onSubmit={handleSubmit} className="space-y-8">
+          
+          {error && (
+            <div className="bg-red-500/10 border border-red-500/20 text-red-400 p-4 rounded-2xl text-sm font-medium flex items-center gap-3 backdrop-blur-md">
+              <div className="w-2 h-2 rounded-full bg-red-500" />
+              {error}
             </div>
+          )}
+          {success && (
+            <div className="bg-cyan/10 border border-cyan/30 text-cyan-light p-4 rounded-2xl text-sm font-medium flex items-center gap-3 backdrop-blur-md shadow-neon-cyan animate-in fade-in zoom-in duration-300">
+              <CheckCircle2 className="w-5 h-5 text-cyan" />
+              Store settings saved successfully! Your storefront is updated.
+            </div>
+          )}
 
-            {/* Store Assets */}
-            <div className="space-y-4">
-              <div className="flex items-center gap-2 border-b border-white/10 pb-2 mb-4">
-                <ImageIcon size={18} className="text-cyan" />
-                <h3 className="text-lg font-bold text-white">Store Logo</h3>
-              </div>
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            
+            {/* Left Column: Form Fields */}
+            <div className="lg:col-span-8 space-y-6">
               
-              <div>
-                <label className="block text-sm font-medium text-white/70 mb-1.5">Upload Logo</label>
-                <div className="flex items-center gap-6">
-                  <div className="w-24 h-24 rounded-xl bg-navy border border-white/10 flex items-center justify-center overflow-hidden flex-shrink-0">
+              {/* Basics Card */}
+              <div className="glass-card p-8 rounded-3xl border-white/10 shadow-xl shadow-black/20 hover:border-white/20 transition-colors group relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-64 h-64 bg-cyan/5 rounded-full blur-3xl -mr-32 -mt-32 pointer-events-none transition-transform group-hover:scale-150 duration-700" />
+                
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="p-2.5 bg-white/5 rounded-xl border border-white/10 text-cyan">
+                    <Store size={20} />
+                  </div>
+                  <h3 className="text-xl font-bold text-white">Store Identity</h3>
+                </div>
+                
+                <div className="space-y-6 relative z-10">
+                  <div>
+                    <label className="block text-sm font-medium text-white/70 mb-2">Store Name</label>
+                    <input
+                      type="text"
+                      required
+                      value={formData.store_name}
+                      onChange={(e) => setFormData({ ...formData, store_name: e.target.value })}
+                      className="w-full bg-navy-dark/50 border border-white/10 rounded-2xl px-5 py-4 text-white outline-none focus:border-cyan focus:ring-1 focus:ring-cyan transition-all shadow-inner placeholder:text-white/20 font-medium text-lg"
+                      placeholder="e.g. My Awesome Shop"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-white/70 mb-2">Store URL</label>
+                    <div className="flex bg-navy-dark/50 border border-white/10 rounded-2xl overflow-hidden focus-within:border-cyan focus-within:ring-1 focus-within:ring-cyan transition-all shadow-inner">
+                      <span className="px-5 py-4 bg-black/20 text-white/40 border-r border-white/10 whitespace-nowrap font-mono text-sm">
+                        apnavyapar.com/store/
+                      </span>
+                      <input
+                        type="text"
+                        required
+                        value={formData.slug}
+                        onChange={(e) => setFormData({ ...formData, slug: e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '-') })}
+                        className="w-full bg-transparent px-5 py-4 text-white outline-none font-mono text-sm"
+                        placeholder="my-awesome-shop"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Logo Card */}
+              <div className="glass-card p-8 rounded-3xl border-white/10 shadow-xl shadow-black/20 hover:border-white/20 transition-colors group relative overflow-hidden">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="p-2.5 bg-white/5 rounded-xl border border-white/10 text-cyan">
+                    <ImageIcon size={20} />
+                  </div>
+                  <h3 className="text-xl font-bold text-white">Brand Logo</h3>
+                </div>
+                
+                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-8 relative z-10">
+                  <div className="w-32 h-32 rounded-2xl bg-navy-dark/50 border-2 border-dashed border-white/10 flex items-center justify-center overflow-hidden flex-shrink-0 shadow-inner group-hover:border-cyan/30 transition-colors">
                     {logoPreview ? (
-                      <img src={logoPreview} alt="Logo Preview" className="w-full h-full object-contain" />
+                      <img src={logoPreview} alt="Logo Preview" className="w-full h-full object-contain p-2" />
                     ) : (
-                      <ImageIcon size={32} className="text-white/20" />
+                      <div className="flex flex-col items-center text-white/20">
+                        <ImageIcon size={32} className="mb-2" />
+                        <span className="text-xs font-medium">No Logo</span>
+                      </div>
                     )}
                   </div>
                   <div className="flex-1">
-                    <label className="cursor-pointer px-4 py-2 rounded-lg border border-white/10 text-white text-sm font-medium hover:bg-white/5 transition-colors inline-flex items-center gap-2">
-                      <Upload size={16} /> Choose Image
+                    <label className="cursor-pointer px-6 py-3 rounded-xl bg-white/5 border border-white/10 text-white text-sm font-medium hover:bg-white/10 hover:border-white/20 transition-all inline-flex items-center gap-2 shadow-sm">
+                      <Upload size={16} className="text-cyan" /> 
+                      <span>Choose New Image</span>
                       <input 
                         type="file" 
                         accept="image/*" 
@@ -319,171 +258,127 @@ Questions about the Terms of Service should be sent to us via the contact detail
                         }}
                       />
                     </label>
-                    <p className="text-white/40 text-xs mt-2">Recommended: Square image or transparent PNG, max 2MB.</p>
+                    <p className="text-white/40 text-xs mt-4 leading-relaxed max-w-xs">
+                      Make your store stand out. We recommend a square image or transparent PNG, max 2MB.
+                    </p>
                   </div>
                 </div>
               </div>
+
             </div>
 
-            {/* Legal & Policies */}
-            <div className="space-y-4">
-              <div className="flex items-center gap-2 border-b border-white/10 pb-2 mb-4">
-                <ShieldCheck size={18} className="text-cyan" />
-                <h3 className="text-lg font-bold text-white">Legal & Policies</h3>
-              </div>
-              <p className="text-sm text-white/60">We have provided standard templates that protect you and the Apna Vyapar platform. Feel free to modify them to suit your specific business needs.</p>
+            {/* Right Column: Settings */}
+            <div className="lg:col-span-4 space-y-6">
               
-              <div>
-                <label className="block text-sm font-medium text-white/70 mb-1.5 flex items-center gap-2">
-                  <FileText size={14} className="text-white/40" /> Privacy Policy
+              {/* Appearance */}
+              <div className="glass-card p-6 rounded-3xl border-white/10 shadow-xl shadow-black/20">
+                <div className="flex items-center gap-3 mb-5">
+                  <div className="p-2 bg-white/5 rounded-lg border border-white/10 text-cyan">
+                    <Palette size={16} />
+                  </div>
+                  <h3 className="text-lg font-bold text-white">Appearance</h3>
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-white/70 mb-3">Primary Brand Color</label>
+                  <div className="flex items-center gap-4 p-2 bg-navy-dark/50 rounded-2xl border border-white/10">
+                    <input
+                      type="color"
+                      value={formData.theme_color}
+                      onChange={(e) => setFormData({ ...formData, theme_color: e.target.value })}
+                      className="w-14 h-14 rounded-xl cursor-pointer border-0 bg-transparent p-1"
+                    />
+                    <div className="flex-1">
+                      <span className="text-white font-mono text-sm font-medium">{formData.theme_color.toUpperCase()}</span>
+                      <p className="text-white/40 text-xs mt-1">Used for buttons & accents</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Visibility */}
+              <div className="glass-card p-6 rounded-3xl border-white/10 shadow-xl shadow-black/20">
+                <div className="flex items-center gap-3 mb-5">
+                  <div className="p-2 bg-white/5 rounded-lg border border-white/10 text-cyan">
+                    <Globe size={16} />
+                  </div>
+                  <h3 className="text-lg font-bold text-white">Visibility</h3>
+                </div>
+                
+                <label className="flex items-start gap-4 cursor-pointer group">
+                  <div className="relative flex items-center justify-center mt-0.5">
+                    <input
+                      type="checkbox"
+                      checked={formData.is_active}
+                      onChange={(e) => setFormData({ ...formData, is_active: e.target.checked })}
+                      className="peer sr-only"
+                    />
+                    <div className="w-12 h-6 bg-white/10 rounded-full peer-checked:bg-cyan/20 transition-colors border border-white/10 peer-checked:border-cyan/50" />
+                    <div className="absolute left-1 top-1 w-4 h-4 bg-white/40 rounded-full peer-checked:translate-x-6 peer-checked:bg-cyan transition-all shadow-sm" />
+                  </div>
+                  <div>
+                    <p className="text-white font-semibold text-sm group-hover:text-cyan transition-colors">Store is Live</p>
+                    <p className="text-white/40 text-xs mt-1 leading-relaxed">Turn off to hide your store from the public and show a maintenance page.</p>
+                  </div>
                 </label>
-                <textarea
-                  rows={8}
-                  value={formData.privacy_policy}
-                  onChange={(e) => setFormData({ ...formData, privacy_policy: e.target.value })}
-                  className="w-full bg-navy border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-cyan transition-colors resize-y font-mono text-sm"
-                  placeholder="Enter your privacy policy..."
-                />
               </div>
 
-              <div>
-                <label className="block text-sm font-medium text-white/70 mb-1.5 flex items-center gap-2">
-                  <FileText size={14} className="text-white/40" /> Terms and Conditions
-                </label>
-                <textarea
-                  rows={8}
-                  value={formData.terms_conditions}
-                  onChange={(e) => setFormData({ ...formData, terms_conditions: e.target.value })}
-                  className="w-full bg-navy border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-cyan transition-colors resize-y font-mono text-sm"
-                  placeholder="Enter your terms and conditions..."
-                />
-              </div>
-            </div>
-
-            {/* Contact Details */}
-            <div className="space-y-4">
-              <div className="flex items-center gap-2 border-b border-white/10 pb-2 mb-4">
-                <PhoneCall size={18} className="text-cyan" />
-                <h3 className="text-lg font-bold text-white">Contact & Support</h3>
-              </div>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-white/70 mb-1.5 flex items-center gap-2">
-                    <Mail size={14} className="text-white/40" /> Support Email
-                  </label>
-                  <input
-                    type="email"
-                    value={formData.support_email}
-                    onChange={(e) => setFormData({ ...formData, support_email: e.target.value })}
-                    className="w-full bg-navy border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-cyan transition-colors"
-                    placeholder="help@myshop.com"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-white/70 mb-1.5 flex items-center gap-2">
-                    <PhoneCall size={14} className="text-white/40" /> Support Phone
-                  </label>
-                  <input
-                    type="tel"
-                    value={formData.support_phone}
-                    onChange={(e) => setFormData({ ...formData, support_phone: e.target.value })}
-                    className="w-full bg-navy border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-cyan transition-colors"
-                    placeholder="+91 9876543210"
-                  />
-                </div>
-              </div>
-            </div>
-
-            {/* Appearance */}
-            <div className="space-y-4">
-              <div className="flex items-center gap-2 border-b border-white/10 pb-2 mb-4">
-                <Palette size={18} className="text-cyan" />
-                <h3 className="text-lg font-bold text-white">Appearance</h3>
-              </div>
-              
-              <div>
-                <label className="block text-sm font-medium text-white/70 mb-1.5">Brand Color</label>
-                <div className="flex items-center gap-4">
-                  <input
-                    type="color"
-                    value={formData.theme_color}
-                    onChange={(e) => setFormData({ ...formData, theme_color: e.target.value })}
-                    className="w-12 h-12 rounded bg-navy border border-white/10 cursor-pointer"
-                  />
-                  <span className="text-white/60 font-mono text-sm">{formData.theme_color.toUpperCase()}</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Status */}
-            <div className="space-y-4">
-              <div className="flex items-center gap-2 border-b border-white/10 pb-2 mb-4">
-                <Globe size={18} className="text-cyan" />
-                <h3 className="text-lg font-bold text-white">Visibility</h3>
-              </div>
-              
-              <label className="flex items-center gap-3 cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={formData.is_active}
-                  onChange={(e) => setFormData({ ...formData, is_active: e.target.checked })}
-                  className="w-5 h-5 rounded bg-navy border border-white/10 text-cyan focus:ring-cyan focus:ring-offset-navy"
-                />
-                <div>
-                  <p className="text-white font-medium">Store is Active</p>
-                  <p className="text-white/40 text-sm">If unchecked, customers will see a "Maintenance" page.</p>
-                </div>
-              </label>
             </div>
 
           </div>
 
-          <div className="flex justify-end gap-3">
-            {storeUrl && formData.id && (
-              <>
-                <button
-                  type="button"
-                  onClick={() => {
-                    navigator.clipboard.writeText(storeUrl);
-                    alert("Store link copied to clipboard!");
-                  }}
-                  className="px-4 py-3 rounded-xl border border-white/10 text-white font-medium hover:bg-white/5 transition-colors flex items-center gap-2"
-                >
-                  <Copy size={16} /> <span className="hidden sm:inline">Copy Link</span>
-                </button>
-                <a
-                  href={`https://wa.me/?text=Check%20out%20my%20new%20store:%20${encodeURIComponent(storeUrl)}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="px-4 py-3 rounded-xl border border-green-500/30 text-green-400 font-medium hover:bg-green-500/10 transition-colors flex items-center gap-2"
-                >
-                  <Share2 size={16} /> <span className="hidden sm:inline">WhatsApp</span>
-                </a>
-                <a
-                  href={storeUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="px-6 py-3 rounded-xl border border-cyan/30 text-cyan font-medium hover:bg-cyan/10 transition-colors flex items-center gap-2"
-                >
-                  View Store <Globe size={16} />
-                </a>
-              </>
-            )}
-            <button
-              type="submit"
-              disabled={saving}
-              className="px-6 py-3 rounded-xl bg-cyan text-navy-dark font-bold hover:scale-105 transition-all shadow-neon-cyan flex items-center gap-2 disabled:opacity-50 disabled:hover:scale-100"
-            >
-              {saving ? (
-                <div className="w-5 h-5 border-2 border-navy-dark/30 border-t-navy-dark rounded-full animate-spin" />
-              ) : (
-                <Save size={18} />
-              )}
-              Save Settings
-            </button>
+          {/* Action Bar */}
+          <div className="fixed bottom-0 left-0 right-0 p-4 bg-navy/80 backdrop-blur-xl border-t border-white/10 z-40">
+            <div className="max-w-4xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+              
+              <div className="flex items-center gap-2 overflow-x-auto w-full sm:w-auto pb-2 sm:pb-0 hide-scrollbar">
+                {storeUrl && formData.id && (
+                  <>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        navigator.clipboard.writeText(storeUrl);
+                        alert("Store link copied to clipboard!");
+                      }}
+                      className="px-4 py-2.5 rounded-xl border border-white/10 text-white/80 text-sm font-medium hover:bg-white/5 hover:text-white transition-all flex items-center gap-2 whitespace-nowrap"
+                    >
+                      <Copy size={14} /> Copy Link
+                    </button>
+                    <a
+                      href={`https://wa.me/?text=Check%20out%20my%20new%20store:%20${encodeURIComponent(storeUrl)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="px-4 py-2.5 rounded-xl border border-[#25D366]/30 text-[#25D366] text-sm font-medium hover:bg-[#25D366]/10 transition-all flex items-center gap-2 whitespace-nowrap"
+                    >
+                      <Share2 size={14} /> WhatsApp
+                    </a>
+                    <a
+                      href={storeUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="px-4 py-2.5 rounded-xl border border-cyan/30 text-cyan text-sm font-medium hover:bg-cyan/10 transition-all flex items-center gap-2 whitespace-nowrap"
+                    >
+                      <Globe size={14} /> View Live
+                    </a>
+                  </>
+                )}
+              </div>
+
+              <button
+                type="submit"
+                disabled={saving}
+                className="w-full sm:w-auto px-8 py-3 rounded-xl bg-cyan text-navy-dark font-black hover:scale-[1.02] active:scale-95 transition-all shadow-neon-cyan flex items-center justify-center gap-2 disabled:opacity-50 disabled:hover:scale-100"
+              >
+                {saving ? (
+                  <div className="w-5 h-5 border-2 border-navy-dark/30 border-t-navy-dark rounded-full animate-spin" />
+                ) : (
+                  <Save size={18} />
+                )}
+                Save Store
+              </button>
+            </div>
           </div>
+          
         </form>
       )}
     </div>

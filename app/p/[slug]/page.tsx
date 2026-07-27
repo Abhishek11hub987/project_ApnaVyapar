@@ -212,16 +212,7 @@ const PAGE_CONTENT: Record<string, { title: string; subtitle: string; content: R
       </div>
     )
   },
-  "privacy": {
-    title: "Privacy Policy",
-    subtitle: "How we protect your data.",
-    content: (
-      <div className="space-y-6">
-        <p>Your privacy is our priority. We do not sell your customer data to third parties. All data is encrypted at rest and in transit.</p>
-        <p>By using our service, you agree to the collection and use of information in accordance with this policy.</p>
-      </div>
-    )
-  },
+
   "terms": {
     title: "Terms of Service",
     subtitle: "The rules of the road.",
