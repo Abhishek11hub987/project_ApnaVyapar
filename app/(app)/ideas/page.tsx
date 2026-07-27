@@ -1,5 +1,6 @@
 'use client';
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
 import { BusinessIdea } from '@/types/database';
 import IdeaCard from '@/components/ideas/idea-card';
@@ -39,6 +40,7 @@ export default function IdeasCatalog() {
   const [filters, setFilters] = useState({ category: '', budget: '', location: '', sort: 'popular' });
   const [activeTab, setActiveTab] = useState<'curated' | 'community'>('curated');
   const [showContribute, setShowContribute] = useState(false);
+  const router = useRouter();
   const { t } = useLanguage();
 
   useEffect(() => {
@@ -196,13 +198,30 @@ export default function IdeasCatalog() {
               <div className="text-center py-24 glass-card border border-white/5 animate-in fade-in">
                 <div className="text-6xl mb-4">🔍</div>
                 <h3 className="text-2xl font-bold text-white mb-2">No ideas found</h3>
-                <p className="text-white/40 text-sm mb-8 max-w-md mx-auto">We couldn't find any business ideas matching your current filters. Try broadening your search.</p>
-                <button 
-                  onClick={() => { setFilters({ category: '', budget: '', location: '', sort: 'popular' }); setSearch(''); }}
-                  className="bg-cyan text-navy-dark px-8 py-3 rounded-full font-bold hover:shadow-neon-cyan transition-all"
-                >
-                  Reset All Filters
-                </button>
+                <p className="text-white/40 text-sm mb-8 max-w-md mx-auto">We couldn't find any business ideas matching your search. Want our AI to research it for you?</p>
+                <div className="flex items-center justify-center gap-4">
+                  {search ? (
+                    <button 
+                      onClick={() => router.push(`/chat?query=${encodeURIComponent(`I want to start a business related to "${search}". Can you research this idea and publish it to the community catalog?`)}`)}
+                      className="bg-gradient-to-r from-cyan to-emerald-500 text-navy-dark px-8 py-3 rounded-full font-bold hover:shadow-neon-cyan transition-all flex items-center gap-2"
+                    >
+                      <Sparkles size={18} /> Ask Vyapar Mitra to Research
+                    </button>
+                  ) : (
+                    <button 
+                      onClick={() => setShowContribute(true)}
+                      className="bg-gradient-to-r from-cyan to-emerald-500 text-navy-dark px-8 py-3 rounded-full font-bold hover:shadow-neon-cyan transition-all"
+                    >
+                      Contribute an Idea
+                    </button>
+                  )}
+                  <button 
+                    onClick={() => { setFilters({ category: '', budget: '', location: '', sort: 'popular' }); setSearch(''); }}
+                    className="bg-white/5 border border-white/10 text-white/70 px-8 py-3 rounded-full font-bold hover:bg-white/10 transition-all"
+                  >
+                    Reset Filters
+                  </button>
+                </div>
               </div>
             )}
           </>
@@ -231,14 +250,34 @@ export default function IdeasCatalog() {
                 <div className="w-20 h-20 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center mx-auto mb-6">
                   <Lightbulb size={36} className="text-emerald-400" />
                 </div>
-                <h3 className="text-2xl font-bold text-white mb-2">No community ideas yet</h3>
-                <p className="text-white/40 text-sm mb-8 max-w-md mx-auto">Be the first to contribute a business idea! Our AI will research it and create a detailed card for the community.</p>
-                <button 
-                  onClick={() => setShowContribute(true)}
-                  className="bg-gradient-to-r from-cyan to-emerald-500 text-navy-dark px-8 py-3 rounded-full font-bold hover:shadow-neon-cyan transition-all inline-flex items-center gap-2"
-                >
-                  <Plus size={18} /> Contribute First Idea
-                </button>
+                <h3 className="text-2xl font-bold text-white mb-2">No community ideas found</h3>
+                <p className="text-white/40 text-sm mb-8 max-w-md mx-auto">Be the first to contribute this business idea! Our AI will research it and create a detailed card for the community.</p>
+                
+                <div className="flex items-center justify-center gap-4">
+                  {search ? (
+                    <button 
+                      onClick={() => router.push(`/chat?query=${encodeURIComponent(`I want to start a business related to "${search}". Can you research this idea and publish it to the community catalog?`)}`)}
+                      className="bg-gradient-to-r from-cyan to-emerald-500 text-navy-dark px-8 py-3 rounded-full font-bold hover:shadow-neon-cyan transition-all flex items-center gap-2"
+                    >
+                      <Sparkles size={18} /> Ask Vyapar Mitra to Research
+                    </button>
+                  ) : (
+                    <button 
+                      onClick={() => setShowContribute(true)}
+                      className="bg-gradient-to-r from-cyan to-emerald-500 text-navy-dark px-8 py-3 rounded-full font-bold hover:shadow-neon-cyan transition-all flex items-center gap-2"
+                    >
+                      <Plus size={18} /> Contribute First Idea
+                    </button>
+                  )}
+                  {search && (
+                    <button 
+                      onClick={() => setSearch('')}
+                      className="bg-white/5 border border-white/10 text-white/70 px-8 py-3 rounded-full font-bold hover:bg-white/10 transition-all"
+                    >
+                      Clear Search
+                    </button>
+                  )}
+                </div>
               </div>
             )}
           </>

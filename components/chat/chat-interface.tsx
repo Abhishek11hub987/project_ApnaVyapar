@@ -11,6 +11,7 @@ function ChatContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const businessIdeaId = searchParams.get('idea');
+  const initialQuery = searchParams.get('query');
   const { messages, isLoading, language, sessionId, addMessage, updateLastMessage, setLanguage, setLoading, setSessionId, setMessages } = useChat();
   const [input, setInput] = useState('');
   const [ideaTitle, setIdeaTitle] = useState('');
@@ -111,8 +112,14 @@ function ChatContent() {
       });
     } else {
       setMessages([]);
+      if (initialQuery && !isSubmittingRef.current) {
+        // Add a small delay to ensure refs are ready
+        setTimeout(() => {
+          handleSubmit(undefined, initialQuery);
+        }, 100);
+      }
     }
-  }, [sessionId, setMessages]);
+  }, [sessionId, setMessages, initialQuery]);
 
   const submitRef = useRef<{ abort: () => void } | null>(null);
 
