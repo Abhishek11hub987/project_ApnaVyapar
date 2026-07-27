@@ -80,7 +80,7 @@ export async function middleware(request: NextRequest) {
     }
   }
 
-  const protectedRoutes = ['/chat', '/checklist', '/profile', '/saved', '/tasks']
+  const protectedRoutes = ['/chat', '/checklist', '/profile', '/saved', '/tasks', '/dashboard']
   const isProtectedRoute = protectedRoutes.some(route => 
     request.nextUrl.pathname.startsWith(route)
   )
@@ -97,5 +97,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/', '/ideas/:path*', '/tasks/:path*', '/chat/:path*', '/checklist/:path*', '/profile/:path*', '/saved/:path*', '/admin/:path*', '/api/admin/:path*'],
+  matcher: ['/', '/ideas/:path*', '/tasks/:path*', '/chat/:path*', '/checklist/:path*', '/profile/:path*', '/saved/:path*', '/admin/:path*', '/api/admin/:path*', '/dashboard/:path*'],
 }
