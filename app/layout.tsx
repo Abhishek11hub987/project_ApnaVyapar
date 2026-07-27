@@ -16,6 +16,33 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   title: "Apna Vyapar",
   description: "Get AI-powered guidance, business ideas, and step-by-step roadmaps to launch your dream.",
+  icons: {
+    icon: "/logo.png",
+    shortcut: "/logo.png",
+    apple: "/logo.png",
+  },
+  openGraph: {
+    title: "Apna Vyapar - Start Your Business Journey",
+    description: "Get AI-powered guidance, business ideas, and step-by-step roadmaps to launch your dream business.",
+    url: "https://project-apna-vyapar-fxk4.vercel.app",
+    siteName: "Apna Vyapar",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Apna Vyapar Social Banner",
+      }
+    ],
+    locale: "en_IN",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Apna Vyapar",
+    description: "Get AI-powered guidance, business ideas, and step-by-step roadmaps to launch your dream.",
+    images: ["/og-image.png"],
+  },
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
