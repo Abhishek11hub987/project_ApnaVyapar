@@ -32,22 +32,22 @@ export default function Header() {
         {/* Desktop Navigation — pill style */}
         <nav className="hidden md:flex items-center justify-center gap-1 bg-white/5 p-1.5 px-3 rounded-full border border-white/10">
           <Link href="/" className={`font-medium text-sm transition-all px-4 py-1.5 rounded-full ${pathname === '/' ? 'bg-white/15 text-white shadow-sm' : 'text-white/50 hover:text-white/80 hover:bg-white/5'}`}>
-            Home
+            {t('nav.home')}
           </Link>
           <Link href="/ideas" className={`font-medium text-sm transition-all px-4 py-1.5 rounded-full ${pathname.startsWith('/ideas') ? 'bg-cyan/20 text-cyan shadow-sm border border-cyan/20' : 'text-white/50 hover:text-white/80 hover:bg-white/5'}`}>
-            Ideas
+            {t('nav.ideas')}
           </Link>
           <ProtectedLink href="/chat" className={`font-medium text-sm transition-all px-4 py-1.5 rounded-full ${pathname.startsWith('/chat') ? 'bg-cyan/20 text-cyan shadow-sm border border-cyan/20' : 'text-white/50 hover:text-white/80 hover:bg-white/5'}`}>
-            Mitra
+            {t('nav.mitra')}
           </ProtectedLink>
           <ProtectedLink href="/tasks" className={`font-medium text-sm transition-all px-4 py-1.5 rounded-full ${pathname.startsWith('/tasks') ? 'bg-cyan/20 text-cyan shadow-sm border border-cyan/20' : 'text-white/50 hover:text-white/80 hover:bg-white/5'}`}>
-            Tasks
+            {t('nav.tasks')}
           </ProtectedLink>
           <ProtectedLink href="/dashboard" className={`font-medium text-sm transition-all px-4 py-1.5 rounded-full ${pathname.startsWith('/dashboard') ? 'bg-cyan/20 text-cyan shadow-sm border border-cyan/20' : 'text-white/50 hover:text-white/80 hover:bg-white/5'}`}>
-            Dashboard
+            {language === 'hi' ? 'डैशबोर्ड' : 'Dashboard'}
           </ProtectedLink>
           <ProtectedLink href="/profile" className={`font-medium text-sm transition-all px-4 py-1.5 rounded-full ${pathname.startsWith('/profile') ? 'bg-cyan/20 text-cyan shadow-sm border border-cyan/20' : 'text-white/50 hover:text-white/80 hover:bg-white/5'}`}>
-            Profile
+            {t('nav.profile')}
           </ProtectedLink>
         </nav>
 
@@ -60,14 +60,6 @@ export default function Header() {
               >
                 <Globe size={14} />
                 {language === 'en' ? 'HI' : 'EN'}
-              </button>
-
-              <button
-                onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-                className="w-9 h-9 flex items-center justify-center rounded-full bg-white/5 border border-white/10 text-white/70 hover:bg-white/10 transition-colors"
-                aria-label="Toggle theme"
-              >
-                {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
               </button>
             </>
           )}

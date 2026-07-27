@@ -38,10 +38,10 @@ export function LandingNavbar() {
 
         <div className="hidden md:flex items-center gap-8">
           <a href="#features" className="text-sm text-white/60 hover:text-white transition-colors focus-ring">
-            Features
+            {language === 'hi' ? 'फ़ीचर्स' : 'Features'}
           </a>
           <a href="#how-it-works" className="text-sm text-white/60 hover:text-white transition-colors focus-ring">
-            How it Works
+            {language === 'hi' ? 'यह कैसे काम करता है' : 'How it Works'}
           </a>
         </div>
 
@@ -51,19 +51,12 @@ export function LandingNavbar() {
               href="/?login=true"
               className="hidden md:block text-sm text-white/70 hover:text-white transition-colors font-medium focus-ring"
             >
-              Log in
+              {language === 'hi' ? 'लॉग इन' : 'Log in'}
             </Link>
           )}
           
-          {/* Theme & Language Toggles (Desktop) */}
+          {/* Language Toggle (Desktop) */}
           <div className="hidden md:flex items-center gap-2 border-l border-white/10 pl-4 ml-2">
-            <button
-              onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-              className="p-2 rounded-full text-white/70 hover:text-white hover:bg-white/10 transition-colors focus-ring"
-              aria-label="Toggle theme"
-            >
-              {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
-            </button>
             <button
               onClick={() => setLanguage(language === 'en' ? 'hi' : 'en')}
               className="p-2 rounded-full text-white/70 hover:text-white hover:bg-white/10 transition-colors focus-ring flex items-center gap-1"
@@ -75,10 +68,10 @@ export function LandingNavbar() {
           </div>
 
           <Link
-            href="/p/ideas"
+            href="/ideas"
             className="text-sm font-semibold bg-gradient-to-r from-cyan to-cyan-dark text-white px-4 md:px-5 py-2 md:py-2.5 rounded-full hover:scale-105 transition-transform shadow-neon-cyan focus-ring"
           >
-            Get Started
+            {language === 'hi' ? 'शुरू करें' : 'Get Started'}
           </Link>
           
           <button 
@@ -94,25 +87,18 @@ export function LandingNavbar() {
       {mobileMenuOpen && (
         <div className="md:hidden bg-navy-dark/95 backdrop-blur-xl border-b border-white/10 px-4 py-4 space-y-4">
           <a href="#features" onClick={() => setMobileMenuOpen(false)} className="block text-white/80 font-medium hover:text-white py-2 border-b border-white/5">
-            Features
+            {language === 'hi' ? 'फ़ीचर्स' : 'Features'}
           </a>
           <a href="#how-it-works" onClick={() => setMobileMenuOpen(false)} className="block text-white/80 font-medium hover:text-white py-2 border-b border-white/5">
-            How it Works
+            {language === 'hi' ? 'यह कैसे काम करता है' : 'How it Works'}
           </a>
           {!isAuthenticated && (
             <Link href="/?login=true" onClick={() => setMobileMenuOpen(false)} className="block text-cyan font-semibold hover:text-cyan-light py-2">
-              Log in
+              {language === 'hi' ? 'लॉग इन' : 'Log in'}
             </Link>
           )}
           
           <div className="pt-4 flex items-center gap-4 border-t border-white/5">
-            <button
-              onClick={() => { setTheme(theme === 'dark' ? 'light' : 'dark'); setMobileMenuOpen(false); }}
-              className="flex items-center gap-2 text-white/80 hover:text-white py-2"
-            >
-              {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
-              <span className="text-sm">Theme</span>
-            </button>
             <button
               onClick={() => { setLanguage(language === 'en' ? 'hi' : 'en'); setMobileMenuOpen(false); }}
               className="flex items-center gap-2 text-white/80 hover:text-white py-2"
