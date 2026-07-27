@@ -1,5 +1,5 @@
 'use client';
-import { useLanguage } from '@/lib/language-context';
+import { useLanguage } from '@/lib/i18n/language-context';
 
 export default function FAQPage() {
   const { t } = useLanguage();
@@ -18,17 +18,17 @@ export default function FAQPage() {
   ];
 
   return (
-    <main className="min-h-screen bg-slate-50 dark:bg-slate-950 pb-24 pt-8">
+    <main className="min-h-screen bg-gray-50 pb-24 pt-8">
       <div className="max-w-3xl mx-auto px-4">
-        <h1 className="text-3xl md:text-4xl font-extrabold text-slate-900 dark:text-slate-100 mb-8 tracking-tight">
+        <h1 className="text-2xl font-bold text-gray-900 mb-8">
           Frequently Asked Questions
         </h1>
         
         <div className="space-y-4">
           {faqs.map((faq, index) => (
-            <div key={index} className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
-              <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100 mb-2">{faq.q}</h3>
-              <p className="text-slate-600 dark:text-slate-400 leading-relaxed">{faq.a}</p>
+            <div key={index} className="bg-white p-6 rounded-lg border border-gray-100 shadow-sm">
+              <h3 className="text-lg font-bold text-gray-900 mb-2">{faq.q}</h3>
+              <p className="text-gray-500 leading-relaxed">{faq.a}</p>
             </div>
           ))}
         </div>

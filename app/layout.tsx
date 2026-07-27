@@ -10,16 +10,16 @@ import { ClientProviders } from "@/components/providers/client-providers";
 import { Suspense } from "react";
 
 export const viewport: Viewport = {
-  themeColor: "#0F766E",
+  themeColor: "#ffffff",
 };
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://apnavyapar.vercel.app"),
   title: "Apna Vyapar",
-  description: "Get AI-powered guidance, business ideas, and step-by-step roadmaps to launch your dream.",
+  description: "AI-powered guidance, business ideas, and step-by-step roadmaps to launch your dream business.",
   openGraph: {
     title: "Apna Vyapar - Start Your Business Journey",
-    description: "Get AI-powered guidance, business ideas, and step-by-step roadmaps to launch your dream business.",
+    description: "AI-powered guidance, business ideas, and step-by-step roadmaps to launch your dream business.",
     url: "https://apnavyapar.vercel.app",
     siteName: "Apna Vyapar",
     locale: "en_IN",
@@ -28,7 +28,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Apna Vyapar",
-    description: "Get AI-powered guidance, business ideas, and step-by-step roadmaps to launch your dream.",
+    description: "AI-powered guidance, business ideas, and step-by-step roadmaps to launch your dream.",
   },
   appleWebApp: {
     capable: true,
@@ -46,10 +46,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <head>
-      </head>
-      <body className={`${inter.className} ${hind.variable} bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-200 antialiased transition-colors`}>
+    <html lang="en">
+      <body className={`${inter.className} ${hind.variable} bg-white text-gray-900 antialiased`}>
         <ClientProviders>
           {children}
           <Suspense fallback={null}>

@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
-import { searchLocations } from '@/lib/locations';
-import { checkRateLimit } from '@/lib/rate-limit';
+import { searchLocations } from '@/lib/utils/locations';
+import { checkRateLimit } from '@/lib/utils/rate-limit';
 import { createServerClient } from '@supabase/ssr';
 import { cookies } from 'next/headers';
 

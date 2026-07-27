@@ -13,7 +13,7 @@ import { LandingNavbar } from "@/components/landing/landing-navbar";
 
 export default function Home() {
   return (
-    <main className="bg-navy min-h-screen overflow-x-hidden">
+    <main className="bg-white min-h-screen">
       {/* Fixed navbar */}
       <LandingNavbar />
 

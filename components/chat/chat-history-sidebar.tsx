@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
 import { MessageSquare, X, Trash2, History } from 'lucide-react';
-import { useLanguage } from '@/lib/language-context';
+import { useLanguage } from '@/lib/i18n/language-context';
 
 interface ChatSession {
   id: string;

@@ -1,6 +1,6 @@
 'use client';
 import { Filter } from 'lucide-react';
-import { useLanguage } from '@/lib/language-context';
+import { useLanguage } from '@/lib/i18n/language-context';
 
 export default function IdeaFilters({ filters, setFilters }: { filters: any, setFilters: (f: any) => void }) {
   const { t } = useLanguage();

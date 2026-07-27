@@ -1,14 +1,12 @@
 import React from 'react';
-import Image from 'next/image';
 
 export default function LogoIcon({ className = '', size = 32 }: { className?: string; size?: number }) {
   return (
-    <Image 
-      src="/logo.png" 
-      alt="Apna Vyapar Logo" 
-      width={size} 
-      height={size} 
-      className={`rounded-md shadow-sm ${className}`}
-    />
+    <div
+      className={`flex items-center justify-center rounded-lg bg-gray-900 text-white font-bold select-none ${className}`}
+      style={{ width: size, height: size, fontSize: size * 0.4 }}
+    >
+      AV
+    </div>
   );
 }

@@ -1,26 +1,22 @@
 import { ReactNode } from 'react';
 
-interface NeonButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children: ReactNode;
-  variant?: 'teal' | 'amber';
-  glow?: boolean;
+  variant?: 'primary' | 'secondary' | 'ghost';
 }
 
-export function NeonButton({ children, className = '', variant = 'teal', glow = true, ...props }: NeonButtonProps) {
-  const baseClasses = "relative inline-flex items-center justify-center px-6 py-2.5 font-bold text-sm tracking-wider uppercase rounded-full border-2 transition-all duration-300 backdrop-blur-sm overflow-hidden";
-  
+export function NeonButton({ children, className = '', variant = 'primary', ...props }: ButtonProps) {
+  const baseClasses = "inline-flex items-center justify-center px-5 py-2.5 text-sm font-medium rounded-lg transition-colors";
+
   const variants = {
-    teal: "text-teal-400 border-teal-400 hover:bg-teal-400/10 hover:shadow-neon-teal",
-    amber: "text-amber-400 border-amber-400 hover:bg-amber-400/10 hover:shadow-neon-amber",
+    primary: "bg-gray-900 text-white hover:bg-gray-800",
+    secondary: "bg-white text-gray-700 border border-gray-200 hover:bg-gray-50",
+    ghost: "text-gray-500 hover:text-gray-900 hover:bg-gray-100",
   };
 
-  const glowClasses = glow 
-    ? (variant === 'teal' ? 'neon-text-teal' : 'neon-text-amber')
-    : '';
-
   return (
-    <button className={`${baseClasses} ${variants[variant]} ${glowClasses} ${className}`} {...props}>
-      <span className="relative z-10">{children}</span>
+    <button className={`${baseClasses} ${variants[variant]} ${className}`} {...props}>
+      {children}
     </button>
   );
 }

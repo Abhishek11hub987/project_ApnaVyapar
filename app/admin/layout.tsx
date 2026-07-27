@@ -15,17 +15,16 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
   ];
 
   return (
-    <div className="min-h-screen bg-navy text-white flex">
-      {/* Sidebar */}
-      <aside className="w-64 border-r border-white/10 bg-navy-dark/50 backdrop-blur-xl flex flex-col hidden md:flex sticky top-0 h-screen">
-        <div className="p-6 border-b border-white/10">
+    <div className="min-h-screen bg-gray-50 text-gray-900 flex">
+      <aside className="w-64 border-r border-gray-200 bg-white flex-col hidden md:flex sticky top-0 h-screen">
+        <div className="p-6 border-b border-gray-100">
           <Link href="/admin" className="flex items-center gap-3 hover:opacity-90 transition-opacity">
-            <Logo iconSize={28} />
-            <span className="font-black text-lg tracking-tight bg-gradient-to-r from-cyan to-white bg-clip-text text-transparent">Admin</span>
+            <Logo iconSize={24} />
+            <span className="text-lg font-semibold text-gray-900">Admin</span>
           </Link>
         </div>
-        
-        <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
+
+        <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
           {navigation.map((item) => {
             const isActive = pathname === item.href;
             const Icon = item.icon;
@@ -33,23 +32,23 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
               <Link
                 key={item.name}
                 href={item.href}
-                className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${
-                  isActive 
-                    ? 'bg-cyan/10 text-cyan border border-cyan/20 shadow-[0_0_15px_rgba(45,212,191,0.1)]' 
-                    : 'text-white/60 hover:text-white hover:bg-white/5 border border-transparent'
+                className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors text-sm font-medium ${
+                  isActive
+                    ? 'bg-gray-100 text-gray-900'
+                    : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'
                 }`}
               >
-                <Icon size={20} className={isActive ? 'text-cyan' : 'text-white/40'} />
-                <span className="font-semibold text-sm">{item.name}</span>
+                <Icon size={18} className={isActive ? 'text-accent-600' : 'text-gray-400'} />
+                {item.name}
               </Link>
             );
           })}
         </nav>
 
-        <div className="p-4 border-t border-white/10">
+        <div className="p-4 border-t border-gray-100">
           <Link
             href="/"
-            className="flex items-center gap-3 px-4 py-3 rounded-xl text-white/60 hover:text-white hover:bg-white/5 transition-all text-sm font-medium"
+            className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-500 hover:text-gray-900 hover:bg-gray-50 transition-colors text-sm font-medium"
           >
             <ArrowLeft size={18} />
             Back to App
@@ -57,15 +56,13 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
         </div>
       </aside>
 
-      {/* Main Content */}
-      <main className="flex-1 flex flex-col min-w-0 overflow-y-auto bg-gradient-to-br from-navy to-navy-dark">
-        {/* Mobile Header */}
-        <header className="md:hidden flex items-center justify-between p-4 border-b border-white/10 bg-navy/50 backdrop-blur-md sticky top-0 z-50">
+      <main className="flex-1 flex flex-col min-w-0 overflow-y-auto">
+        <header className="md:hidden flex items-center justify-between p-4 border-b border-gray-100 bg-white sticky top-0 z-50">
           <Link href="/admin" className="flex items-center gap-2">
-            <Logo iconSize={24} />
-            <span className="font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan to-white">Admin</span>
+            <Logo iconSize={22} />
+            <span className="text-base font-semibold">Admin</span>
           </Link>
-          <Link href="/" className="p-2 rounded-full bg-white/5 text-white/70">
+          <Link href="/" className="p-2 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100">
             <ArrowLeft size={20} />
           </Link>
         </header>

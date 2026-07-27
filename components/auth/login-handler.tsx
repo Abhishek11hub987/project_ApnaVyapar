@@ -1,12 +1,18 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 import LoginModal from '@/components/auth/login-modal';
 import { useAuth } from '@/hooks/use-auth';
 
 function isSafeRedirect(path: string | null): path is string {
-  return !!path && path.startsWith('/') && !path.startsWith('//');
+  if (!path) return false;
+  try {
+    const url = new URL(path, 'http://localhost');
+    return url.origin === 'http://localhost';
+  } catch {
+    return false;
+  }
 }
 
 function stripLoginParams(pathname: string, searchParams: URLSearchParams) {
@@ -22,13 +28,15 @@ export default function LoginHandler() {
   const pathname = usePathname();
   const { isAuthenticated, isLoading, initialize } = useAuth();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const initialized = useRef(false);
 
-  // Initialize auth state on mount
   useEffect(() => {
-    initialize();
+    if (!initialized.current) {
+      initialized.current = true;
+      initialize();
+    }
   }, [initialize]);
 
-  // Open modal when ?login=true AND auth is done loading AND user is not logged in
   useEffect(() => {
     if (isLoading) return;
 
@@ -50,7 +58,6 @@ export default function LoginHandler() {
     }
   }, [searchParams.get('login'), searchParams.get('redirect'), isAuthenticated, isLoading, pathname, router]);
 
-  // After login on the same page, follow redirect target if present
   useEffect(() => {
     if (isLoading || !isAuthenticated || !isModalOpen) return;
 

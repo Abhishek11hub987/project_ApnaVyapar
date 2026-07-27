@@ -1,4 +1,4 @@
-import { supabaseAdmin } from "@/lib/supabase-admin";
+import { supabaseAdmin } from "@/lib/supabase/admin";
 import { notFound } from "next/navigation";
 import { StorefrontClient } from "@/components/store/storefront-client";
 import { VyaparMitraChat } from "@/components/store/vyapar-mitra-chat"; // We will create this next

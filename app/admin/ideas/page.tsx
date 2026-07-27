@@ -1,4 +1,4 @@
-import { supabaseAdmin } from '@/lib/supabase-admin';
+import { supabaseAdmin } from '@/lib/supabase/admin';
 import ClientIdeasTable from './client-ideas-table';
 
 export const revalidate = 0;

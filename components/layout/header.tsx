@@ -1,70 +1,101 @@
 'use client';
 import Link from 'next/link';
-import { useTheme } from 'next-themes';
-import { useLanguage } from '@/lib/language-context';
-import { Sun, Moon, Globe } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useLanguage } from '@/lib/i18n/language-context';
+import { Globe, Menu, X } from 'lucide-react';
+import { useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { useAuth } from '@/hooks/use-auth';
 import Logo from '@/components/logo';
 import ProtectedLink from '@/components/auth/protected-link';
 
+const navItems = [
+  { href: '/ideas', labelKey: 'nav.ideas', protected: false },
+  { href: '/chat', labelKey: 'nav.mitra', protected: true },
+  { href: '/tasks', labelKey: 'nav.tasks', protected: true },
+  { href: '/dashboard', labelKey: 'Dashboard', protected: true },
+  { href: '/profile', labelKey: 'nav.profile', protected: true },
+];
+
 export default function Header() {
-  const { theme, setTheme } = useTheme();
   const { language, setLanguage, t } = useLanguage();
   const pathname = usePathname();
   const { isAuthenticated } = useAuth();
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  if (!mounted) return null;
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-50 w-full bg-navy/90 backdrop-blur-xl border-b border-white/5 shadow-lg">
-      <div className="max-w-7xl mx-auto px-4 h-16 grid grid-cols-[1fr_auto_1fr] items-center">
-        <Link href="/" className="hover:opacity-90 transition-opacity justify-self-start">
-          <Logo iconSize={28} />
-        </Link>
-        
-        {/* Desktop Navigation — pill style */}
-        <nav className="hidden md:flex items-center justify-center gap-1 bg-white/5 p-1.5 px-3 rounded-full border border-white/10">
-          <Link href="/" className={`font-medium text-sm transition-all px-4 py-1.5 rounded-full ${pathname === '/' ? 'bg-white/15 text-white shadow-sm' : 'text-white/50 hover:text-white/80 hover:bg-white/5'}`}>
-            {t('nav.home')}
+    <header className="sticky top-0 z-50 w-full bg-white/90 backdrop-blur-lg border-b border-gray-100">
+      <div className="section-container">
+        <div className="flex items-center justify-between h-16">
+          <Link href="/" className="shrink-0">
+            <Logo />
           </Link>
-          <Link href="/ideas" className={`font-medium text-sm transition-all px-4 py-1.5 rounded-full ${pathname.startsWith('/ideas') ? 'bg-cyan/20 text-cyan shadow-sm border border-cyan/20' : 'text-white/50 hover:text-white/80 hover:bg-white/5'}`}>
-            {t('nav.ideas')}
-          </Link>
-          <ProtectedLink href="/chat" className={`font-medium text-sm transition-all px-4 py-1.5 rounded-full ${pathname.startsWith('/chat') ? 'bg-cyan/20 text-cyan shadow-sm border border-cyan/20' : 'text-white/50 hover:text-white/80 hover:bg-white/5'}`}>
-            {t('nav.mitra')}
-          </ProtectedLink>
-          <ProtectedLink href="/tasks" className={`font-medium text-sm transition-all px-4 py-1.5 rounded-full ${pathname.startsWith('/tasks') ? 'bg-cyan/20 text-cyan shadow-sm border border-cyan/20' : 'text-white/50 hover:text-white/80 hover:bg-white/5'}`}>
-            {t('nav.tasks')}
-          </ProtectedLink>
-          <ProtectedLink href="/dashboard" className={`font-medium text-sm transition-all px-4 py-1.5 rounded-full ${pathname.startsWith('/dashboard') ? 'bg-cyan/20 text-cyan shadow-sm border border-cyan/20' : 'text-white/50 hover:text-white/80 hover:bg-white/5'}`}>
-            {language === 'hi' ? 'डैशबोर्ड' : 'Dashboard'}
-          </ProtectedLink>
-          <ProtectedLink href="/profile" className={`font-medium text-sm transition-all px-4 py-1.5 rounded-full ${pathname.startsWith('/profile') ? 'bg-cyan/20 text-cyan shadow-sm border border-cyan/20' : 'text-white/50 hover:text-white/80 hover:bg-white/5'}`}>
-            {t('nav.profile')}
-          </ProtectedLink>
-        </nav>
 
-        <div className="flex items-center gap-2 sm:gap-3 justify-self-end">
-          {isAuthenticated && (
-            <>
+          <nav className="hidden md:flex items-center gap-1">
+            {navItems.map((item) => {
+              const active = pathname.startsWith(item.href);
+              const classes = `px-3.5 py-2 text-sm font-medium rounded-lg transition-colors ${
+                active ? 'bg-gray-100 text-gray-900' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'
+              }`;
+              if (item.protected) {
+                return (
+                  <ProtectedLink key={item.href} href={item.href} className={classes}>
+                    {item.labelKey === 'Dashboard' ? (language === 'hi' ? 'डैशबोर्ड' : 'Dashboard') : t(item.labelKey)}
+                  </ProtectedLink>
+                );
+              }
+              return (
+                <Link key={item.href} href={item.href} className={classes}>
+                  {t(item.labelKey)}
+                </Link>
+              );
+            })}
+          </nav>
+
+          <div className="flex items-center gap-2">
+            {isAuthenticated && (
               <button
                 onClick={() => setLanguage(language === 'en' ? 'hi' : 'en')}
-                className="flex items-center gap-1.5 text-xs font-bold bg-white/5 border border-white/10 hover:bg-white/10 text-white/70 px-3 py-2 rounded-full transition-colors"
+                className="flex items-center gap-1.5 text-xs font-semibold text-gray-500 hover:text-gray-900 bg-gray-50 hover:bg-gray-100 px-3 py-1.5 rounded-lg transition-colors"
               >
-                <Globe size={14} />
+                <Globe size={12} />
                 {language === 'en' ? 'HI' : 'EN'}
               </button>
-            </>
-          )}
+            )}
+
+            <button
+              onClick={() => setMobileOpen(!mobileOpen)}
+              className="md:hidden p-2 text-gray-500 hover:text-gray-900 rounded-lg hover:bg-gray-100 transition-colors"
+            >
+              {mobileOpen ? <X size={20} /> : <Menu size={20} />}
+            </button>
+          </div>
         </div>
       </div>
+
+      {mobileOpen && (
+        <div className="md:hidden border-t border-gray-100 bg-white animate-fade-in-down">
+          <nav className="section-container py-3 flex flex-col gap-1">
+            {navItems.map((item) => {
+              const active = pathname.startsWith(item.href);
+              const classes = `px-3 py-2.5 text-sm font-medium rounded-lg transition-colors ${
+                active ? 'bg-gray-100 text-gray-900' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'
+              }`;
+              if (item.protected) {
+                return (
+                  <ProtectedLink key={item.href} href={item.href} className={classes} onClick={() => setMobileOpen(false)}>
+                    {item.labelKey === 'Dashboard' ? (language === 'hi' ? 'डैशबोर्ड' : 'Dashboard') : t(item.labelKey)}
+                  </ProtectedLink>
+                );
+              }
+              return (
+                <Link key={item.href} href={item.href} className={classes} onClick={() => setMobileOpen(false)}>
+                  {t(item.labelKey)}
+                </Link>
+              );
+            })}
+          </nav>
+        </div>
+      )}
     </header>
   );
 }

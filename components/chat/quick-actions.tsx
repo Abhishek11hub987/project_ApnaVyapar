@@ -1,4 +1,4 @@
-import { useLanguage } from '@/lib/language-context';
+import { useLanguage } from '@/lib/i18n/language-context';
 
 export default function QuickActions({ onSelect }: { onSelect: (text: string) => void }) {
   const { t } = useLanguage();

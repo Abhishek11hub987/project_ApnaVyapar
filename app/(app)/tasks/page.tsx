@@ -8,7 +8,7 @@ import TaskItem from '@/components/tasks/task-item';
 import ProgressBar from '@/components/tasks/progress-bar';
 import { FileText, Bot, Trash2 } from 'lucide-react';
 import Link from 'next/link';
-import { useLanguage } from '@/lib/language-context';
+import { useLanguage } from '@/lib/i18n/language-context';
 
 function TasksContent() {
   const { user, isAuthenticated, isLoading: authLoading } = useAuth();

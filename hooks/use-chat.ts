@@ -12,11 +12,13 @@ interface ChatState {
   language: 'english' | 'hinglish';
   sessionId: string | null;
   addMessage: (message: Message) => void;
+  addMessages: (messages: Message[]) => void;
   updateLastMessage: (content: string) => void;
   setMessages: (messages: Message[]) => void;
   setLanguage: (lang: 'english' | 'hinglish') => void;
   setLoading: (loading: boolean) => void;
   setSessionId: (id: string | null) => void;
+  reset: () => void;
 }
 
 export const useChat = create<ChatState>()(
@@ -28,6 +30,10 @@ export const useChat = create<ChatState>()(
       sessionId: null,
 
       addMessage: (message) => set((state) => ({ messages: [...state.messages, message] })),
+
+      addMessages: (newMessages) => set((state) => ({
+        messages: [...state.messages, ...newMessages],
+      })),
 
       updateLastMessage: (content) => set((state) => {
         const newMessages = [...state.messages];
@@ -41,10 +47,11 @@ export const useChat = create<ChatState>()(
       setLanguage: (language) => set({ language }),
       setLoading: (isLoading) => set({ isLoading }),
       setSessionId: (sessionId) => set({ sessionId }),
+      reset: () => set({ messages: [], sessionId: null, isLoading: false }),
     }),
     {
       name: 'chat-storage',
-      partialize: (state) => ({ language: state.language, sessionId: state.sessionId }),
+      partialize: (state) => ({ language: state.language }),
     }
   )
 );

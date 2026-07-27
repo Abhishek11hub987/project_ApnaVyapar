@@ -4,7 +4,7 @@ import { GlassCard } from '@/components/ui/glass-card';
 import { CheckCircle2 } from 'lucide-react';
 import IdeaCard from '@/components/ideas/idea-card';
 import { BusinessIdea } from '@/types/database';
-import { useLanguage } from '@/lib/language-context';
+import { useLanguage } from '@/lib/i18n/language-context';
 
 interface LikedIdeasProps {
   ideas: BusinessIdea[];
@@ -15,9 +15,9 @@ export default function LikedIdeas({ ideas }: LikedIdeasProps) {
   const { t } = useLanguage();
 
   return (
-    <GlassCard className="bg-navy-light/40 border-cyan/20 shadow-[0_0_30px_rgba(45,212,191,0.05)]">
-      <h3 className="text-lg font-black text-white flex items-center gap-2 mb-6">
-        <CheckCircle2 size={20} className="text-cyan" /> {t('liked.title')}
+    <GlassCard>
+      <h3 className="text-lg font-black text-gray-900 flex items-center gap-2 mb-6">
+        <CheckCircle2 size={20} className="text-gray-500" /> {t('liked.title')}
       </h3>
       
       {ideas.length > 0 ? (
@@ -27,10 +27,10 @@ export default function LikedIdeas({ ideas }: LikedIdeasProps) {
           ))}
         </div>
       ) : (
-        <div className="text-center py-12 bg-white/5 rounded-2xl border border-white/10">
+        <div className="text-center py-12 bg-gray-50 rounded-lg border border-gray-100">
           <div className="text-4xl mb-3 opacity-50">💡</div>
-          <p className="text-white/60 font-medium">{t('liked.emptyTitle')}</p>
-          <button onClick={() => router.push('/ideas')} className="mt-4 text-cyan font-bold hover:underline">
+          <p className="text-gray-500">{t('liked.emptyTitle')}</p>
+          <button onClick={() => router.push('/ideas')} className="mt-4 text-accent-500 font-medium hover:underline">
             {t('liked.emptyCta')}
           </button>
         </div>

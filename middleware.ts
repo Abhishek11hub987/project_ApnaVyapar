@@ -75,8 +75,10 @@ export async function middleware(request: NextRequest) {
       if (isAdminApiRoute) {
         return NextResponse.json({ error: 'Forbidden', message: 'Admin access required' }, { status: 403 });
       }
-      // Return 403 Forbidden for UI routes as requested to block scrapers
-      return new NextResponse('403 Forbidden - Admin Access Required', { status: 403 });
+      return new NextResponse(
+        '<!DOCTYPE html><html><body style="display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0;background:#fff;font-family:sans-serif"><div style="text-align:center"><h1 style="font-size:72px;color:#ddd;margin:0">403</h1><p style="color:#666;font-size:16px">Admin access required</p><a href="/" style="display:inline-block;margin-top:16px;padding:10px 24px;background:#111;color:#fff;text-decoration:none;border-radius:8px;font-size:14px">Go Home</a></div></body></html>',
+        { status: 403, headers: { 'Content-Type': 'text/html' } }
+      );
     }
   }
 
@@ -87,6 +89,14 @@ export async function middleware(request: NextRequest) {
 
   if (isProtectedRoute && !user) {
     return NextResponse.redirect(new URL('/?login=true', request.url))
+  }
+
+  // Redirect to onboarding if profile incomplete (skip for onboarding itself)
+  if (user && isProtectedRoute && !request.nextUrl.pathname.startsWith('/onboarding')) {
+    const { data: profile } = await supabase.from('profiles').select('onboarding_completed').eq('id', user.id).single();
+    if (profile && !profile.onboarding_completed) {
+      return NextResponse.redirect(new URL('/onboarding', request.url));
+    }
   }
 
     return response

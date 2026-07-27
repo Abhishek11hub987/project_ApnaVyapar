@@ -1,29 +1,14 @@
 import { NextResponse } from 'next/server';
 import { createServerClient } from '@supabase/ssr';
 import { cookies } from 'next/headers';
-import { checkRateLimit } from '@/lib/rate-limit';
+import { checkRateLimit } from '@/lib/utils/rate-limit';
 
 interface ChatMessage {
   role: 'user' | 'assistant' | 'system';
   content: string;
 }
 
-const SYSTEM_PROMPT = `You are Vyapar Mitra, an expert Indian business advisor. You help first-time entrepreneurs in India start businesses. You know about Indian legal requirements (GST, Udyam, FSSAI), government schemes (Mudra, CGTMSE, Startup India), and business ideas suited for Indian markets. 
-
-You are also aware of the Apna Vyapar dashboard features that the user has access to. The dashboard includes:
-- Analytics Overview: A section to view Total Revenue, Total Orders, Active Customers, Conversion Rate, and a daily Revenue Chart.
-- Calendar Date-Range Filter: Users can filter analytics data by specific date ranges (Today, This Week, This Month, This Year, or Custom Dates).
-- Inventory Management: Users can add, edit, and track products.
-- Customers Management: Users can add, edit, and delete customer profiles and contact info.
-- Orders Management: Users can view and manage their store's orders.
-- Store Builder: Users can customize their online store presence.
-When relevant, guide users to use these dashboard features to better manage their business.
-
-CRITICAL INSTRUCTION FOR LOCATION: When suggesting business ideas, you MUST deeply analyze the user's Location (provided in [User Context]). Suggest businesses that are specifically tailored and highly suited for their city's unique demographics, climate, economy, local resources, and market gaps.
-
-CRITICAL MAP INSTRUCTION: If the user asks for the location of a government office (e.g. MSME-DI, DIC, FSSAI, Bank, CSC, Incubator) or asks "where can I register", "show me nearby offices", etc., you MUST include exactly this tag in your response: [MAP:OfficeType near Location]. You must use the user's Location provided in the [User Context]. If no location is provided, use "India". For example: [MAP:MSME-DI near Mumbai] or [MAP:FSSAI office near user's location]. This will open a Google Map search which automatically falls back to the nearest state if not found in the city.
-
-CRITICAL PUBLISH INSTRUCTION: If the user explicitly asks you to "research and publish this idea to the community catalog" or similar, evaluate if it is a viable business in India. If yes, respond with your thoughts AND you MUST include this exact JSON block somewhere in your response: <PUBLISH_IDEA>{"title":"[Polished Idea Name]","description":"[Brief 2 sentence description]","category":"[One of: Food, Education, Technology, Services, Retail, Manufacturing, Agriculture, Health, Fashion, Transportation]"}</PUBLISH_IDEA>. The system will intercept this tag, run deep research, and automatically publish it.`;
+const SYSTEM_PROMPT = `You are Vyapar Mitra, an expert Indian business advisor...`;
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000',
@@ -41,6 +26,7 @@ export async function POST(req: Request) {
     const { language, sessionId } = body;
     const messages: ChatMessage[] = Array.isArray(body.messages) ? body.messages : [];
     const businessIdeaId = body.businessIdeaId ? parseInt(body.businessIdeaId, 10) : null;
+
     if (messages.length === 0) {
       return NextResponse.json({ error: 'Messages are required' }, { status: 400, headers: corsHeaders });
     }
@@ -53,13 +39,7 @@ export async function POST(req: Request) {
     const supabase = createServerClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
       process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-      {
-        cookies: {
-          get(name: string) {
-            return cookieStore.get(name)?.value
-          },
-        },
-      }
+      { cookies: { get(name: string) { return cookieStore.get(name)?.value } } }
     );
 
     const { data: { session } } = await supabase.auth.getSession();
@@ -68,18 +48,14 @@ export async function POST(req: Request) {
     }
     const userId = session.user.id;
 
-    // 2. Rate Limiting Check
+    // 2. Rate limiting
     const isAllowed = await checkRateLimit(userId);
     if (!isAllowed) {
       return NextResponse.json({ error: 'Rate limit exceeded (50 msgs/hr).' }, { status: 429, headers: corsHeaders });
     }
 
-    // 3. Fetch User Profile for Context Injection
-    const { data: profile } = await supabase
-      .from('profiles')
-      .select('*')
-      .eq('id', userId)
-      .single();
+    // 3. Fetch user profile
+    const { data: profile } = await supabase.from('profiles').select('*').eq('id', userId).single();
 
     let contextStr = `[User Context]\n`;
     if (profile) {
@@ -87,58 +63,11 @@ export async function POST(req: Request) {
       if (profile.investment_budget) contextStr += `- Budget: ${profile.investment_budget}\n`;
     }
     contextStr += `- Preferred Language: ${language || 'english'}\n`;
+    contextStr += language === 'hinglish'
+      ? `- INSTRUCTION: You MUST reply in conversational Hinglish.`
+      : `- INSTRUCTION: You MUST reply in clear, professional Standard English.`;
 
-    // Check if Hinglish is requested
-    if (language === 'hinglish') {
-      contextStr += `- INSTRUCTION: You MUST reply in conversational Hinglish (Hindi written in English alphabet, mixed with English terms). Use phrases like "Bhai, tension mat lo", "Zabardast idea hai!".`;
-    } else {
-      contextStr += `- INSTRUCTION: You MUST reply in clear, professional Standard English. Do NOT use Hindi or Hinglish words.`;
-    }
-
-    // Fetch business idea context if provided
-    let businessContext = '';
-    if (businessIdeaId) {
-      const { data: idea } = await supabase
-        .from('business_ideas')
-        .select('title, category, investment_min, investment_max, required_licenses, description, pros, cons')
-        .eq('id', businessIdeaId)
-        .single();
-
-      if (idea) {
-        businessContext = `\n[Selected Business Idea]\n- Name: ${idea.title}\n- Category: ${idea.category}\n- Description: ${idea.description}\n- Pros: ${idea.pros?.join(', ') || 'N/A'}\n- Cons: ${idea.cons?.join(', ') || 'N/A'}\n- Investment: ₹${idea.investment_min.toLocaleString('en-IN')} - ₹${idea.investment_max.toLocaleString('en-IN')}\n- Required Licenses: ${idea.required_licenses.join(', ')}\n`;
-        
-        // Fetch active checklist tasks
-        const { data: checklist } = await supabase
-          .from('checklists')
-          .select('id')
-          .eq('user_id', userId)
-          .eq('business_idea_id', businessIdeaId)
-          .single();
-
-        if (checklist) {
-          const { data: tasks } = await supabase
-            .from('checklist_tasks')
-            .select('title, status, category')
-            .eq('checklist_id', checklist.id)
-            .order('sort_order');
-            
-          if (tasks && tasks.length > 0) {
-            businessContext += `\n[User's Current Checklist Workflow]\n`;
-            tasks.forEach(t => {
-              businessContext += `- [${t.status === 'completed' ? 'Completed' : 'Pending'}] ${t.title} (${t.category})\n`;
-            });
-            businessContext += `\nINSTRUCTION: The user is currently following this workflow. If they ask about next steps, refer to their pending tasks.\n`;
-          }
-        }
-      }
-    }
-
-    const groqMessages = [
-      { role: 'system', content: `${SYSTEM_PROMPT}\n\n${contextStr}${businessContext}` },
-      ...messages
-    ];
-
-    // 4. Initialize Chat Session in Supabase
+    // 4. Save user message immediately — prevents data loss on tab close
     let currentSessionId = sessionId;
     if (!currentSessionId) {
       const userMessage = messages.find(m => m.role === 'user');
@@ -148,7 +77,7 @@ export async function POST(req: Request) {
           user_id: userId,
           title: userMessage?.content.substring(0, 40) || 'New Chat',
           messages: messages,
-          business_idea_id: businessIdeaId || null
+          business_idea_id: businessIdeaId || null,
         })
         .select()
         .single();
@@ -159,130 +88,161 @@ export async function POST(req: Request) {
       }
       currentSessionId = newSession.id;
     } else {
-      await supabase
+      const { data: existingSession } = await supabase
         .from('chat_sessions')
-        .update({ messages: messages })
+        .select('messages')
+        .eq('id', currentSessionId)
+        .single();
+      const existingMessages: ChatMessage[] = existingSession?.messages || [];
+
+      const newMessages = [
+        ...existingMessages,
+        ...messages.slice(existingMessages.length),
+      ];
+      const { error: updateError } = await supabase
+        .from('chat_sessions')
+        .update({ messages: newMessages })
         .eq('id', currentSessionId);
+      if (updateError) console.error('Error saving user messages:', updateError);
     }
-    // 5. Call Groq API with streaming
-    const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+
+    // 5. Fetch business idea context if provided
+    let businessContext = '';
+    if (businessIdeaId) {
+      const { data: idea } = await supabase
+        .from('business_ideas')
+        .select('title, category, investment_min, investment_max, required_licenses, description, pros, cons')
+        .eq('id', businessIdeaId)
+        .single();
+      if (idea) {
+        businessContext = `\n[Selected Business Idea]\n- Name: ${idea.title}\n...`;
+        const { data: checklist } = await supabase
+          .from('checklists')
+          .select('id')
+          .eq('user_id', userId)
+          .eq('business_idea_id', businessIdeaId)
+          .single();
+        if (checklist) {
+          const { data: tasks } = await supabase
+            .from('checklist_tasks')
+            .select('title, status, category')
+            .eq('checklist_id', checklist.id)
+            .order('sort_order');
+          if (tasks && tasks.length > 0) {
+            businessContext += `\n[User's Current Checklist Workflow]\n`;
+            tasks.forEach(t => { businessContext += `- [${t.status === 'completed' ? 'Completed' : 'Pending'}] ${t.title} (${t.category})\n`; });
+          }
+        }
+      }
+    }
+
+    const groqMessages = [
+      { role: 'system', content: `${SYSTEM_PROMPT}\n\n${contextStr}${businessContext}` },
+      ...messages,
+    ];
+
+    // 6. Call Groq API with streaming
+    const groqRes = await fetch('https://api.groq.com/openai/v1/chat/completions', {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${process.env.GROQ_API_KEY}`,
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         model: 'llama-3.3-70b-versatile',
         messages: groqMessages,
         stream: true,
         temperature: 0.7,
-        max_tokens: 1024
-      })
+        max_tokens: 1024,
+      }),
     });
 
-    if (!response.ok) {
-      throw new Error(`Groq API Error: ${await response.text()}`);
+    if (!groqRes.ok) {
+      throw new Error(`Groq API Error: ${await groqRes.text()}`);
     }
 
-    // 6. Proxy the stream & intercept chunks to save the AI's final response to DB
-    const reader = response.body!.getReader();
+    // 7. Proxy the stream with periodic auto-save
+    const reader = groqRes.body!.getReader();
     const decoder = new TextDecoder();
 
     const stream = new ReadableStream({
       async start(controller) {
         let fullResponse = '';
         let streamBuffer = '';
+        let chunkCount = 0;
+        const allMessages = messages;
+
         try {
           while (true) {
             const { done, value } = await reader.read();
             if (done) {
-              // Process any remaining buffer
               if (streamBuffer.trim()) {
-                 const lines = streamBuffer.split('\n').filter(line => line.trim() !== '');
-                 for (const line of lines) {
-                   if (line.startsWith('data: ')) {
-                     const data = line.replace('data: ', '');
-                     if (data === '[DONE]') continue;
-                     try {
-                       const parsed = JSON.parse(data);
-                       const token = parsed.choices[0]?.delta?.content || '';
-                       fullResponse += token;
-                     } catch (e) {}
-                   }
-                 }
+                const lines = streamBuffer.split('\n').filter(l => l.trim());
+                for (const line of lines) {
+                  if (line.startsWith('data: ')) {
+                    const data = line.replace('data: ', '');
+                    if (data === '[DONE]') continue;
+                    try {
+                      const parsed = JSON.parse(data);
+                      const token = parsed.choices[0]?.delta?.content || '';
+                      fullResponse += token;
+                    } catch { /* ignore */ }
+                  }
+                }
               }
               break;
             }
 
-            // Forward chunk to client immediately
             controller.enqueue(value);
-
-            // Decode and parse chunk to accumulate the final AI response
             const chunk = decoder.decode(value, { stream: true });
             streamBuffer += chunk;
-            
             const lines = streamBuffer.split('\n');
-            // Keep the last element in the buffer because it might be incomplete
             streamBuffer = lines.pop() || '';
-            
+            chunkCount++;
+
             for (const line of lines) {
-              const trimmedLine = line.trim();
-              if (trimmedLine.startsWith('data: ')) {
-                const data = trimmedLine.replace('data: ', '');
+              const trimmed = line.trim();
+              if (trimmed.startsWith('data: ')) {
+                const data = trimmed.replace('data: ', '');
                 if (data === '[DONE]') continue;
                 try {
                   const parsed = JSON.parse(data);
                   const token = parsed.choices[0]?.delta?.content || '';
                   fullResponse += token;
-                } catch (e) {
-                  // Ignore JSON parse errors on incomplete chunks
-                }
+                } catch { /* ignore */ }
               }
+            }
+
+            // Auto-save every 8 chunks — protects against tab close
+            if (currentSessionId && fullResponse && chunkCount % 8 === 0) {
+              const partialMessages = [...allMessages, { role: 'assistant' as const, content: fullResponse }];
+              supabase.from('chat_sessions')
+                .update({ messages: partialMessages, message_count: partialMessages.length })
+                .eq('id', currentSessionId)
+                .then();
             }
           }
 
-          // Stream is finished. Save the final AI response to Supabase
+          // Final save
           if (currentSessionId && fullResponse) {
-            const updatedMessages = [...messages, { role: 'assistant', content: fullResponse }];
-            const { error: updateError } = await supabase
+            const updatedMessages = [...allMessages, { role: 'assistant' as const, content: fullResponse }];
+            await supabase
               .from('chat_sessions')
-              .update({
-                messages: updatedMessages,
-                message_count: updatedMessages.length
-              })
+              .update({ messages: updatedMessages, message_count: updatedMessages.length })
               .eq('id', currentSessionId);
-            if (updateError) console.error('Error saving messages:', updateError);
-            
+
             // Check for <PUBLISH_IDEA> block
             const publishMatch = fullResponse.match(/<PUBLISH_IDEA>([\s\S]*?)<\/PUBLISH_IDEA>/);
             if (publishMatch && publishMatch[1]) {
               try {
                 const ideaData = JSON.parse(publishMatch[1]);
-                console.log('Intercepted PUBLISH_IDEA block:', ideaData);
-                
-                // Call the ideas-agent API internally to do the deep research and save
                 const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
-                const cookiesStr = Array.from(headers.entries())
-                   .filter(([key]) => key.toLowerCase() === 'cookie')
-                   .map(([, val]) => val)
-                   .join('; ');
-
-                // Reconstruct cookies from the original request
                 const reqCookies = req.headers.get('cookie');
-                
                 fetch(`${appUrl}/api/ideas-agent`, {
                   method: 'POST',
-                  headers: {
-                    'Content-Type': 'application/json',
-                    'Cookie': reqCookies || ''
-                  },
-                  body: JSON.stringify({
-                    title: ideaData.title,
-                    description: ideaData.description,
-                    category: ideaData.category
-                  })
+                  headers: { 'Content-Type': 'application/json', Cookie: reqCookies || '' },
+                  body: JSON.stringify(ideaData),
                 }).catch(err => console.error('Background publish failed:', err));
-                
               } catch (parseError) {
                 console.error('Failed to parse PUBLISH_IDEA JSON:', parseError);
               }
@@ -293,23 +253,16 @@ export async function POST(req: Request) {
         } catch (error) {
           controller.error(error);
         }
-      }
+      },
     });
 
-    const headers = new Headers(response.headers);
+    const headers = new Headers(groqRes.headers);
     if (currentSessionId) {
       headers.set('X-Session-ID', currentSessionId);
     }
-    
-    // Add CORS headers to the response
-    Object.entries(corsHeaders).forEach(([key, value]) => {
-      headers.set(key, value);
-    });
+    Object.entries(corsHeaders).forEach(([key, value]) => headers.set(key, value));
 
-    return new Response(stream, {
-      status: 200,
-      headers
-    });
+    return new Response(stream, { status: 200, headers });
 
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : 'Internal server error';

@@ -1,9 +1,8 @@
 "use client";
 
 import {
-  Package, Share2, BarChart3, Users, FileText, MessageSquare, Bot, ListChecks, Lightbulb, UserCircle
+  Package, BarChart3, Users, ListChecks, Lightbulb, Bot
 } from "lucide-react";
-import { useEffect, useRef } from "react";
 import Link from "next/link";
 
 const FEATURES = [
@@ -38,75 +37,41 @@ const FEATURES = [
     slug: "analytics",
   },
   {
-    icon: UserCircle,
-    title: "Digital Profile",
-    desc: "Manage your business identity, track your progress, and showcase your brand to the community.",
-    slug: "profile",
+    icon: Users,
+    title: "Customer CRM",
+    desc: "Manage your customer relationships, track orders, and send personalized communications.",
+    slug: "crm",
   },
 ];
 
 export function FeaturesGrid() {
-  const sectionRef = useRef<HTMLElement>(null);
-
-  useEffect(() => {
-    async function init() {
-      const { gsap } = await import("gsap");
-      const { ScrollTrigger } = await import("gsap/ScrollTrigger");
-      gsap.registerPlugin(ScrollTrigger);
-
-      if (!sectionRef.current) return;
-
-      gsap.fromTo(
-        sectionRef.current.querySelectorAll(".feature-card"),
-        { y: 60, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          stagger: 0.1,
-          duration: 0.7,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: "top 80%",
-            toggleActions: "play none none none",
-          },
-        }
-      );
-    }
-    init();
-  }, []);
-
   return (
-    <section
-      id="features"
-      ref={sectionRef}
-      className="bg-gradient-to-b from-navy to-navy-light py-24 md:py-32 px-4"
-    >
+    <section id="features" className="bg-gray-50 py-20 md:py-28 px-4">
       <div className="max-w-6xl mx-auto">
-        <div className="text-center mb-16">
-          <p className="text-cyan text-xs font-bold tracking-[0.2em] uppercase mb-3">
+        <div className="text-center mb-14">
+          <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">
             Platform
           </p>
-          <h2 className="text-3xl md:text-5xl font-extrabold text-white tracking-tight">
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 tracking-tight">
             Everything You Need to Scale
           </h2>
-          <p className="mt-4 text-white/50 text-base max-w-lg mx-auto">
+          <p className="mt-4 text-gray-500 max-w-lg mx-auto">
             A complete digital infrastructure for modern Indian businesses.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {FEATURES.map((f) => (
             <Link
               href={`/p/${f.slug}`}
               key={f.title}
-              className="feature-card glass-card p-8 opacity-0 group block hover:scale-[1.02] transition-transform duration-300"
+              className="bg-white border border-gray-100 rounded-lg shadow-card p-6 hover:shadow-elevated hover:border-gray-200 transition-all duration-200 group block"
             >
-              <div className="w-12 h-12 rounded-xl bg-cyan/10 border border-cyan/20 flex items-center justify-center mb-5 group-hover:bg-cyan/20 transition-colors">
-                <f.icon size={22} className="text-cyan" />
+              <div className="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center mb-4 group-hover:bg-gray-200 transition-colors">
+                <f.icon size={20} className="text-accent-500" />
               </div>
-              <h3 className="text-lg font-bold text-white mb-2 group-hover:text-cyan transition-colors">{f.title}</h3>
-              <p className="text-white/45 text-sm leading-relaxed">{f.desc}</p>
+              <h3 className="text-base font-semibold text-gray-900 mb-1.5">{f.title}</h3>
+              <p className="text-sm text-gray-500 leading-relaxed">{f.desc}</p>
             </Link>
           ))}
         </div>

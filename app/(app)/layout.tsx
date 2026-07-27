@@ -27,7 +27,7 @@ export default function AppLayout({
   const isChat = pathname === '/chat';
 
   return (
-    <div className="flex flex-col min-h-screen bg-navy text-white">
+    <div className="flex flex-col min-h-screen bg-white text-gray-900">
       {!isDashboard && (
         <div className={isChat ? 'hidden md:block' : ''}>
           <Header />

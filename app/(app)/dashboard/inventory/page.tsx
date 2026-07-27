@@ -38,20 +38,20 @@ export default function InventoryPage() {
     <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
       <div className="flex justify-between items-end mb-8">
         <div>
-          <h1 className="text-3xl font-extrabold text-white tracking-tight mb-2">Inventory</h1>
-          <p className="text-white/60">Manage your products, pricing, and stock levels.</p>
+          <h1 className="text-2xl font-bold text-gray-900 mb-2">Inventory</h1>
+          <p className="text-gray-500">Manage your products, pricing, and stock levels.</p>
         </div>
         <Link 
           href="/dashboard/inventory/new" 
-          className="px-5 py-2.5 rounded-xl bg-cyan text-navy-dark text-sm font-bold hover:scale-105 transition-transform shadow-neon-cyan flex items-center gap-2"
+          className="px-5 py-2.5 rounded-lg bg-gray-900 text-white text-sm font-bold hover:bg-gray-800 transition-colors flex items-center gap-2"
         >
           <Plus size={18} /> Add Product
         </Link>
       </div>
 
       {loading ? (
-        <div className="glass-card p-12 flex justify-center items-center">
-          <div className="w-8 h-8 border-2 border-cyan/30 border-t-cyan rounded-full animate-spin" />
+        <div className="bg-white border border-gray-100 rounded-lg shadow-card p-12 flex justify-center items-center">
+          <div className="w-8 h-8 border-2 border-gray-200 border-t-gray-900 rounded-full animate-spin" />
         </div>
       ) : (
         <InventoryTable initialProducts={products} />

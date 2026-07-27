@@ -25,10 +25,9 @@ export function RevenueChart({ orders = [] }: { orders?: any[] }) {
     setMounted(true);
   }, []);
 
-  // 1. Extract unique months from orders for the dropdown
   const availableMonths = useMemo(() => {
     const months = new Set<string>();
-    months.add(currentYYYYMM); // Always include current month
+    months.add(currentYYYYMM);
     
     orders.forEach(order => {
       const d = new Date(order.created_at);
@@ -36,11 +35,9 @@ export function RevenueChart({ orders = [] }: { orders?: any[] }) {
       months.add(yyyymm);
     });
     
-    // Sort descending
     return Array.from(months).sort((a, b) => b.localeCompare(a));
   }, [orders, currentYYYYMM]);
 
-  // 2. Compute daily data for the selected month
   const chartData = useMemo(() => {
     const [yearStr, monthStr] = selectedMonth.split('-');
     const year = parseInt(yearStr);
@@ -48,7 +45,6 @@ export function RevenueChart({ orders = [] }: { orders?: any[] }) {
     
     const daysInMonth = new Date(year, month + 1, 0).getDate();
     
-    // Initialize array with 0 for each day
     const dailyData = Array.from({ length: daysInMonth }, (_, i) => ({
       name: `${i + 1}`,
       fullDate: `${MONTH_NAMES[month]} ${i + 1}, ${year}`,
@@ -81,13 +77,12 @@ export function RevenueChart({ orders = [] }: { orders?: any[] }) {
     return `${MONTH_NAMES[parseInt(m) - 1]} ${y}`;
   };
 
-  // Tooltip formatter
   const CustomTooltip = ({ active, payload }: any) => {
     if (active && payload && payload.length) {
       return (
-        <div className="bg-slate-900/90 backdrop-blur-md border border-white/10 rounded-xl p-3 shadow-xl z-50">
-          <p className="text-white/60 text-xs font-semibold mb-1">{payload[0].payload.fullDate}</p>
-          <p className="text-white font-bold text-lg">
+        <div className="bg-white border border-gray-200 rounded-lg p-3 shadow-card z-50">
+          <p className="text-gray-500 text-xs font-semibold mb-1">{payload[0].payload.fullDate}</p>
+          <p className="text-gray-900 font-bold text-lg">
             {formatCurrency(payload[0].value)}
           </p>
         </div>
@@ -96,36 +91,36 @@ export function RevenueChart({ orders = [] }: { orders?: any[] }) {
     return null;
   };
 
-  const strokeColor = '#00D4FF';
+  const strokeColor = '#9CA3AF';
 
   return (
-    <div className="glass-card p-4 sm:p-6 border-white/5 h-full flex flex-col w-full overflow-hidden relative z-10">
+    <div className="bg-white border border-gray-100 rounded-lg shadow-card p-4 sm:p-6 h-full flex flex-col w-full overflow-hidden relative z-10">
       <div className="flex flex-col sm:flex-row justify-between items-start gap-4 mb-6">
         <div className="w-full">
-          <h3 className="text-white font-bold text-lg mb-1">Revenue Overview</h3>
-          <p className="text-white/40 text-sm">
+          <h3 className="text-gray-900 font-bold text-lg mb-1">Revenue Overview</h3>
+          <p className="text-gray-500 text-sm">
             {hasData ? "Daily earnings breakdown" : "Waiting for sales in this month..."}
           </p>
-          <p className="text-2xl font-extrabold text-cyan mt-2">
+          <p className="text-2xl font-extrabold text-gray-900 mt-2">
             {formatCurrency(totalRevenue)}
           </p>
         </div>
         
         <div className="shrink-0 relative">
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <Calendar size={14} className="text-cyan" />
+            <Calendar size={14} className="text-gray-400" />
           </div>
           <select
             value={selectedMonth}
             onChange={(e) => setSelectedMonth(e.target.value)}
-            className="pl-9 pr-8 py-2 bg-navy/80 border border-white/10 rounded-xl text-sm font-semibold text-white appearance-none cursor-pointer hover:bg-white/5 transition-colors focus:outline-none focus:border-cyan/50"
+            className="pl-9 pr-8 py-2 bg-white border border-gray-200 rounded-lg text-sm font-semibold text-gray-900 appearance-none cursor-pointer hover:bg-gray-50 transition-colors focus:outline-none focus:border-gray-900 focus:ring-1 focus:ring-gray-900"
           >
             {availableMonths.map(m => (
-              <option key={m} value={m} className="bg-navy text-white">{formatMonthLabel(m)}</option>
+              <option key={m} value={m} className="bg-white text-gray-900">{formatMonthLabel(m)}</option>
             ))}
           </select>
           <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-            <svg className="w-4 h-4 text-white/40" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
+            <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
           </div>
         </div>
       </div>
@@ -140,20 +135,20 @@ export function RevenueChart({ orders = [] }: { orders?: any[] }) {
                   <stop offset="95%" stopColor={strokeColor} stopOpacity={0} />
                 </linearGradient>
               </defs>
-              <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
+              <CartesianGrid strokeDasharray="3 3" stroke="#F3F4F6" vertical={false} />
               <XAxis 
                 dataKey="name" 
-                stroke="rgba(255,255,255,0.2)" 
+                stroke="#E5E7EB" 
                 fontSize={12} 
                 tickLine={false} 
                 axisLine={false} 
                 dy={10}
-                tick={{fill: 'rgba(255,255,255,0.4)'}}
+                tick={{fill: '#9CA3AF'}}
                 interval="preserveStartEnd"
                 minTickGap={20}
               />
               <YAxis 
-                stroke="rgba(255,255,255,0.2)" 
+                stroke="#E5E7EB" 
                 fontSize={12} 
                 tickLine={false} 
                 axisLine={false} 
@@ -161,7 +156,7 @@ export function RevenueChart({ orders = [] }: { orders?: any[] }) {
                 allowDecimals={false}
                 domain={hasData ? ['auto', 'auto'] : [0, 5000]}
               />
-              <Tooltip content={<CustomTooltip />} cursor={{ stroke: 'rgba(255,255,255,0.1)', strokeWidth: 2, strokeDasharray: '4 4' }} />
+              <Tooltip content={<CustomTooltip />} cursor={{ stroke: '#E5E7EB', strokeWidth: 2, strokeDasharray: '4 4' }} />
               <Area 
                 type="monotone" 
                 dataKey="revenue" 
@@ -169,7 +164,7 @@ export function RevenueChart({ orders = [] }: { orders?: any[] }) {
                 strokeWidth={2.5}
                 fillOpacity={1} 
                 fill="url(#colorRevenue)" 
-                activeDot={{ r: 5, fill: strokeColor, stroke: '#1e293b', strokeWidth: 2 }}
+                activeDot={{ r: 5, fill: strokeColor, stroke: '#ffffff', strokeWidth: 2 }}
                 animationDuration={1000}
               />
             </AreaChart>

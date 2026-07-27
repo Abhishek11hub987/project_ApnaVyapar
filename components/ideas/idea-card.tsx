@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { BusinessIdea } from '@/types/database';
-import { useLanguage } from '@/lib/language-context';
+import { useLanguage } from '@/lib/i18n/language-context';
 import { Sparkles } from 'lucide-react';
 
 export const CATEGORY_IMAGES: Record<string, string> = {
@@ -19,109 +19,105 @@ export const CATEGORY_IMAGES: Record<string, string> = {
 };
 
 export const CATEGORY_GRADIENTS: Record<string, string> = {
-  'Food': 'from-orange-500/30 to-red-500/30',
-  'Education': 'from-blue-500/30 to-indigo-500/30',
-  'Technology': 'from-cyan-500/30 to-blue-500/30',
-  'Services': 'from-teal-500/30 to-emerald-500/30',
-  'Retail': 'from-purple-500/30 to-pink-500/30',
-  'Manufacturing': 'from-slate-500/30 to-zinc-500/30',
-  'Agriculture': 'from-green-500/30 to-lime-500/30',
-  'Health': 'from-rose-500/30 to-pink-500/30',
-  'Fashion': 'from-fuchsia-500/30 to-purple-500/30',
-  'Transportation': 'from-amber-500/30 to-yellow-500/30',
+  'Food': 'from-orange-200 to-red-200',
+  'Education': 'from-blue-200 to-indigo-200',
+  'Technology': 'from-cyan-200 to-blue-200',
+  'Services': 'from-teal-200 to-emerald-200',
+  'Retail': 'from-purple-200 to-pink-200',
+  'Manufacturing': 'from-gray-200 to-zinc-200',
+  'Agriculture': 'from-green-200 to-lime-200',
+  'Health': 'from-rose-200 to-pink-200',
+  'Fashion': 'from-fuchsia-200 to-purple-200',
+  'Transportation': 'from-amber-200 to-yellow-200',
 };
 
 export const DEFAULT_IMAGE = 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800&q=80';
 
-import ideasHi from '@/locales/ideas_hi.json';
+import ideasHi from '@/locales/ideas-hi.json';
 
 export default function IdeaCard({ idea, isCommunity = false }: { idea: any, isCommunity?: boolean }) {
   const { language, t } = useLanguage();
   const [imgError, setImgError] = useState(false);
-  
-  const formatINR = (amount: number) => 
+
+  const formatINR = (amount: number) =>
     new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(amount);
 
-  // Dynamic Hindi translation lookup
   const localizedTitle = language === 'hi' ? (ideasHi as any)[idea.id]?.title || idea.title : idea.title;
   const localizedCategory = language === 'hi' ? (ideasHi as any)[idea.id]?.category || idea.category : idea.category;
 
   return (
-    <div className="h-full">
-    <div className="h-full glass-card !p-0 overflow-hidden flex flex-col group relative rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl hover:border-cyan/30 transition-all duration-500 hover:shadow-[0_0_30px_rgba(0,212,255,0.1)]">
-      <div className="h-48 bg-navy-light flex items-center justify-center text-5xl relative overflow-hidden">
+    <div className="bg-white border border-gray-100 rounded-lg shadow-card overflow-hidden flex flex-col group hover:shadow-elevated hover:border-gray-200 transition-all duration-200">
+      <div className="h-44 bg-gray-100 flex items-center justify-center relative overflow-hidden">
         {!imgError ? (
-          <img 
-            src={idea.image_url || CATEGORY_IMAGES[idea.category] || DEFAULT_IMAGE} 
-            alt={localizedTitle} 
+          <img
+            src={idea.image_url || CATEGORY_IMAGES[idea.category] || DEFAULT_IMAGE}
+            alt={localizedTitle}
             loading="lazy"
-            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" 
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
             onError={() => setImgError(true)}
           />
         ) : (
-          <div className={`w-full h-full bg-gradient-to-br ${CATEGORY_GRADIENTS[idea.category] || 'from-cyan-500/30 to-blue-500/30'} flex items-center justify-center text-white/60 font-bold text-4xl group-hover:scale-105 transition-transform duration-500`}>
+          <div className={`w-full h-full bg-gradient-to-br ${CATEGORY_GRADIENTS[idea.category] || 'from-gray-200 to-gray-300'} flex items-center justify-center text-gray-400 font-bold text-3xl`}>
             {localizedTitle.substring(0, 2).toUpperCase()}
           </div>
         )}
-        {/* Gradient Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-navy via-navy/30 to-transparent pointer-events-none"></div>
-        
+        <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent pointer-events-none"></div>
+
         {isCommunity && idea.ai_generated && (
-          <div className="absolute top-3 right-3 bg-gradient-to-r from-cyan to-emerald-500 text-navy-dark text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full shadow-sm z-10 flex items-center gap-1">
+          <div className="absolute top-3 right-3 bg-white/90 text-gray-700 text-[10px] font-semibold uppercase tracking-wider px-2.5 py-1 rounded-full shadow-sm z-10 flex items-center gap-1 border border-gray-200">
             <Sparkles size={10} /> AI Researched
           </div>
         )}
 
         {!isCommunity && idea.is_trending && (
-          <div className="absolute top-3 right-3 bg-gradient-to-r from-amber-500 to-orange-500 text-white text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full shadow-sm z-10 pointer-events-none">
+          <div className="absolute top-3 right-3 bg-amber-50 text-amber-700 text-[10px] font-semibold uppercase tracking-wider px-2.5 py-1 rounded-full shadow-sm z-10 border border-amber-200">
             {t('card.trending')}
           </div>
         )}
 
         {isCommunity && (
           <div className="absolute bottom-3 left-3 z-10">
-            <span className="text-white/60 text-xs font-medium bg-navy/60 backdrop-blur-sm px-2 py-1 rounded-full border border-white/5 shadow-sm">
+            <span className="text-white text-xs font-medium bg-black/30 backdrop-blur-sm px-2 py-1 rounded-full">
               by {idea.contributor_name || 'Anonymous'}
             </span>
           </div>
         )}
       </div>
-      
+
       <div className="p-5 flex flex-col flex-1">
-        <span className="text-xs font-bold text-cyan bg-cyan/10 border border-cyan/20 px-2.5 py-1 rounded-full w-fit mb-3">
+        <span className="text-xs font-medium text-accent-600 bg-accent-50 px-2.5 py-1 rounded-full w-fit mb-3">
           {localizedCategory}
         </span>
-        <h3 className="text-lg font-bold text-white mb-4 line-clamp-2 leading-[1.3] group-hover:text-cyan transition-colors">
+        <h3 className="text-base font-semibold text-gray-900 mb-4 line-clamp-2 leading-snug">
           {localizedTitle}
         </h3>
-        
-        <div className="mt-auto space-y-3 text-sm text-white/50 mb-5">
-          <div className="flex justify-between items-center bg-white/5 px-3 py-2 rounded-lg border border-white/5">
-            <span className="font-medium text-white/40">{t('card.investment')}</span>
-            <span className="font-bold text-white">
-              {formatINR(idea.investment_min)}<span className="text-white/30 font-normal"> - </span>{formatINR(idea.investment_max)}
+
+        <div className="mt-auto space-y-2.5 text-sm text-gray-500 mb-4">
+          <div className="flex justify-between items-center bg-gray-50 px-3 py-2 rounded-lg">
+            <span className="font-medium text-gray-400">{t('card.investment')}</span>
+            <span className="font-semibold text-gray-900">
+              {formatINR(idea.investment_min)}<span className="text-gray-300 font-normal"> - </span>{formatINR(idea.investment_max)}
             </span>
           </div>
           <div className="flex justify-between items-center px-1">
             <span className="font-medium">{t('card.location')}</span>
-            <span className="font-semibold text-white/70 capitalize">{idea.location_type.replace('-', ' ')}</span>
+            <span className="font-semibold text-gray-700 capitalize">{idea.location_type.replace('-', ' ')}</span>
           </div>
           <div className="flex justify-between items-center px-1">
             <span className="font-medium">{t('card.profit')}</span>
-            <span className="font-bold text-emerald-400">
+            <span className="font-semibold text-green-600">
               {idea.monthly_profit_min ? `${formatINR(idea.monthly_profit_min)}${t('card.perMonth')}` : 'Varies'}
             </span>
           </div>
         </div>
-        
-        <Link 
+
+        <Link
           href={`/ideas/${idea.slug}`}
-          className="w-full block text-center bg-transparent hover:bg-cyan text-cyan hover:text-navy-dark border-2 border-cyan/30 hover:border-cyan font-bold py-3 rounded-xl transition-all duration-300 hover:shadow-neon-cyan"
+          className="w-full block text-center bg-gray-900 text-white font-medium py-2.5 rounded-lg hover:bg-gray-800 transition-colors"
         >
           {t('card.viewDetails')}
         </Link>
       </div>
-    </div>
     </div>
   );
 }

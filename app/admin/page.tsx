@@ -1,4 +1,4 @@
-import { supabaseAdmin } from '@/lib/supabase-admin';
+import { supabaseAdmin } from '@/lib/supabase/admin';
 import { Users, Lightbulb, MessageSquare, Clock, Calendar, TrendingUp } from 'lucide-react';
 import Link from 'next/link';
 

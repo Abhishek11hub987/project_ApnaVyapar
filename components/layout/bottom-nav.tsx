@@ -22,61 +22,50 @@ export default function BottomNav() {
   ];
 
   const protectedItems = [
-    { name: 'Dash', href: '/dashboard', icon: LayoutDashboard },
+    { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
     { name: 'Mitra', href: '/chat', icon: MessageSquare },
     { name: 'Tasks', href: '/tasks', icon: CheckSquare },
     { name: 'Profile', href: '/profile', icon: User },
   ];
 
-  if (!mounted) return null; // Avoid hydration mismatch
+  if (!mounted) return null;
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-t border-slate-200 dark:border-slate-800 pb-safe z-50 shadow-[0_-4px_20px_rgba(0,0,0,0.06)] transition-colors md:hidden">
-      <div className="flex justify-around items-center px-2 py-2.5 max-w-md mx-auto">
-        {publicItems.map((item, idx) => {
-          const isActive =
-            item.href === '/'
-              ? pathname === '/'
-              : pathname.startsWith(item.href);
+    <nav className="fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur-lg border-t border-gray-100 pb-safe z-50 md:hidden">
+      <div className="flex justify-around items-center px-2 py-1 max-w-md mx-auto">
+        {publicItems.map((item) => {
+          const isActive = item.href === '/' ? pathname === '/' : pathname.startsWith(item.href);
           const Icon = item.icon;
           return (
             <Link
-              key={item.name + idx}
+              key={item.name}
               href={item.href}
-              className={`flex flex-col items-center justify-center flex-1 h-12 rounded-xl transition-all ${
-                isActive
-                  ? 'text-teal-700 dark:text-teal-400 font-bold scale-105'
-                  : 'text-slate-500 dark:text-slate-400 hover:text-teal-600 dark:hover:text-teal-300 font-medium hover:bg-slate-50 dark:hover:bg-slate-800'
+              className={`flex flex-col items-center justify-center flex-1 py-2.5 rounded-lg transition-colors ${
+                isActive ? 'text-gray-900' : 'text-gray-400 hover:text-gray-600'
               }`}
             >
-              <div className={`mb-1 transition-transform ${isActive ? 'translate-y-0.5' : ''}`}>
-                <Icon size={isActive ? 22 : 20} strokeWidth={isActive ? 2.5 : 2} />
-              </div>
-              <span className="text-[10px] tracking-wide">{item.name}</span>
+              <Icon size={20} strokeWidth={isActive ? 2.5 : 2} />
+              <span className="text-[10px] font-medium mt-0.5">{item.name}</span>
             </Link>
           );
         })}
-        {protectedItems.map((item, idx) => {
+        {protectedItems.map((item) => {
           const isActive = pathname.startsWith(item.href);
           const Icon = item.icon;
           return (
             <ProtectedLink
-              key={item.name + idx}
+              key={item.name}
               href={item.href}
-              className={`flex flex-col items-center justify-center flex-1 h-12 rounded-xl transition-all ${
-                isActive
-                  ? 'text-teal-700 dark:text-teal-400 font-bold scale-105'
-                  : 'text-slate-500 dark:text-slate-400 hover:text-teal-600 dark:hover:text-teal-300 font-medium hover:bg-slate-50 dark:hover:bg-slate-800'
+              className={`flex flex-col items-center justify-center flex-1 py-2.5 rounded-lg transition-colors ${
+                isActive ? 'text-gray-900' : 'text-gray-400 hover:text-gray-600'
               }`}
             >
-              <div className={`mb-1 transition-transform ${isActive ? 'translate-y-0.5' : ''}`}>
-                <Icon size={isActive ? 22 : 20} strokeWidth={isActive ? 2.5 : 2} />
-              </div>
-              <span className="text-[10px] tracking-wide">{item.name}</span>
+              <Icon size={20} strokeWidth={isActive ? 2.5 : 2} />
+              <span className="text-[10px] font-medium mt-0.5">{item.name}</span>
             </ProtectedLink>
           );
         })}
       </div>
-    </div>
+    </nav>
   );
 }

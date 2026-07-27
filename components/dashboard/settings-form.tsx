@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { updateProfileSettings } from "@/app/actions/settings";
 import { Save, User, MapPin, Globe, Phone } from "lucide-react";
-import { NeonButton } from "@/components/ui/neon-button";
 
 interface ProfileData {
   full_name: string;
@@ -40,19 +39,19 @@ export function SettingsForm({ initialData }: { initialData: ProfileData }) {
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       {status === "error" && (
-        <div className="p-4 bg-red-500/10 border border-red-500/20 text-red-400 rounded-lg text-sm">
+        <div className="p-4 bg-red-50 border border-red-200 text-red-700 rounded-lg text-sm">
           {message}
         </div>
       )}
       {status === "success" && (
-        <div className="p-4 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 rounded-lg text-sm">
+        <div className="p-4 bg-green-50 border border-green-200 text-green-700 rounded-lg text-sm">
           {message}
         </div>
       )}
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
-          <label className="flex items-center gap-2 text-sm font-medium text-white/60 mb-2">
+          <label className="flex items-center gap-2 text-sm font-medium text-gray-600 mb-2">
             <User size={16} /> Full Name
           </label>
           <input
@@ -60,12 +59,12 @@ export function SettingsForm({ initialData }: { initialData: ProfileData }) {
             name="full_name"
             defaultValue={initialData.full_name || ""}
             placeholder="John Doe"
-            className="w-full bg-navy-dark/50 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/20 focus:outline-none focus:border-cyan focus:ring-1 focus:ring-cyan transition-colors"
+            className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2.5 text-gray-900 placeholder-gray-400 focus:outline-none focus:border-gray-900 focus:ring-1 focus:ring-gray-900 transition-colors"
           />
         </div>
 
         <div>
-          <label className="flex items-center gap-2 text-sm font-medium text-white/60 mb-2">
+          <label className="flex items-center gap-2 text-sm font-medium text-gray-600 mb-2">
             <Phone size={16} /> Phone Number
           </label>
           <input
@@ -73,12 +72,12 @@ export function SettingsForm({ initialData }: { initialData: ProfileData }) {
             name="phone"
             defaultValue={initialData.phone || ""}
             placeholder="+91 9876543210"
-            className="w-full bg-navy-dark/50 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/20 focus:outline-none focus:border-cyan focus:ring-1 focus:ring-cyan transition-colors"
+            className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2.5 text-gray-900 placeholder-gray-400 focus:outline-none focus:border-gray-900 focus:ring-1 focus:ring-gray-900 transition-colors"
           />
         </div>
 
         <div>
-          <label className="flex items-center gap-2 text-sm font-medium text-white/60 mb-2">
+          <label className="flex items-center gap-2 text-sm font-medium text-gray-600 mb-2">
             <MapPin size={16} /> City
           </label>
           <input
@@ -86,12 +85,12 @@ export function SettingsForm({ initialData }: { initialData: ProfileData }) {
             name="city"
             defaultValue={initialData.city || ""}
             placeholder="Mumbai"
-            className="w-full bg-navy-dark/50 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/20 focus:outline-none focus:border-cyan focus:ring-1 focus:ring-cyan transition-colors"
+            className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2.5 text-gray-900 placeholder-gray-400 focus:outline-none focus:border-gray-900 focus:ring-1 focus:ring-gray-900 transition-colors"
           />
         </div>
 
         <div>
-          <label className="flex items-center gap-2 text-sm font-medium text-white/60 mb-2">
+          <label className="flex items-center gap-2 text-sm font-medium text-gray-600 mb-2">
             <MapPin size={16} /> State
           </label>
           <input
@@ -99,18 +98,18 @@ export function SettingsForm({ initialData }: { initialData: ProfileData }) {
             name="state"
             defaultValue={initialData.state || ""}
             placeholder="Maharashtra"
-            className="w-full bg-navy-dark/50 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/20 focus:outline-none focus:border-cyan focus:ring-1 focus:ring-cyan transition-colors"
+            className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2.5 text-gray-900 placeholder-gray-400 focus:outline-none focus:border-gray-900 focus:ring-1 focus:ring-gray-900 transition-colors"
           />
         </div>
 
         <div className="md:col-span-2">
-          <label className="flex items-center gap-2 text-sm font-medium text-white/60 mb-2">
+          <label className="flex items-center gap-2 text-sm font-medium text-gray-600 mb-2">
             <Globe size={16} /> Preferred Language
           </label>
           <select
             name="preferred_language"
             defaultValue={initialData.preferred_language || "english"}
-            className="w-full bg-navy-dark/50 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-cyan focus:ring-1 focus:ring-cyan transition-colors"
+            className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2.5 text-gray-900 focus:outline-none focus:border-gray-900 focus:ring-1 focus:ring-gray-900 transition-colors"
           >
             <option value="english">English</option>
             <option value="hinglish">Hinglish</option>
@@ -118,11 +117,11 @@ export function SettingsForm({ initialData }: { initialData: ProfileData }) {
         </div>
       </div>
 
-      <div className="pt-4 border-t border-white/10 flex justify-end">
-        <NeonButton 
-          type="submit" 
-          variant="teal"
+      <div className="pt-4 border-t border-gray-200 flex justify-end">
+        <button
+          type="submit"
           disabled={loading}
+          className="bg-gray-900 text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {loading ? (
             <span className="flex items-center gap-2">
@@ -134,7 +133,7 @@ export function SettingsForm({ initialData }: { initialData: ProfileData }) {
               <Save size={18} /> Save Settings
             </span>
           )}
-        </NeonButton>
+        </button>
       </div>
     </form>
   );

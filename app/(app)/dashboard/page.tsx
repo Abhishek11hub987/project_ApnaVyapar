@@ -17,8 +17,8 @@ import {
   X
 } from "lucide-react";
 import Link from "next/link";
-import { downloadCSV } from "@/lib/csv";
-import { downloadProfessionalReport } from "@/lib/report";
+import { downloadCSV } from "@/lib/utils/csv";
+import { downloadProfessionalReport } from "@/lib/utils/report";
 
 export default function DashboardPage() {
   const [stats, setStats] = useState({
@@ -246,13 +246,13 @@ export default function DashboardPage() {
     <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 overflow-hidden w-full">
       <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-6 mb-8 w-full">
         <div className="max-w-full">
-          <h1 className="text-3xl font-extrabold text-white tracking-tight mb-2 break-words">Analytics Overview</h1>
-          <p className="text-white/60 text-sm md:text-base">Welcome back! Here's what's happening with your store today.</p>
+          <h1 className="text-2xl font-bold text-gray-900 mb-2 break-words">Analytics Overview</h1>
+          <p className="text-gray-500 text-sm md:text-base">Welcome back! Here's what's happening with your store today.</p>
         </div>
         <div className="flex flex-wrap gap-2 sm:gap-3 w-full lg:w-auto">
           <button 
             onClick={() => downloadProfessionalReport(stats, 'dashboard_report')}
-            className="px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-sm font-medium hover:bg-white/10 transition-colors flex items-center gap-2"
+            className="px-4 py-2 rounded-lg bg-white border border-gray-100 text-sm font-medium text-gray-600 hover:bg-gray-50 transition-colors flex items-center gap-2"
           >
             <FileText size={15} /> Download Report
           </button>
@@ -267,11 +267,11 @@ export default function DashboardPage() {
               'Week 3': stats.monthlyData.current[2],
               'Week 4': stats.monthlyData.current[3],
             }], 'analytics_export')}
-            className="px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-sm font-medium hover:bg-white/10 transition-colors flex items-center gap-2"
+            className="px-4 py-2 rounded-lg bg-white border border-gray-100 text-sm font-medium text-gray-600 hover:bg-gray-50 transition-colors flex items-center gap-2"
           >
             <Download size={15} /> Export CSV
           </button>
-          <Link href="/dashboard/inventory" className="px-4 py-2 rounded-xl bg-cyan text-navy-dark text-sm font-bold hover:scale-105 transition-transform shadow-neon-cyan flex items-center gap-2">
+          <Link href="/dashboard/inventory" className="px-4 py-2 rounded-lg bg-gray-900 text-white text-sm font-bold hover:bg-gray-800 transition-colors flex items-center gap-2">
             Add Product <ArrowRight size={16} />
           </Link>
         </div>
@@ -279,7 +279,7 @@ export default function DashboardPage() {
 
       {/* Date Range Filter */}
       <div className="mb-8">
-        <div className="glass-card p-4 border-white/5">
+        <div className="bg-white border border-gray-100 rounded-lg shadow-card p-4">
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
             {/* Quick Filter Buttons */}
             <div className="flex flex-wrap gap-2">
@@ -295,8 +295,8 @@ export default function DashboardPage() {
                   onClick={() => applyQuickFilter(f.key)}
                   className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
                     activeFilter === f.key
-                      ? 'bg-cyan text-navy-dark shadow-neon-cyan'
-                      : 'bg-white/5 text-white/60 border border-white/10 hover:bg-white/10 hover:text-white'
+                      ? 'bg-gray-900 text-white'
+                      : 'bg-white text-gray-500 border border-gray-200 hover:bg-gray-50 hover:text-gray-900'
                   }`}
                 >
                   {f.label}
@@ -305,7 +305,7 @@ export default function DashboardPage() {
             </div>
 
             {/* Divider */}
-            <div className="hidden sm:block w-px h-8 bg-white/10" />
+            <div className="hidden sm:block w-px h-8 bg-gray-200" />
 
             {/* Custom Date Range */}
             <div className="flex items-center gap-2 flex-wrap">
@@ -313,8 +313,8 @@ export default function DashboardPage() {
                 onClick={() => setShowCalendar(!showCalendar)}
                 className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
                   showCalendar
-                    ? 'bg-cyan/10 text-cyan border border-cyan/30'
-                    : 'bg-white/5 text-white/60 border border-white/10 hover:bg-white/10'
+                    ? 'bg-gray-50 text-gray-900 border border-gray-200'
+                    : 'bg-white text-gray-500 border border-gray-200 hover:bg-gray-50'
                 }`}
               >
                 <CalendarDays size={14} />
@@ -324,7 +324,7 @@ export default function DashboardPage() {
               {hasDateFilter && (
                 <button
                   onClick={clearDateFilter}
-                  className="flex items-center gap-1 px-2 py-1 rounded-lg bg-red-500/10 text-red-400 text-xs font-bold border border-red-500/20 hover:bg-red-500/20 transition-colors"
+                  className="flex items-center gap-1 px-2 py-1 rounded-lg bg-red-50 text-red-500 text-xs font-bold border border-red-200 hover:bg-red-100 transition-colors"
                 >
                   <X size={12} /> Clear
                 </button>
@@ -334,30 +334,30 @@ export default function DashboardPage() {
 
           {/* Expandable Calendar Inputs */}
           {showCalendar && (
-            <div className="mt-4 pt-4 border-t border-white/10 flex flex-col sm:flex-row items-start sm:items-end gap-4 animate-in fade-in slide-in-from-top-2 duration-300">
+            <div className="mt-4 pt-4 border-t border-gray-100 flex flex-col sm:flex-row items-start sm:items-end gap-4 animate-in fade-in slide-in-from-top-2 duration-300">
               <div className="flex-1 w-full sm:w-auto">
-                <label className="block text-xs font-bold text-white/40 uppercase tracking-wider mb-2">From Date</label>
+                <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">From Date</label>
                 <input
                   type="date"
                   value={startDate}
                   onChange={(e) => { setStartDate(e.target.value); setActiveFilter('custom'); }}
-                  className="w-full px-4 py-2.5 rounded-xl bg-navy/80 border border-white/10 text-white text-sm font-medium focus:outline-none focus:border-cyan/50 transition-colors [color-scheme:dark]"
+                  className="w-full px-4 py-2.5 rounded-lg bg-white border border-gray-200 text-gray-900 text-sm font-medium focus:outline-none focus:border-gray-400 transition-colors"
                 />
               </div>
               <div className="flex-1 w-full sm:w-auto">
-                <label className="block text-xs font-bold text-white/40 uppercase tracking-wider mb-2">To Date</label>
+                <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">To Date</label>
                 <input
                   type="date"
                   value={endDate}
                   onChange={(e) => { setEndDate(e.target.value); setActiveFilter('custom'); }}
-                  className="w-full px-4 py-2.5 rounded-xl bg-navy/80 border border-white/10 text-white text-sm font-medium focus:outline-none focus:border-cyan/50 transition-colors [color-scheme:dark]"
+                  className="w-full px-4 py-2.5 rounded-lg bg-white border border-gray-200 text-gray-900 text-sm font-medium focus:outline-none focus:border-gray-400 transition-colors"
                 />
               </div>
               {hasDateFilter && (
-                <div className="glass-card px-4 py-2.5 border-cyan/20 bg-cyan/5 w-full sm:w-auto">
-                  <p className="text-xs text-white/50 font-bold">Filtered Revenue</p>
-                  <p className="text-lg font-black text-cyan">{formatINR(filteredRevenue)}</p>
-                  <p className="text-[10px] text-white/30">{filteredOrdersCount} orders in range</p>
+                <div className="bg-white border border-gray-100 rounded-lg shadow-card px-4 py-2.5 w-full sm:w-auto">
+                  <p className="text-xs text-gray-400 font-bold">Filtered Revenue</p>
+                  <p className="text-lg font-black text-gray-900">{formatINR(filteredRevenue)}</p>
+                  <p className="text-[10px] text-gray-400">{filteredOrdersCount} orders in range</p>
                 </div>
               )}
             </div>
@@ -404,23 +404,23 @@ export default function DashboardPage() {
         </div>
 
         {/* Recent Orders / Activity */}
-        <div className="glass-card p-6 border-white/5 h-full flex flex-col">
-          <h3 className="text-white font-bold text-lg mb-6">Recent Orders</h3>
+        <div className="bg-white border border-gray-100 rounded-lg shadow-card p-6 h-full flex flex-col">
+          <h3 className="text-gray-900 font-bold text-lg mb-6">Recent Orders</h3>
           
           {recentOrders.length > 0 ? (
             <div className="flex-1 space-y-3 overflow-y-auto">
               {recentOrders.map((order, i) => (
-                <div key={i} className="flex items-center justify-between p-3 rounded-xl bg-white/5 border border-white/5 hover:bg-white/10 transition-colors gap-2">
+                <div key={i} className="flex items-center justify-between p-3 rounded-lg bg-gray-50 border border-gray-100 hover:bg-gray-100 transition-colors gap-2">
                   <div className="min-w-0 flex-1">
-                    <p className="text-white text-sm font-semibold truncate">{order.customers?.name || 'Customer'}</p>
-                    <p className="text-white/40 text-xs truncate">{new Date(order.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}</p>
+                    <p className="text-gray-900 text-sm font-semibold truncate">{order.customers?.name || 'Customer'}</p>
+                    <p className="text-gray-400 text-xs truncate">{new Date(order.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}</p>
                   </div>
                   <div className="text-right shrink-0">
-                    <p className="text-cyan font-bold text-sm">{formatINR(Number(order.total_amount))}</p>
+                    <p className="text-gray-900 font-bold text-sm">{formatINR(Number(order.total_amount))}</p>
                     <span className={`text-[10px] font-bold uppercase px-2 py-0.5 rounded-full ${
-                      order.status === 'delivered' ? 'bg-emerald-500/20 text-emerald-400' :
-                      order.status === 'cancelled' ? 'bg-red-500/20 text-red-400' :
-                      'bg-amber-500/20 text-amber-400'
+                      order.status === 'delivered' ? 'bg-emerald-50 text-emerald-700' :
+                      order.status === 'cancelled' ? 'bg-red-50 text-red-700' :
+                      'bg-amber-50 text-amber-700'
                     }`}>{order.status}</span>
                   </div>
                 </div>
@@ -428,18 +428,18 @@ export default function DashboardPage() {
             </div>
           ) : (
             <div className="flex-1 flex flex-col items-center justify-center text-center px-4 opacity-70">
-              <div className="w-16 h-16 rounded-full bg-white/5 border border-white/10 flex items-center justify-center mb-4">
-                <PackageX size={28} className="text-white/40" />
+              <div className="w-16 h-16 rounded-full bg-gray-50 border border-gray-100 flex items-center justify-center mb-4">
+                <PackageX size={28} className="text-gray-400" />
               </div>
-              <h4 className="text-white font-semibold mb-1">
+              <h4 className="text-gray-900 font-semibold mb-1">
                 {stats.orders > 0 ? "Orders incoming!" : "No orders yet"}
               </h4>
-              <p className="text-white/40 text-sm mb-6">
+              <p className="text-gray-400 text-sm mb-6">
                 {stats.orders > 0 
                   ? "Your customers are starting to buy your products." 
                   : "When you receive orders, they will show up here."}
               </p>
-              <Link href="/dashboard/store" className="px-4 py-2 rounded-lg border border-cyan/40 text-cyan text-sm font-medium hover:bg-cyan/10 transition-colors">
+              <Link href="/dashboard/store" className="px-4 py-2 rounded-lg border border-gray-200 text-gray-600 text-sm font-medium hover:bg-gray-50 transition-colors">
                 Go to Store Builder
               </Link>
             </div>

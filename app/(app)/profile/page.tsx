@@ -53,7 +53,7 @@ export default function ProfilePage() {
     // Fetch all ideas for recommendations
     const { data: allIdeas } = await supabase.from('business_ideas').select('*').eq('is_active', true);
     if (allIdeas) {
-      const { getRecommendedIdeas } = await import('@/lib/recommendations');
+      const { getRecommendedIdeas } = await import('@/features/ideas/utils/recommendations');
       setRecommendedIdeas(getRecommendedIdeas(allIdeas, user));
     }
   };
@@ -75,12 +75,8 @@ export default function ProfilePage() {
   if (!mounted || authLoading || !user) return null;
 
   return (
-    <main className="min-h-screen bg-navy relative overflow-hidden pb-24 font-sans pt-8">
-      {/* Decorative Background Elements */}
-      <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-cyan/5 rounded-full blur-[100px] pointer-events-none" />
-      <div className="absolute bottom-0 right-0 w-[600px] h-[600px] bg-purple-500/5 rounded-full blur-[120px] pointer-events-none" />
-
-      <div className="max-w-7xl mx-auto px-4 space-y-8 relative z-10">
+    <main className="min-h-screen bg-gray-50 pb-24 pt-8">
+      <div className="max-w-7xl mx-auto px-4 space-y-8">
         
         {/* 1. Profile Header (Full Width) */}
         <ProfileHeader user={user} onEditClick={() => setIsEditing(true)} />

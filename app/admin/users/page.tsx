@@ -1,4 +1,4 @@
-import { supabaseAdmin } from '@/lib/supabase-admin';
+import { supabaseAdmin } from '@/lib/supabase/admin';
 import { Mail, Calendar, Shield, User, Copy } from 'lucide-react';
 import Link from 'next/link';
 

@@ -2,7 +2,7 @@
 import { Bot, CheckCircle, FileText, MapPin, Briefcase, Clock, IndianRupee, ShieldAlert, ArrowLeft, Target, TrendingUp } from 'lucide-react';
 import Link from 'next/link';
 import { BusinessIdea } from '@/types/database';
-import { useLanguage } from '@/lib/language-context';
+import { useLanguage } from '@/lib/i18n/language-context';
 import { CATEGORY_IMAGES, DEFAULT_IMAGE } from './idea-card';
 import MarketAnalysisCard from './market-analysis-card';
 import RoadmapTimeline from './roadmap-timeline';
@@ -238,14 +238,14 @@ export default function IdeaDetailClient({ idea }: { idea: BusinessIdea }) {
       <div className="fixed bottom-[70px] left-0 right-0 glass-panel border-b-0 rounded-b-none p-3 md:p-4 z-40 mx-4 md:mx-auto max-w-5xl">
         <div className="flex gap-4">
           <Link href={`/chat?idea=${idea.id}`} className="flex-1">
-            <NeonButton variant="teal" className="w-full">
+            <NeonButton variant="primary" className="w-full">
               <Bot size={22} className="mr-2" />
               <span className="hidden sm:inline">{t('ideaDetail.askMitra')}</span>
               <span className="sm:hidden">Ask AI</span>
             </NeonButton>
           </Link>
           <Link href={`/tasks?idea=${idea.id}`} className="flex-1">
-            <NeonButton variant="amber" className="w-full">
+            <NeonButton variant="secondary" className="w-full">
               <CheckCircle size={22} className="mr-2" />
               <span className="hidden sm:inline">{t('ideaDetail.generateChecklist')}</span>
               <span className="sm:hidden">Get Tasks</span>

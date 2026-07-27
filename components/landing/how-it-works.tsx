@@ -1,133 +1,57 @@
 "use client";
 
-import { UserPlus, Lightbulb, Rocket, ListChecks } from "lucide-react";
-import { useEffect, useRef } from "react";
+import { Lightbulb, ListChecks, Rocket } from "lucide-react";
 
 const STEPS = [
   {
     icon: Lightbulb,
-    title: "1. Discover Ideas",
+    title: "Discover Ideas",
     desc: "Use our AI generator to find profitable, tailored business ideas.",
   },
   {
     icon: ListChecks,
-    title: "2. Follow Checklist",
+    title: "Follow Checklist",
     desc: "Complete your customized setup steps with the help of Vyapar Mitra.",
   },
   {
     icon: Rocket,
-    title: "3. Launch & Grow",
+    title: "Launch & Grow",
     desc: "Publish your store, manage inventory, and track analytics from one dashboard.",
   },
 ];
 
 export function HowItWorks() {
-  const sectionRef = useRef<HTMLElement>(null);
-
-  useEffect(() => {
-    async function init() {
-      const { gsap } = await import("gsap");
-      const { ScrollTrigger } = await import("gsap/ScrollTrigger");
-      gsap.registerPlugin(ScrollTrigger);
-
-      if (!sectionRef.current) return;
-
-      // Animate steps
-      gsap.fromTo(
-        sectionRef.current.querySelectorAll(".step-card"),
-        { x: -30, opacity: 0 },
-        {
-          x: 0,
-          opacity: 1,
-          stagger: 0.2,
-          duration: 0.7,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: "top 75%",
-            toggleActions: "play none none none",
-          },
-        }
-      );
-
-      // Animate connecting line
-      const line = sectionRef.current.querySelector(".connecting-line");
-      if (line) {
-        gsap.fromTo(
-          line,
-          { strokeDashoffset: 600 },
-          {
-            strokeDashoffset: 0,
-            duration: 1.5,
-            ease: "power2.out",
-            scrollTrigger: {
-              trigger: sectionRef.current,
-              start: "top 70%",
-              toggleActions: "play none none none",
-            },
-          }
-        );
-      }
-    }
-    init();
-  }, []);
-
   return (
-    <section
-      id="how-it-works"
-      ref={sectionRef}
-      className="bg-navy py-24 md:py-32 px-4 overflow-hidden"
-    >
+    <section id="how-it-works" className="bg-white py-20 md:py-28 px-4">
       <div className="max-w-5xl mx-auto">
-        <div className="text-center mb-16">
-          <p className="text-cyan text-xs font-bold tracking-[0.2em] uppercase mb-3">
+        <div className="text-center mb-14">
+          <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">
             Simple Process
           </p>
-          <h2 className="text-3xl md:text-5xl font-extrabold text-white tracking-tight">
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 tracking-tight">
             Three Steps to Digital Success
           </h2>
         </div>
 
-        <div className="relative">
-          {/* Desktop connecting line */}
-          <div className="hidden md:block absolute top-1/2 left-[15%] right-[15%] -translate-y-1/2 z-0">
-            <svg width="100%" height="4" viewBox="0 0 600 4" preserveAspectRatio="none">
-              <line
-                className="connecting-line"
-                x1="0" y1="2" x2="600" y2="2"
-                stroke="rgba(0, 212, 255, 0.3)"
-                strokeWidth="2"
-                strokeDasharray="600"
-                strokeDashoffset="600"
-              />
-            </svg>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative z-10">
-            {STEPS.map((step, i) => (
-              <div key={step.title} className="step-card text-center opacity-0">
-                {/* Step number ring */}
-                <div className="relative mx-auto mb-6 w-20 h-20">
-                  <div className="absolute inset-0 rounded-full border-2 border-cyan/20" />
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="w-14 h-14 rounded-full bg-cyan/10 flex items-center justify-center">
-                      <step.icon size={24} className="text-cyan" />
-                    </div>
-                  </div>
-                  <span className="absolute -top-2 -right-2 w-7 h-7 rounded-full bg-cyan text-navy-dark text-xs font-bold flex items-center justify-center">
-                    {i + 1}
-                  </span>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {STEPS.map((step, i) => (
+            <div key={step.title} className="text-center">
+              <div className="relative mx-auto mb-6 w-20 h-20">
+                <div className="w-14 h-14 mx-auto rounded-full bg-gray-100 flex items-center justify-center">
+                  <step.icon size={24} className="text-accent-500" />
                 </div>
-
-                <h3 className="text-xl font-bold text-white mb-2">
-                  {step.title.substring(3)}
-                </h3>
-                <p className="text-white/50 text-sm leading-relaxed max-w-xs mx-auto">
-                  {step.desc}
-                </p>
+                <span className="absolute -top-1 -right-1 w-7 h-7 rounded-full bg-accent-500 text-white text-xs font-bold flex items-center justify-center">
+                  {i + 1}
+                </span>
               </div>
-            ))}
-          </div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                {step.title}
+              </h3>
+              <p className="text-sm text-gray-500 leading-relaxed max-w-xs mx-auto">
+                {step.desc}
+              </p>
+            </div>
+          ))}
         </div>
       </div>
     </section>

@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import { ResourceLocation } from '@/types/database';
 import { MapPin, Phone, Building2, Map, ExternalLink } from 'lucide-react';
-import { useLanguage } from '@/lib/language-context';
+import { useLanguage } from '@/lib/i18n/language-context';
 
 const MapView = dynamic(() => import('@/components/map/map-view'), { 
   ssr: false,

@@ -1,5 +1,5 @@
 export type Profile = {
-  id: string; // uuid
+  id: string;
   full_name: string | null;
   phone: string | null;
   email: string | null;
@@ -11,6 +11,7 @@ export type Profile = {
   business_interest: string | null;
   investment_budget: 'under-10k' | '10k-50k' | '50k-2l' | '2l-10l' | 'above-10l' | null;
   preferred_language: 'english' | 'hinglish';
+  role: 'user' | 'admin';
   onboarding_completed: boolean;
   created_at: string;
   updated_at: string;
@@ -138,5 +139,109 @@ export type ResourceLocation = {
   longitude: number | null;
   services: string[];
   is_active: boolean;
+  created_at: string;
+};
+
+export type CommunityIdea = {
+  id: number;
+  user_id: string | null;
+  title: string;
+  description: string;
+  category: string;
+  investment_min: number;
+  investment_max: number;
+  location_type: string;
+  monthly_profit_min: number | null;
+  monthly_profit_max: number | null;
+  time_commitment: string | null;
+  skill_level: string | null;
+  pros: string[];
+  cons: string[];
+  required_skills: string[];
+  required_licenses: string[];
+  real_example_name: string | null;
+  real_example_location: string | null;
+  real_example_description: string | null;
+  image_url: string | null;
+  slug: string | null;
+  is_approved: boolean;
+  ai_generated: boolean;
+  contributor_name: string | null;
+  market_analysis: any;
+  competition_strategy: any;
+  roadmap: any;
+  financial_projections: any;
+  resources_needed: string[];
+  risk_analysis: any;
+  success_stories: any;
+  view_count: number;
+  created_at: string;
+  updated_at: string;
+};
+
+export type PlatformMessage = {
+  id: number;
+  name: string;
+  email: string;
+  subject: string | null;
+  message: string;
+  is_read: boolean;
+  created_at: string;
+};
+
+export type Product = {
+  id: string;
+  user_id: string;
+  name: string;
+  description: string | null;
+  price: number;
+  stock_quantity: number;
+  sku: string | null;
+  image_url: string | null;
+  status: 'active' | 'draft' | 'out_of_stock';
+  created_at: string;
+  updated_at: string;
+};
+
+export type Customer = {
+  id: string;
+  user_id: string;
+  name: string;
+  email: string | null;
+  phone: string | null;
+  total_spent: number;
+  total_orders: number;
+  status: 'active' | 'inactive' | 'vip';
+  created_at: string;
+  updated_at: string;
+};
+
+export type StoreSettings = {
+  id: string;
+  user_id: string;
+  store_name: string;
+  slug: string;
+  theme_color: string;
+  logo_url: string | null;
+  hero_text: string | null;
+  support_email: string | null;
+  support_phone: string | null;
+  privacy_policy: string | null;
+  terms_conditions: string | null;
+  payment_instructions: string | null;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+};
+
+export type Order = {
+  id: string;
+  store_id: string;
+  customer_id: string | null;
+  total_amount: number;
+  status: 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled';
+  items: any;
+  shipping_address: string | null;
+  idempotency_key: string | null;
   created_at: string;
 };

@@ -1,5 +1,4 @@
 import React from 'react';
-import LogoIcon from './logo-icon';
 
 interface LogoProps {
   className?: string;
@@ -7,21 +6,21 @@ interface LogoProps {
   showTagline?: boolean;
 }
 
-export default function Logo({ className = '', iconSize = 40, showTagline = false }: LogoProps) {
+export default function Logo({ className = '', iconSize = 28, showTagline = false }: LogoProps) {
   return (
-    <div className={`flex items-center gap-2 ${className}`}>
-      <img 
-        src="/logo-transparent.png" 
-        alt="Apna Vyapar Logo" 
-        style={{ height: iconSize, width: iconSize }} 
-        className="object-contain"
-      />
+    <div className={`flex items-center gap-2.5 ${className}`}>
+      <div
+        className="flex items-center justify-center rounded-lg bg-gray-900 text-white font-bold select-none"
+        style={{ width: iconSize + 8, height: iconSize + 8, fontSize: iconSize * 0.45 }}
+      >
+        AV
+      </div>
       <div className="flex flex-col">
-        <span className="font-extrabold tracking-tight" style={{ fontSize: iconSize * 0.7, lineHeight: 1.1 }}>
-          <span style={{ color: '#429095' }}>Apna</span> <span style={{ color: '#F19D2A' }}>Vyapar</span>
+        <span className="font-semibold tracking-tight text-gray-900" style={{ fontSize: iconSize * 0.7, lineHeight: 1.15 }}>
+          Apna Vyapar
         </span>
         {showTagline && (
-          <span className="text-slate-400 font-medium" style={{ fontSize: iconSize * 0.35, marginTop: 0 }}>
+          <span className="text-gray-400 text-xs" style={{ marginTop: -1 }}>
             Aapka Digital Business Sathi
           </span>
         )}

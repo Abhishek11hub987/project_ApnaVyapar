@@ -3,40 +3,45 @@ import Link from 'next/link';
 
 export default function Footer() {
   return (
-    <footer className="bg-slate-900 text-slate-400 py-12 px-4 border-t border-slate-800 pb-28 md:pb-12 mt-auto">
-      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
-        <div className="col-span-1 md:col-span-2">
-          <div className="flex items-center gap-2 mb-4">
-            <div className="w-8 h-8 bg-teal-600 rounded-lg flex items-center justify-center">
-              <span className="text-white font-black text-sm tracking-tighter">AV</span>
+    <footer className="border-t border-gray-100 bg-white mt-auto">
+      <div className="section-container py-12 md:py-16">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
+          <div className="md:col-span-2">
+            <div className="flex items-center gap-2.5 mb-4">
+              <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-gray-900 text-white text-xs font-bold">
+                AV
+              </div>
+              <span className="text-lg font-semibold text-gray-900">Apna Vyapar</span>
             </div>
-            <span className="text-xl font-bold text-slate-100 tracking-tight">Apna Vyapar</span>
+            <p className="text-sm text-gray-500 max-w-sm leading-relaxed">
+              AI-powered guidance, curated business ideas, and step-by-step roadmaps to launch your dream business.
+            </p>
           </div>
-          <p className="text-sm max-w-sm">
-            Get AI-powered guidance, curated business ideas, and step-by-step roadmaps to launch your dream — all for free.
-          </p>
-        </div>
-        
-        <div>
-          <h4 className="text-slate-100 font-bold mb-4 uppercase text-xs tracking-widest">Platform</h4>
-          <ul className="space-y-2 text-sm">
-            <li><Link href="/" className="hover:text-teal-400 transition-colors">Home</Link></li>
-            <li><Link href="/ideas" className="hover:text-teal-400 transition-colors">Business Ideas</Link></li>
-            <li><Link href="/chat" className="hover:text-teal-400 transition-colors">Vyapar Mitra AI</Link></li>
-            <li><Link href="/tasks" className="hover:text-teal-400 transition-colors">My Tasks</Link></li>
-          </ul>
+
+          <div>
+            <h4 className="text-xs font-semibold text-gray-900 uppercase tracking-wider mb-4">Platform</h4>
+            <ul className="space-y-3 text-sm">
+              <li><Link href="/" className="text-gray-500 hover:text-gray-900 transition-colors">Home</Link></li>
+              <li><Link href="/ideas" className="text-gray-500 hover:text-gray-900 transition-colors">Business Ideas</Link></li>
+              <li><Link href="/chat" className="text-gray-500 hover:text-gray-900 transition-colors">Vyapar Mitra</Link></li>
+              <li><Link href="/tasks" className="text-gray-500 hover:text-gray-900 transition-colors">My Tasks</Link></li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 className="text-xs font-semibold text-gray-900 uppercase tracking-wider mb-4">Support</h4>
+            <ul className="space-y-3 text-sm">
+              <li><Link href="/faq" className="text-gray-500 hover:text-gray-900 transition-colors">FAQ</Link></li>
+              <li><Link href="/contact" className="text-gray-500 hover:text-gray-900 transition-colors">Contact</Link></li>
+              <li><Link href="/p/privacy" className="text-gray-500 hover:text-gray-900 transition-colors">Privacy</Link></li>
+              <li><Link href="/p/terms" className="text-gray-500 hover:text-gray-900 transition-colors">Terms</Link></li>
+            </ul>
+          </div>
         </div>
 
-        <div>
-          <h4 className="text-slate-100 font-bold mb-4 uppercase text-xs tracking-widest">Support</h4>
-          <ul className="space-y-2 text-sm">
-            <li><Link href="/faq" className="hover:text-teal-400 transition-colors">FAQ</Link></li>
-            <li><Link href="/contact" className="hover:text-teal-400 transition-colors">Contact Us</Link></li>
-          </ul>
+        <div className="mt-12 pt-8 border-t border-gray-100 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-gray-400">
+          <p>&copy; {new Date().getFullYear()} Apna Vyapar.</p>
         </div>
-      </div>
-      <div className="max-w-7xl mx-auto mt-12 pt-8 border-t border-slate-800 text-sm text-slate-500 flex flex-col md:flex-row justify-between items-center gap-4">
-        <p>&copy; {new Date().getFullYear()} Apna Vyapar. Made for India.</p>
       </div>
     </footer>
   );

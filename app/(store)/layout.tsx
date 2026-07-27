@@ -9,7 +9,7 @@ export const metadata = {
 export default function StoreLayout({ children }: { children: ReactNode }) {
   // Public storefront layout. Completely decoupled from the dashboard.
   return (
-    <div className="min-h-screen bg-navy font-sans text-white">
+    <div className="min-h-screen bg-white font-sans text-gray-900">
       {children}
     </div>
   );

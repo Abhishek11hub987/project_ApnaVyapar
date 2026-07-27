@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import { X, Save } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
-import { useLanguage } from '@/lib/language-context';
+import { useLanguage } from '@/lib/i18n/language-context';
 
 interface EditProfileModalProps {
   isOpen: boolean;

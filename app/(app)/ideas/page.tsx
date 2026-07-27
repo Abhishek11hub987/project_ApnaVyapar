@@ -7,7 +7,7 @@ import IdeaCard from '@/components/ideas/idea-card';
 import IdeaFilters from '@/components/ideas/idea-filters';
 import ContributeIdeaModal from '@/components/ideas/contribute-idea-modal';
 import { Search, Lightbulb, Users2, Sparkles, Plus, TrendingUp } from 'lucide-react';
-import { useLanguage } from '@/lib/language-context';
+import { useLanguage } from '@/lib/i18n/language-context';
 import { GuruGyaan } from '@/components/guru-gyaan';
 import { CATEGORY_GRADIENTS } from '@/components/ideas/idea-card';
 
@@ -96,32 +96,26 @@ export default function IdeasCatalog() {
     new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(amount);
 
   return (
-    <main className="min-h-screen bg-navy pb-24 font-sans transition-colors">
+    <main className="min-h-screen bg-white pb-24 font-sans">
       {/* Header */}
-      <div className="pt-12 pb-20 px-4 relative overflow-hidden">
-        {/* Abstract background shapes */}
-        <div className="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none">
-          <div className="absolute -top-24 -right-24 w-96 h-96 bg-cyan rounded-full blur-3xl"></div>
-          <div className="absolute top-24 -left-24 w-64 h-64 bg-emerald-500 rounded-full blur-3xl"></div>
-        </div>
-
-        <div className="max-w-7xl mx-auto relative z-10 flex flex-col items-center">
+      <div className="pt-12 pb-20 px-4">
+        <div className="max-w-7xl mx-auto flex flex-col items-center">
           <GuruGyaan context="general" />
-          <h1 className="text-3xl md:text-5xl font-extrabold text-white mt-8 mb-4 text-center">
+          <h1 className="text-3xl md:text-5xl font-bold text-gray-900 mt-8 mb-4 text-center">
             {t('catalog.title')}
           </h1>
-          <p className="text-white/50 text-lg md:text-xl max-w-2xl mx-auto font-medium text-center">
+          <p className="text-gray-500 text-lg md:text-xl max-w-2xl mx-auto text-center">
             {t('catalog.subtitle')}
           </p>
           
           <div className="relative max-w-2xl w-full mt-8">
-            <Search className="absolute left-4 top-4 text-white/30" size={22} />
+            <Search className="absolute left-4 top-4 text-gray-300" size={20} />
             <input 
               type="text" 
               placeholder={t('ideas.searchPlaceholder')} 
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full bg-white/5 backdrop-blur-xl rounded-2xl pl-12 pr-4 py-4 outline-none text-white font-medium border border-white/10 focus:border-cyan/40 focus:ring-2 focus:ring-cyan/20 transition-all placeholder:text-white/25"
+              className="w-full bg-white border border-gray-200 rounded-lg pl-11 pr-4 py-3.5 outline-none text-gray-900 font-medium focus:border-accent-500 focus:ring-1 focus:ring-accent-500 transition-all placeholder:text-gray-400"
             />
           </div>
         </div>
@@ -131,39 +125,39 @@ export default function IdeasCatalog() {
       <div className="max-w-7xl mx-auto px-4 -mt-16 relative z-20">
         {/* Tab Switcher + Contribute Button */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-8">
-          <div className="flex items-center gap-2 bg-white/5 p-1.5 rounded-xl border border-white/10">
+          <div className="flex items-center gap-1 bg-gray-100 p-1 rounded-lg">
             <button
               onClick={() => setActiveTab('curated')}
-              className={`flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold transition-all ${
+              className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-all ${
                 activeTab === 'curated' 
-                  ? 'bg-cyan/20 text-cyan border border-cyan/20 shadow-[0_0_15px_rgba(0,212,255,0.1)]' 
-                  : 'text-white/40 hover:text-white/70'
+                  ? 'bg-white text-gray-900 shadow-sm border border-gray-200' 
+                  : 'text-gray-500 hover:text-gray-700'
               }`}
             >
-              <Sparkles size={16} /> Curated Ideas
+              <Sparkles size={15} /> Curated Ideas
             </button>
             <button
               onClick={() => setActiveTab('community')}
-              className={`flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold transition-all ${
+              className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-all ${
                 activeTab === 'community' 
-                  ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/20 shadow-[0_0_15px_rgba(16,185,129,0.1)]' 
-                  : 'text-white/40 hover:text-white/70'
+                  ? 'bg-white text-gray-900 shadow-sm border border-gray-200' 
+                  : 'text-gray-500 hover:text-gray-700'
               }`}
             >
-              <Users2 size={16} /> Community Ideas
+              <Users2 size={15} /> Community Ideas
             </button>
           </div>
 
           <button
             onClick={() => setShowContribute(true)}
-            className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold bg-gradient-to-r from-cyan to-emerald-500 text-navy-dark hover:shadow-neon-cyan hover:scale-105 transition-all"
+            className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium bg-gray-900 text-white hover:bg-gray-800 transition-colors"
           >
-            <Plus size={16} /> Contribute Your Idea
+            <Plus size={15} /> Contribute Your Idea
           </button>
         </div>
 
         {/* Filters */}
-        <div className="glass-card p-5 md:p-8 mb-10 border border-white/5">
+        <div className="bg-white border border-gray-100 rounded-lg shadow-card p-5 md:p-6 mb-8">
           <IdeaFilters filters={filters} setFilters={setFilters} />
         </div>
 
@@ -173,17 +167,16 @@ export default function IdeasCatalog() {
             {loading ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {[1,2,3,4,5,6].map(i => (
-                  <div key={i} className="glass-card overflow-hidden border border-white/5">
-                    <div className="h-40 bg-white/5 animate-pulse" />
+                  <div key={i} className="bg-white border border-gray-100 rounded-lg overflow-hidden">
+                    <div className="h-40 bg-gray-100 animate-pulse" />
                     <div className="p-5 space-y-4">
-                      <div className="h-5 w-20 bg-white/10 animate-pulse rounded-full" />
-                      <div className="h-6 w-4/5 bg-white/10 animate-pulse" />
-                      <div className="h-4 w-3/5 bg-white/10 animate-pulse" />
+                      <div className="h-5 w-20 bg-gray-100 animate-pulse rounded-full" />
+                      <div className="h-6 w-4/5 bg-gray-100 animate-pulse" />
+                      <div className="h-4 w-3/5 bg-gray-100 animate-pulse" />
                       <div className="space-y-2 pt-2">
-                        <div className="h-10 bg-white/10 animate-pulse rounded-lg" />
-                        <div className="h-4 w-2/3 bg-white/10 animate-pulse" />
+                        <div className="h-10 bg-gray-100 animate-pulse rounded-lg" />
                       </div>
-                      <div className="h-12 bg-white/10 animate-pulse rounded-xl mt-2" />
+                      <div className="h-10 bg-gray-100 animate-pulse rounded-lg mt-2" />
                     </div>
                   </div>
                 ))}
@@ -195,29 +188,29 @@ export default function IdeasCatalog() {
                 ))}
               </div>
             ) : (
-              <div className="text-center py-24 glass-card border border-white/5 animate-in fade-in">
-                <div className="text-6xl mb-4">🔍</div>
-                <h3 className="text-2xl font-bold text-white mb-2">No ideas found</h3>
-                <p className="text-white/40 text-sm mb-8 max-w-md mx-auto">We couldn't find any business ideas matching your search. Want our AI to research it for you?</p>
+              <div className="text-center py-20 bg-white border border-gray-100 rounded-lg shadow-card">
+                <div className="text-5xl mb-4">🔍</div>
+                <h3 className="text-xl font-semibold text-gray-900 mb-2">No ideas found</h3>
+                <p className="text-gray-500 text-sm mb-8 max-w-md mx-auto">We couldn't find any business ideas matching your search.</p>
                 <div className="flex items-center justify-center gap-4">
                   {search ? (
                     <button 
                       onClick={() => router.push(`/chat?query=${encodeURIComponent(`I want to start a business related to "${search}". Can you research this idea and publish it to the community catalog?`)}`)}
-                      className="bg-gradient-to-r from-cyan to-emerald-500 text-navy-dark px-8 py-3 rounded-full font-bold hover:shadow-neon-cyan transition-all flex items-center gap-2"
+                      className="bg-gray-900 text-white px-6 py-2.5 rounded-lg font-medium hover:bg-gray-800 transition-colors flex items-center gap-2"
                     >
-                      <Sparkles size={18} /> Ask Vyapar Mitra to Research
+                      <Sparkles size={16} /> Ask Vyapar Mitra to Research
                     </button>
                   ) : (
                     <button 
                       onClick={() => setShowContribute(true)}
-                      className="bg-gradient-to-r from-cyan to-emerald-500 text-navy-dark px-8 py-3 rounded-full font-bold hover:shadow-neon-cyan transition-all"
+                      className="bg-gray-900 text-white px-6 py-2.5 rounded-lg font-medium hover:bg-gray-800 transition-colors"
                     >
                       Contribute an Idea
                     </button>
                   )}
                   <button 
                     onClick={() => { setFilters({ category: '', budget: '', location: '', sort: 'popular' }); setSearch(''); }}
-                    className="bg-white/5 border border-white/10 text-white/70 px-8 py-3 rounded-full font-bold hover:bg-white/10 transition-all"
+                    className="bg-white text-gray-700 border border-gray-200 px-6 py-2.5 rounded-lg font-medium hover:bg-gray-50 transition-colors"
                   >
                     Reset Filters
                   </button>
@@ -230,11 +223,11 @@ export default function IdeasCatalog() {
             {loading ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {[1,2,3].map(i => (
-                  <div key={i} className="glass-card overflow-hidden border border-white/5">
-                    <div className="h-40 bg-white/5 animate-pulse" />
+                  <div key={i} className="bg-white border border-gray-100 rounded-lg overflow-hidden">
+                    <div className="h-40 bg-gray-100 animate-pulse" />
                     <div className="p-5 space-y-4">
-                      <div className="h-5 w-20 bg-white/10 animate-pulse rounded-full" />
-                      <div className="h-6 w-4/5 bg-white/10 animate-pulse" />
+                      <div className="h-5 w-20 bg-gray-100 animate-pulse rounded-full" />
+                      <div className="h-6 w-4/5 bg-gray-100 animate-pulse" />
                     </div>
                   </div>
                 ))}
@@ -246,33 +239,33 @@ export default function IdeasCatalog() {
                 ))}
               </div>
             ) : (
-              <div className="text-center py-24 glass-card border border-white/5 animate-in fade-in">
-                <div className="w-20 h-20 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center mx-auto mb-6">
-                  <Lightbulb size={36} className="text-emerald-400" />
+              <div className="text-center py-20 bg-white border border-gray-100 rounded-lg shadow-card">
+                <div className="w-16 h-16 rounded-xl bg-gray-100 flex items-center justify-center mx-auto mb-6">
+                  <Lightbulb size={30} className="text-gray-400" />
                 </div>
-                <h3 className="text-2xl font-bold text-white mb-2">No community ideas found</h3>
-                <p className="text-white/40 text-sm mb-8 max-w-md mx-auto">Be the first to contribute this business idea! Our AI will research it and create a detailed card for the community.</p>
+                <h3 className="text-xl font-semibold text-gray-900 mb-2">No community ideas found</h3>
+                <p className="text-gray-500 text-sm mb-8 max-w-md mx-auto">Be the first to contribute a business idea!</p>
                 
                 <div className="flex items-center justify-center gap-4">
                   {search ? (
                     <button 
                       onClick={() => router.push(`/chat?query=${encodeURIComponent(`I want to start a business related to "${search}". Can you research this idea and publish it to the community catalog?`)}`)}
-                      className="bg-gradient-to-r from-cyan to-emerald-500 text-navy-dark px-8 py-3 rounded-full font-bold hover:shadow-neon-cyan transition-all flex items-center gap-2"
+                      className="bg-gray-900 text-white px-6 py-2.5 rounded-lg font-medium hover:bg-gray-800 transition-colors flex items-center gap-2"
                     >
-                      <Sparkles size={18} /> Ask Vyapar Mitra to Research
+                      <Sparkles size={16} /> Ask Vyapar Mitra to Research
                     </button>
                   ) : (
                     <button 
                       onClick={() => setShowContribute(true)}
-                      className="bg-gradient-to-r from-cyan to-emerald-500 text-navy-dark px-8 py-3 rounded-full font-bold hover:shadow-neon-cyan transition-all flex items-center gap-2"
+                      className="bg-gray-900 text-white px-6 py-2.5 rounded-lg font-medium hover:bg-gray-800 transition-colors flex items-center gap-2"
                     >
-                      <Plus size={18} /> Contribute First Idea
+                      <Plus size={16} /> Contribute First Idea
                     </button>
                   )}
                   {search && (
                     <button 
                       onClick={() => setSearch('')}
-                      className="bg-white/5 border border-white/10 text-white/70 px-8 py-3 rounded-full font-bold hover:bg-white/10 transition-all"
+                      className="bg-white text-gray-700 border border-gray-200 px-6 py-2.5 rounded-lg font-medium hover:bg-gray-50 transition-colors"
                     >
                       Clear Search
                     </button>

@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect, useRef } from "react";
 import { Code2, ShieldCheck, HeartHandshake } from "lucide-react";
 
 const PRINCIPLES = [
@@ -22,65 +21,29 @@ const PRINCIPLES = [
 ];
 
 export function SocialProof() {
-  const sectionRef = useRef<HTMLElement>(null);
-
-  useEffect(() => {
-    async function init() {
-      const { gsap } = await import("gsap");
-      const { ScrollTrigger } = await import("gsap/ScrollTrigger");
-      gsap.registerPlugin(ScrollTrigger);
-
-      if (!sectionRef.current) return;
-
-      gsap.fromTo(
-        sectionRef.current.querySelectorAll(".principle-card"),
-        { y: 40, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          stagger: 0.15,
-          duration: 0.6,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: sectionRef.current.querySelector(".principles-grid"),
-            start: "top 85%",
-            toggleActions: "play none none none",
-          },
-        }
-      );
-    }
-    init();
-  }, []);
-
   return (
-    <section ref={sectionRef} className="bg-navy-light py-24 md:py-32 px-4">
+    <section className="bg-white py-20 md:py-28 px-4">
       <div className="max-w-6xl mx-auto">
-        <div className="text-center mb-16">
-          <p className="text-cyan text-xs font-bold tracking-[0.2em] uppercase mb-3">
+        <div className="text-center mb-14">
+          <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">
             Our Commitment
           </p>
-          <h2 className="text-3xl md:text-5xl font-extrabold text-white tracking-tight mb-4">
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 tracking-tight mb-3">
             Built by the Community, for the Community
           </h2>
-          <p className="text-white/60 max-w-2xl mx-auto text-lg">
+          <p className="text-gray-500 max-w-2xl mx-auto">
             Apna Vyapar is an open-source movement to digitize Indian businesses without corporate greed. Honest code, honest growth.
           </p>
         </div>
 
-        {/* Open Source Principles */}
-        <div className="principles-grid grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {PRINCIPLES.map((p) => (
-            <div
-              key={p.title}
-              className="principle-card glass-card p-8 opacity-0 group"
-            >
-              <div className="w-14 h-14 rounded-2xl bg-cyan/10 border border-cyan/20 flex items-center justify-center mb-6 group-hover:bg-cyan/20 transition-colors">
-                <p.icon size={28} className="text-cyan" />
+            <div key={p.title} className="bg-white border border-gray-100 rounded-lg shadow-card p-8 hover:shadow-elevated hover:border-gray-200 transition-all duration-200">
+              <div className="w-12 h-12 rounded-lg bg-gray-100 flex items-center justify-center mb-5">
+                <p.icon size={24} className="text-accent-500" />
               </div>
-              <h3 className="text-xl font-bold text-white mb-3">{p.title}</h3>
-              <p className="text-white/60 text-sm leading-relaxed">
-                {p.desc}
-              </p>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">{p.title}</h3>
+              <p className="text-sm text-gray-500 leading-relaxed">{p.desc}</p>
             </div>
           ))}
         </div>

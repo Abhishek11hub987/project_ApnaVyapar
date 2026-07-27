@@ -1,5 +1,5 @@
 import { notFound } from 'next/navigation';
-import { supabaseAdmin } from '@/lib/supabase-admin';
+import { supabaseAdmin } from '@/lib/supabase/admin';
 import IdeaDetailClient from '@/components/ideas/idea-detail-client';
 
 export const revalidate = 60;
