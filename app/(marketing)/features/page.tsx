@@ -2,7 +2,7 @@
 
 import { LandingNavbar } from "@/components/landing/landing-navbar";
 import { LandingFooter } from "@/components/landing/landing-footer";
-import { Package, Smartphone, BarChart3, ShieldCheck, Zap, Globe, Layers, ArrowRight } from "lucide-react";
+import { Package, Smartphone, BarChart3, ShieldCheck, Zap, Globe, Layers, ArrowRight, Users, Unlock } from "lucide-react";
 import Link from "next/link";
 import { FinalCTA } from "@/components/landing/final-cta";
 
@@ -181,9 +181,9 @@ export default function FeaturesPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
               { icon: Smartphone, title: "Mobile Optimized", desc: "Manage your store on the go." },
-              { icon: ShieldCheck, title: "Secure Payments", desc: "Integrated with Razorpay, UPI, & more." },
+              { icon: Users, title: "Community Driven", desc: "Built for and by Indian merchants." },
               { icon: Layers, title: "Theme Customization", desc: "Make it truly yours." },
-              { icon: Globe, title: "SEO Ready", desc: "Rank higher on Google." },
+              { icon: Unlock, title: "No Vendor Lock-in", desc: "Your data belongs to you." },
             ].map((f, i) => (
               <div key={i} className="p-6 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors text-center flex flex-col items-center">
                 <div className="w-12 h-12 rounded-full bg-cyan/10 text-cyan flex items-center justify-center mb-4">

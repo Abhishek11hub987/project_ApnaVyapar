@@ -98,7 +98,7 @@ export function FeaturesGrid() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {FEATURES.map((f) => (
             <Link
-              href={`/${f.slug === 'ideas' ? 'ideas' : 'features#' + f.slug}`}
+              href={`/p/${f.slug}`}
               key={f.title}
               className="feature-card glass-card p-8 opacity-0 group block hover:scale-[1.02] transition-transform duration-300"
             >
