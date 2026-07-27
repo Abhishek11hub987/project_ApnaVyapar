@@ -15,9 +15,9 @@ export default function LikedIdeas({ ideas }: LikedIdeasProps) {
   const { t } = useLanguage();
 
   return (
-    <GlassCard>
-      <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2 mb-6">
-        <CheckCircle2 size={20} className="text-teal-500" /> {t('liked.title')}
+    <GlassCard className="bg-navy-light/40 border-cyan/20 shadow-[0_0_30px_rgba(45,212,191,0.05)]">
+      <h3 className="text-lg font-black text-white flex items-center gap-2 mb-6">
+        <CheckCircle2 size={20} className="text-cyan" /> {t('liked.title')}
       </h3>
       
       {ideas.length > 0 ? (
@@ -27,10 +27,10 @@ export default function LikedIdeas({ ideas }: LikedIdeasProps) {
           ))}
         </div>
       ) : (
-        <div className="text-center py-12 bg-slate-50/50 dark:bg-slate-800/50 rounded-xl border border-slate-200/50 dark:border-slate-700/50">
+        <div className="text-center py-12 bg-white/5 rounded-2xl border border-white/10">
           <div className="text-4xl mb-3 opacity-50">💡</div>
-          <p className="text-slate-500 dark:text-slate-400 font-medium">{t('liked.emptyTitle')}</p>
-          <button onClick={() => router.push('/')} className="mt-4 text-teal-600 dark:text-teal-400 font-bold hover:underline">
+          <p className="text-white/60 font-medium">{t('liked.emptyTitle')}</p>
+          <button onClick={() => router.push('/ideas')} className="mt-4 text-cyan font-bold hover:underline">
             {t('liked.emptyCta')}
           </button>
         </div>

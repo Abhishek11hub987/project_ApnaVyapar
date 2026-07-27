@@ -9,12 +9,15 @@ export default function RecommendedIdeas({ ideas }: { ideas: BusinessIdea[] }) {
   if (!ideas || ideas.length === 0) return null;
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center gap-2">
-        <div className="bg-amber-100 dark:bg-amber-900/30 p-2 rounded-xl text-amber-600 dark:text-amber-400">
+    <GlassCard className="bg-navy-light/40 border-cyan/20 shadow-[0_0_30px_rgba(45,212,191,0.05)]">
+      <div className="flex items-center gap-3 mb-6">
+        <div className="bg-cyan/10 p-2.5 rounded-xl text-cyan border border-cyan/20">
           <Sparkles size={20} />
         </div>
-        <h2 className="text-xl font-bold text-slate-800 dark:text-white">Recommended For You</h2>
+        <div>
+          <h2 className="text-lg font-black text-white">Ideas Matching Your Profile</h2>
+          <p className="text-xs text-white/40 mt-0.5">Based on your interests and budget preferences</p>
+        </div>
       </div>
       
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -24,6 +27,6 @@ export default function RecommendedIdeas({ ideas }: { ideas: BusinessIdea[] }) {
           </div>
         ))}
       </div>
-    </div>
+    </GlassCard>
   );
 }

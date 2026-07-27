@@ -135,7 +135,7 @@ export function FinalCTA() {
           Join 50,000+ merchants already growing with Apna Vyapar. Start free, no credit card required.
         </p>
         <Link
-          href="/p/ideas"
+          href="/ideas"
           className="cta-animate inline-flex items-center gap-2 px-12 py-5 rounded-full text-white font-bold text-lg
                      bg-gradient-to-r from-cyan to-cyan-dark
                      animate-pulse-glow hover:scale-105
