@@ -6,16 +6,16 @@
   [![Live Demo](https://img.shields.io/badge/Live%20Demo-Visit%20Now-brightgreen?style=for-the-badge)](https://project-apna-vyapar-fxk4.vercel.app)
   
   <p>
-    <a href="#-overview">Overview</a> &nbsp;|&nbsp; 
-    <a href="#-key-features">Key Features</a> &nbsp;|&nbsp; 
-    <a href="#-tech-stack">Tech Stack</a> &nbsp;|&nbsp; 
-    <a href="#-contact">Contact</a>
+    <a href="#overview">Overview</a> &nbsp;|&nbsp; 
+    <a href="#features">Key Features</a> &nbsp;|&nbsp; 
+    <a href="#tech-stack">Tech Stack</a> &nbsp;|&nbsp; 
+    <a href="#contact">Contact</a>
   </p>
 </div>
 
 ---
 
-## ✨ Overview
+## <a id="overview"></a>✨ Overview
 
 **Apna Vyapar** is a premium SaaS-style web application built specifically for the Indian market. It guides first-time founders from zero to launch with curated business ideas, interactive data visualization, and an intelligent AI co-pilot. 
 
@@ -23,7 +23,7 @@ The entire platform features a stunning **Project Aethereal** glassmorphism aest
 
 ---
 
-## 🌟 Key Features
+## <a id="features"></a>🌟 Key Features
 
 ### 🤖 Vyapar Mitra (AI Assistant)
 Your personal 24/7 AI business advisor. Built directly into the platform, Vyapar Mitra helps you navigate Indian compliance laws, understand GST, find government MSME loans, and optimize your inventory.
@@ -45,7 +45,7 @@ Swipe through business ideas Tinder-style to save what you love. Explore the int
 
 ---
 
-## 🏗️ Tech Stack
+## <a id="tech-stack"></a>🏗️ Tech Stack
 
 Apna Vyapar is built using a modern, highly scalable, and production-ready architecture:
 
@@ -90,7 +90,7 @@ npm run dev
 
 ---
 
-## 🤝 Contact & Support
+## <a id="contact"></a>🤝 Contact & Support
 
 This project is built and maintained by a solo developer. I am always open to feedback, bug reports, and exciting new ideas to make Apna Vyapar better for everyone!
 

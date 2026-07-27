@@ -39,28 +39,28 @@ export default function ProfileHeader({ user, onEditClick }: ProfileHeaderProps)
   }
 
   return (
-    <GlassCard className="relative overflow-hidden">
-      <div className="absolute top-0 right-0 w-64 h-64 bg-teal-500/10 rounded-full blur-3xl pointer-events-none" />
+    <GlassCard className="relative overflow-hidden bg-navy-light/40 border-cyan/20 shadow-[0_0_30px_rgba(45,212,191,0.05)] group">
+      <div className="absolute top-0 right-0 w-64 h-64 bg-cyan/10 rounded-full blur-3xl pointer-events-none group-hover:bg-cyan/20 transition-colors duration-700" />
       
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 relative z-10">
         <div className="flex items-center gap-5">
-          <div className="w-20 h-20 rounded-full bg-teal-500/20 text-teal-500 border border-teal-500/30 flex items-center justify-center text-3xl font-bold uppercase shadow-neon-teal shrink-0">
+          <div className="w-20 h-20 rounded-full bg-cyan/10 text-cyan border border-cyan/30 flex items-center justify-center text-3xl font-black uppercase shadow-[0_0_15px_rgba(45,212,191,0.2)] shrink-0">
             {user.full_name ? user.full_name.charAt(0) : user.email?.charAt(0)}
           </div>
           <div>
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white">
+            <h1 className="text-2xl sm:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-white/70">
               {user.full_name || t('profile.entrepreneur')}
             </h1>
-            <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-slate-500 dark:text-slate-400 mt-2 text-sm">
+            <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-white/60 mt-2 text-sm font-medium">
               <span className="flex items-center gap-1.5"><Mail size={14}/> {user.email}</span>
               {user.city && (
                 <>
-                  <span className="hidden sm:inline text-slate-300 dark:text-slate-700">•</span>
+                  <span className="hidden sm:inline text-white/30">•</span>
                   <span className="flex items-center gap-1.5"><MapPin size={14}/> {user.city}</span>
                 </>
               )}
             </div>
-            <div className="mt-2 text-xs font-medium text-teal-600 dark:text-teal-400 bg-teal-50 dark:bg-teal-900/30 w-fit px-2.5 py-1 rounded-full border border-teal-100 dark:border-teal-800">
+            <div className="mt-3 text-xs font-bold text-cyan bg-cyan/10 w-fit px-3 py-1.5 rounded-full border border-cyan/20 uppercase tracking-wider">
               {t('profile.memberSince')} {joinDate}
             </div>
           </div>
@@ -68,44 +68,44 @@ export default function ProfileHeader({ user, onEditClick }: ProfileHeaderProps)
         
         <button 
           onClick={onEditClick}
-          className="flex items-center justify-center gap-2 text-slate-700 dark:text-slate-200 hover:text-teal-700 dark:hover:text-teal-400 bg-slate-100 dark:bg-slate-800 hover:bg-teal-50 dark:hover:bg-teal-900/30 border border-transparent hover:border-teal-200 dark:hover:border-teal-800 px-4 py-2.5 rounded-xl transition-all font-semibold text-sm w-full sm:w-auto shrink-0 shadow-sm self-start sm:self-center"
+          className="flex items-center justify-center gap-2 text-white hover:text-cyan bg-white/5 hover:bg-cyan/10 border border-white/10 hover:border-cyan/30 px-5 py-2.5 rounded-xl transition-all font-bold text-sm w-full sm:w-auto shrink-0 shadow-sm self-start sm:self-center"
         >
           <Edit3 size={16} /> {t('profile.editProfile')}
         </button>
       </div>
 
       {/* Details Row */}
-      <div className="mt-6 pt-6 border-t border-slate-200 dark:border-slate-800 grid grid-cols-1 md:grid-cols-3 gap-6 relative z-10">
+      <div className="mt-6 pt-6 border-t border-white/10 grid grid-cols-1 md:grid-cols-3 gap-6 relative z-10">
         <div>
-          <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Interests</h3>
+          <h3 className="text-xs font-black text-white/40 uppercase tracking-wider mb-3">Interests</h3>
           <div className="flex flex-wrap gap-2">
             {user.business_interest ? user.business_interest.split(',').map((i: string) => (
-              <span key={i.trim()} className="px-2.5 py-1 rounded-md bg-teal-50 dark:bg-teal-900/20 text-teal-700 dark:text-teal-400 text-xs font-semibold border border-teal-200 dark:border-teal-800/50">
+              <span key={i.trim()} className="px-3 py-1 rounded-lg bg-cyan/10 text-cyan text-xs font-bold border border-cyan/20">
                 {i.trim()}
               </span>
-            )) : <span className="text-sm text-slate-400">None set</span>}
+            )) : <span className="text-sm text-white/40">None set</span>}
           </div>
         </div>
 
         <div>
-          <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Skills</h3>
+          <h3 className="text-xs font-black text-white/40 uppercase tracking-wider mb-3">Skills</h3>
           <div className="flex flex-wrap gap-2">
             {skills.length > 0 ? skills.map((s: string) => (
-              <span key={s} className="px-2.5 py-1 rounded-md bg-purple-50 dark:bg-purple-900/20 text-purple-700 dark:text-purple-400 text-xs font-semibold border border-purple-200 dark:border-purple-800/50">
+              <span key={s} className="px-3 py-1 rounded-lg bg-purple-500/10 text-purple-400 text-xs font-bold border border-purple-500/20">
                 {s}
               </span>
-            )) : <span className="text-sm text-slate-400">None set</span>}
+            )) : <span className="text-sm text-white/40">None set</span>}
           </div>
         </div>
 
         <div>
-          <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Resources</h3>
-          <div className="text-sm font-semibold text-slate-700 dark:text-slate-300">
-            <span className="text-slate-500 font-medium mr-1">Budget:</span>
+          <h3 className="text-xs font-black text-white/40 uppercase tracking-wider mb-3">Resources</h3>
+          <div className="text-sm font-bold text-white">
+            <span className="text-white/50 font-medium mr-2">Budget:</span>
             {formatBudget(user.investment_budget)}
           </div>
-          <div className="text-sm font-semibold text-slate-700 dark:text-slate-300 mt-1">
-            <span className="text-slate-500 font-medium mr-1">Time:</span>
+          <div className="text-sm font-bold text-white mt-2">
+            <span className="text-white/50 font-medium mr-2">Time:</span>
             {timeCommitment || 'Not set'}
           </div>
         </div>

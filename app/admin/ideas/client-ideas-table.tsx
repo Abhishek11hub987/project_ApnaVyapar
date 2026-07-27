@@ -51,7 +51,7 @@ export default function ClientIdeasTable({ initialIdeas }: { initialIdeas: any[]
                       {idea.icon || '💡'}
                     </div>
                     <div>
-                      <p className="font-bold text-white group-hover:text-cyan transition-colors line-clamp-1">{idea.title_en}</p>
+                      <p className="font-bold text-white group-hover:text-cyan transition-colors line-clamp-1">{idea.title}</p>
                       <p className="text-xs text-white/40 font-mono mt-0.5" title={idea.id}>
                         {idea.id.substring(0, 8)}...
                       </p>

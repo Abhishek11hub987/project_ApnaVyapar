@@ -75,8 +75,12 @@ export default function ProfilePage() {
   if (!mounted || authLoading || !user) return null;
 
   return (
-    <main className="min-h-screen bg-transparent pb-24 font-sans pt-8">
-      <div className="max-w-7xl mx-auto px-4 space-y-8">
+    <main className="min-h-screen bg-navy relative overflow-hidden pb-24 font-sans pt-8">
+      {/* Decorative Background Elements */}
+      <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-cyan/5 rounded-full blur-[100px] pointer-events-none" />
+      <div className="absolute bottom-0 right-0 w-[600px] h-[600px] bg-purple-500/5 rounded-full blur-[120px] pointer-events-none" />
+
+      <div className="max-w-7xl mx-auto px-4 space-y-8 relative z-10">
         
         {/* 1. Profile Header (Full Width) */}
         <ProfileHeader user={user} onEditClick={() => setIsEditing(true)} />
