@@ -29,7 +29,7 @@ export const metadata: Metadata = {
     siteName: "Apna Vyapar",
     images: [
       {
-        url: "/og-image.png",
+        url: "https://apnavyapar.vercel.app/og-image.png",
         width: 1200,
         height: 630,
         alt: "Apna Vyapar Social Banner",
@@ -42,7 +42,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Apna Vyapar",
     description: "Get AI-powered guidance, business ideas, and step-by-step roadmaps to launch your dream.",
-    images: ["/og-image.png"],
+    images: ["https://apnavyapar.vercel.app/og-image.png"],
   },
   appleWebApp: {
     capable: true,
