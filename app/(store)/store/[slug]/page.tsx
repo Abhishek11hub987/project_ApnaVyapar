@@ -2,8 +2,10 @@ import { supabaseAdmin } from "@/lib/supabase/admin";
 import { notFound } from "next/navigation";
 import { StorefrontClient } from "@/components/store/storefront-client";
 import { VyaparMitraChat } from "@/components/store/vyapar-mitra-chat"; // We will create this next
+import { unstable_noStore as noStore } from 'next/cache';
 
 export const dynamic = 'force-dynamic'; // Prevent aggressive caching for immediate setting updates
+export const revalidate = 0; // Disable revalidation caching
 
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<import("next").Metadata> {
   const { data: store } = await supabaseAdmin
@@ -40,6 +42,8 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   };
 }
 export default async function PublicStorePage({ params }: { params: { slug: string } }) {
+  noStore(); // Opt out of Next.js caching completely for this request
+
   // 1. Fetch Store Settings by slug
   const { data: store, error: storeError } = await supabaseAdmin
     .from("store_settings")
