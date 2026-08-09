@@ -20,12 +20,12 @@ export default async function AdminOverviewPage() {
   // Calculate today's signups
   const today = new Date();
   today.setHours(0, 0, 0, 0);
-  const todaySignups = signups.filter(s => new Date(s.signup_date) >= today).length;
+  const todaySignups = signups.filter((s: any) => new Date(s.signup_date) >= today).length;
 
   // Calculate this week's signups
   const lastWeek = new Date(today);
   lastWeek.setDate(lastWeek.getDate() - 7);
-  const weekSignups = signups.filter(s => new Date(s.signup_date) >= lastWeek).length;
+  const weekSignups = signups.filter((s: any) => new Date(s.signup_date) >= lastWeek).length;
 
   return (
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500 max-w-7xl mx-auto pb-10">
