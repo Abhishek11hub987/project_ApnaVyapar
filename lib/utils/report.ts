@@ -50,7 +50,14 @@ export function downloadProfessionalReport(stats: any, filename: string) {
           <p class="meta">Generated • ${new Date().toLocaleDateString('en-IN', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}</p>
         </div>
         <div class="brand">
-          <img src="/logo-transparent.png" alt="Apna Vyapar Logo" style="height: 48px; object-fit: contain; mix-blend-mode: multiply;" />
+          <div class="logo-container">
+            <div class="logo-inner">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0d9488" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2L2 7l10 5 10-5-10-5z" fill="#0d9488" fill-opacity="0.2"/>
+                <path d="M2 17l10 5 10-5M2 12l10 5 10-5"/>
+              </svg>
+            </div>
+          </div>
         </div>
       </div>
 
