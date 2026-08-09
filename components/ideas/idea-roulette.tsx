@@ -65,6 +65,12 @@ export default function IdeaRoulette({ ideas }: { ideas: BusinessIdea[] }) {
   const likeOpacity = useTransform(x, [0, 100], [0, 1]);
   const skipOpacity = useTransform(x, [0, -100], [0, 1]);
 
+  const [imageError, setImageError] = useState(false);
+
+  useEffect(() => {
+    setImageError(false);
+  }, [currentIndex]);
+
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'ArrowRight') handleSwipe('right');
@@ -162,7 +168,16 @@ export default function IdeaRoulette({ ideas }: { ideas: BusinessIdea[] }) {
         className="absolute w-full h-[500px] bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden flex flex-col cursor-grab active:cursor-grabbing will-change-transform z-10"
       >
         <div className="relative h-1/2 w-full bg-gray-100 shrink-0">
-          <img src={imgSrc} alt={idea.title} className="w-full h-full object-cover pointer-events-none" />
+          {!imageError && imgSrc ? (
+            <img 
+              src={imgSrc} 
+              alt={idea.title} 
+              className="w-full h-full object-cover pointer-events-none" 
+              onError={() => setImageError(true)}
+            />
+          ) : (
+            <div className={`w-full h-full bg-gradient-to-br ${CATEGORY_GRADIENTS[idea.category] || 'from-gray-200 to-gray-300'}`} />
+          )}
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-black/0 pointer-events-none" />
           
           <motion.div style={{ opacity: likeOpacity }} className="absolute top-8 right-8 border-4 border-green-500 text-green-500 font-bold text-4xl rounded-lg px-4 py-2 rotate-12 pointer-events-none uppercase tracking-widest bg-white/20 backdrop-blur-sm shadow-xl">
