@@ -431,19 +431,22 @@ create trigger enforce_role_security
 -- 1. PROFILES
 alter table profiles enable row level security;
 drop policy if exists "User own profile" on profiles;
-create policy "User own profile" on profiles
-  for select using (auth.uid() = id);
+drop policy if exists "Users can read own profile" on profiles;
 drop policy if exists "Admin read all profiles" on profiles;
-create policy "Admin read all profiles" on profiles
-  for select using (
-    exists (select 1 from profiles where id = auth.uid() and role = 'admin')
-  );
+drop policy if exists "Admins can read all profiles" on profiles;
 drop policy if exists "Users can update own profile" on profiles;
-create policy "Users can update own profile" on profiles
-  for update using (auth.uid() = id);
 drop policy if exists "Users can insert own profile" on profiles;
+
+create policy "Users can read own profile" on profiles
+  for select using (auth.uid() = id);
 create policy "Users can insert own profile" on profiles
   for insert with check (auth.uid() = id);
+create policy "Users can update own profile" on profiles
+  for update using (auth.uid() = id);
+create policy "Admins can read all profiles" on profiles
+  for select using (
+    exists (select 1 from profiles p where p.id = auth.uid() and p.role = 'admin')
+  );
 
 -- 2. BUSINESS IDEAS
 alter table business_ideas enable row level security;
