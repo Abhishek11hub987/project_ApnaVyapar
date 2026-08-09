@@ -671,3 +671,15 @@ drop policy if exists "Users can update own store-logos" on storage.objects;
 create policy "Users can update own store-logos" on storage.objects for update using ( bucket_id = 'store-logos' and auth.uid() = owner );
 drop policy if exists "Users can delete own store-logos" on storage.objects;
 create policy "Users can delete own store-logos" on storage.objects for delete using ( bucket_id = 'store-logos' and auth.uid() = owner );
+
+-- ============================================================================
+-- REALTIME SUBSCRIPTIONS
+-- ============================================================================
+-- Enable realtime for products and store_settings so the storefront can auto-refresh
+begin;
+  -- Remove if they already exist to avoid errors
+  drop publication if exists supabase_realtime;
+  create publication supabase_realtime;
+commit;
+alter publication supabase_realtime add table products;
+alter publication supabase_realtime add table store_settings;
