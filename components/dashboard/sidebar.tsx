@@ -94,7 +94,7 @@ export function DashboardSidebar() {
             <ArrowLeft size={18} />
           </Link>
           <Link href="/" className="hover:opacity-90 transition-opacity">
-            <Logo iconSize={20} />
+            <Logo />
           </Link>
         </div>
         <button
@@ -197,7 +197,7 @@ export function DashboardSidebar() {
             <ArrowLeft size={20} />
           </Link>
           <Link href="/" className="hover:opacity-90 transition-opacity">
-            <Logo iconSize={20} />
+            <Logo />
           </Link>
         </div>
         <button

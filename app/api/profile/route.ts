@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { createServerClient } from '@supabase/ssr';
 import { cookies } from 'next/headers';
+import { supabaseAdmin } from '@/lib/supabase/admin';
 
 function getSupabaseClient() {
   const cookieStore = cookies();
@@ -36,7 +37,26 @@ export async function GET(request: Request) {
     }
 
     if (!data) {
-      return NextResponse.json({ error: 'Profile not found' }, { status: 404 });
+      // Auto-create missing profile to prevent login loops
+      const newProfile = {
+        id: session.user.id,
+        email: session.user.email || '',
+        full_name: session.user.user_metadata?.full_name || '',
+        onboarding_completed: false
+      };
+      
+      const { data: createdProfile, error: createError } = await supabaseAdmin
+        .from('profiles')
+        .insert(newProfile)
+        .select()
+        .single();
+        
+      if (createError || !createdProfile) {
+        console.error('Failed to auto-create profile:', createError);
+        return NextResponse.json({ error: 'Profile not found and could not be created' }, { status: 404 });
+      }
+      
+      return NextResponse.json(createdProfile);
     }
 
     return NextResponse.json(data);
