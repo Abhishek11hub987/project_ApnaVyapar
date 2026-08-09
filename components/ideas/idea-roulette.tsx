@@ -146,7 +146,7 @@ export default function IdeaRoulette({ ideas }: { ideas: BusinessIdea[] }) {
   const imgSrc = idea.image_url || DEFAULT_IMAGE;
 
   return (
-    <div className="relative w-full max-w-md mx-auto h-[600px] flex items-center justify-center perspective-1000 pb-20 pt-10">
+    <div className="relative w-full max-w-md mx-auto h-[650px] flex items-center justify-center perspective-1000 pb-20 pt-4">
       {showConfetti && <ConfettiBurst />}
       {showToast && (
         <motion.div 
@@ -165,29 +165,36 @@ export default function IdeaRoulette({ ideas }: { ideas: BusinessIdea[] }) {
         style={{ x, rotate, opacity }}
         animate={controls}
         onDragEnd={handleDragEnd}
-        className="absolute w-full h-[500px] bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden flex flex-col cursor-grab active:cursor-grabbing will-change-transform z-10"
+        className="absolute w-full h-[560px] bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden flex flex-col cursor-grab active:cursor-grabbing will-change-transform z-10"
       >
-        <div className="relative h-1/2 w-full bg-gray-100 shrink-0">
+        <div className="relative h-[240px] w-full shrink-0 bg-gray-100">
           {!imageError && imgSrc ? (
-            <img 
-              src={imgSrc} 
-              alt={idea.title} 
-              className="w-full h-full object-cover pointer-events-none" 
-              onError={() => setImageError(true)}
-            />
+            <>
+              <img 
+                src={imgSrc} 
+                alt={idea.title} 
+                className="w-full h-full object-cover pointer-events-none" 
+                onError={() => setImageError(true)}
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent pointer-events-none" />
+            </>
           ) : (
-            <div className={`w-full h-full bg-gradient-to-br ${CATEGORY_GRADIENTS[idea.category] || 'from-gray-200 to-gray-300'}`} />
+            <div className={`w-full h-full bg-gradient-to-br ${CATEGORY_GRADIENTS[idea.category] || 'from-gray-200 to-gray-300'} relative overflow-hidden`}>
+               {/* Decorative circles for the fallback gradient so it doesn't look empty */}
+               <div className="absolute -top-10 -right-10 w-40 h-40 bg-white/10 rounded-full blur-2xl pointer-events-none" />
+               <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-black/10 rounded-full blur-2xl pointer-events-none" />
+               <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent pointer-events-none" />
+            </div>
           )}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-black/0 pointer-events-none" />
           
-          <motion.div style={{ opacity: likeOpacity }} className="absolute top-8 right-8 border-4 border-green-500 text-green-500 font-bold text-4xl rounded-lg px-4 py-2 rotate-12 pointer-events-none uppercase tracking-widest bg-white/20 backdrop-blur-sm shadow-xl">
+          <motion.div style={{ opacity: likeOpacity }} className="absolute top-8 right-8 border-4 border-green-500 text-green-500 font-bold text-4xl rounded-lg px-4 py-2 rotate-12 pointer-events-none uppercase tracking-widest bg-white/20 backdrop-blur-sm shadow-xl z-20">
             LIKE
           </motion.div>
-          <motion.div style={{ opacity: skipOpacity }} className="absolute top-8 left-8 border-4 border-red-500 text-red-500 font-bold text-4xl rounded-lg px-4 py-2 -rotate-12 pointer-events-none uppercase tracking-widest bg-white/20 backdrop-blur-sm shadow-xl">
+          <motion.div style={{ opacity: skipOpacity }} className="absolute top-8 left-8 border-4 border-red-500 text-red-500 font-bold text-4xl rounded-lg px-4 py-2 -rotate-12 pointer-events-none uppercase tracking-widest bg-white/20 backdrop-blur-sm shadow-xl z-20">
             SKIP
           </motion.div>
 
-          <div className="absolute bottom-4 left-4 right-4 text-white">
+          <div className="absolute bottom-4 left-4 right-4 text-white z-10">
             <span className="inline-block px-3 py-1 rounded-full bg-white/20 backdrop-blur-md text-xs font-semibold mb-2 shadow-sm border border-white/10">
               {idea.category}
             </span>
@@ -213,7 +220,7 @@ export default function IdeaRoulette({ ideas }: { ideas: BusinessIdea[] }) {
             </div>
           </div>
           
-          <Link href={`/ideas/${idea.slug}`} className="mt-4 w-full bg-gray-50 hover:bg-gray-100 border border-gray-200 flex items-center justify-center gap-2 text-gray-700 font-medium text-sm py-2.5 rounded-lg transition-colors">
+          <Link href={`/ideas/${idea.slug}`} className="mt-5 w-full bg-gray-50 hover:bg-gray-100 border border-gray-200 flex items-center justify-center gap-2 text-gray-700 font-medium text-sm py-3 rounded-xl transition-colors">
             <Info size={16} /> View Full Details
           </Link>
         </div>
@@ -221,22 +228,22 @@ export default function IdeaRoulette({ ideas }: { ideas: BusinessIdea[] }) {
       
       {/* Background card to show what's next (stack effect) */}
       {currentIndex + 1 < ideas.length && (
-        <div className="absolute w-full h-[500px] bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden scale-[0.95] translate-y-4 z-0 opacity-50">
-           <div className="h-1/2 w-full bg-gray-200"></div>
+        <div className="absolute w-full h-[560px] bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden scale-[0.95] translate-y-4 z-0 opacity-50">
+           <div className="h-[240px] w-full bg-gray-200"></div>
         </div>
       )}
       
       {/* Controls */}
-      <div className="absolute -bottom-4 left-0 right-0 flex items-center justify-center gap-6">
+      <div className="absolute -bottom-8 left-0 right-0 flex items-center justify-center gap-6">
         <button 
           onClick={() => handleSwipe('left')}
-          className="w-16 h-16 rounded-full bg-white shadow-xl border border-gray-100 flex items-center justify-center text-red-500 hover:bg-red-50 hover:scale-110 transition-all focus:outline-none focus:ring-4 focus:ring-red-500/20 active:scale-95"
+          className="w-16 h-16 rounded-full bg-white shadow-xl border border-gray-100 flex items-center justify-center text-red-500 hover:bg-red-50 hover:scale-110 transition-all focus:outline-none focus:ring-4 focus:ring-red-500/20 active:scale-95 z-30"
         >
           <X size={32} strokeWidth={2.5} />
         </button>
         <button 
           onClick={() => handleSwipe('right')}
-          className="w-16 h-16 rounded-full bg-white shadow-xl border border-gray-100 flex items-center justify-center text-green-500 hover:bg-green-50 hover:scale-110 transition-all focus:outline-none focus:ring-4 focus:ring-green-500/20 active:scale-95"
+          className="w-16 h-16 rounded-full bg-white shadow-xl border border-gray-100 flex items-center justify-center text-green-500 hover:bg-green-50 hover:scale-110 transition-all focus:outline-none focus:ring-4 focus:ring-green-500/20 active:scale-95 z-30"
         >
           <Heart size={32} strokeWidth={2.5} className="fill-current" />
         </button>
