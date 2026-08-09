@@ -2,7 +2,7 @@
   <img src="public/logo-transparent.png" width="300" height="auto" alt="Apna Vyapar Logo">
   <h1>🚀 Apna Vyapar (अपना व्यापार)</h1>
   <p><strong>An AI‑powered platform empowering aspiring Indian entrepreneurs to discover, evaluate, and launch high‑impact businesses.</strong></p>
-  [![Live Demo](https://img.shields.io/badge/Live%20Demo-Visit%20Now-brightgreen?style=for-the-badge)](https://apnavyapar.vercel.app)
+  (https://apnavyapar.vercel.app)
   
   <p>
     <a href="#overview">Overview</a> &nbsp;|&nbsp; 
@@ -18,7 +18,7 @@
 
 **Apna Vyapar** is a premium SaaS-style web application built specifically for the Indian market. It guides first-time founders from zero to launch with curated business ideas, interactive data visualization, and an intelligent AI co-pilot. 
 
-The entire platform features a stunning **Glassmorphism Aesthetic**—complete with dynamic neon glows, adaptive light/dark modes, and smooth micro-animations, providing a world-class user experience.
+The entire platform features a stunning **Glassmorphism Aesthetic**—complete with dynamic neon glows, and smooth micro-animations, providing a world-class user experience.
 
 ---
 
