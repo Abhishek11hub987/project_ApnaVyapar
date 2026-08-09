@@ -533,6 +533,9 @@ alter table products enable row level security;
 drop policy if exists "Users can CRUD own products" on products;
 create policy "Users can CRUD own products" on products
   for all using (auth.uid() = user_id);
+drop policy if exists "Public can view active products" on products;
+create policy "Public can view active products" on products
+  for select using (status = 'active');
 
 -- 13. CUSTOMERS
 alter table customers enable row level security;
