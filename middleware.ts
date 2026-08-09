@@ -55,25 +55,14 @@ export async function middleware(request: NextRequest) {
     }
   }
 
-  const publicRoutes = ['/', '/ideas', '/how-it-works', '/about', '/contact', '/faq', '/schemes', '/about-us'];
-  
-  // Also allow static files, api routes, and public folder routes (images, next static, etc)
-  // Usually the matcher in config handles some of this, but it's safe to be explicit
-  const isPublicRoute = publicRoutes.includes(request.nextUrl.pathname) || 
-                        request.nextUrl.pathname.startsWith('/ideas/') ||
-                        request.nextUrl.pathname.startsWith('/p/') ||
-                        request.nextUrl.pathname.startsWith('/schemes/') ||
-                        request.nextUrl.pathname.startsWith('/api/checkout') ||
-                        request.nextUrl.pathname.startsWith('/api/store-chat') ||
-                        request.nextUrl.pathname.startsWith('/api/locations') ||
-                        request.nextUrl.pathname.startsWith('/api/cron') ||
-                        request.nextUrl.pathname.startsWith('/_next/') ||
-                        request.nextUrl.pathname.startsWith('/images/') ||
-                        request.nextUrl.pathname.startsWith('/auth/');
-
-  const isProtectedRoute = !isPublicRoute;
+  const protectedPrefixes = ['/dashboard', '/chat', '/profile', '/onboarding', '/tasks'];
+  const isProtectedRoute = protectedPrefixes.some(prefix => request.nextUrl.pathname.startsWith(prefix));
 
   if (isProtectedRoute && !user) {
+    // Prevent redirect loop if already going to login
+    if (request.nextUrl.searchParams.get('login') === 'true') {
+      return supabaseResponse;
+    }
     return NextResponse.redirect(new URL('/?login=true', request.url))
   }
 
@@ -88,7 +77,8 @@ export async function middleware(request: NextRequest) {
     return supabaseResponse
   } catch (error) {
     console.error('Middleware error:', error);
-    return NextResponse.redirect(new URL('/?login=true', request.url));
+    // Don't redirect to login on random errors to prevent infinite loops, just return the response
+    return NextResponse.next({ request });
   }
 }
 

@@ -6,11 +6,11 @@ import BottomNav from '@/components/layout/bottom-nav';
 import { useAuth } from '@/hooks/use-auth';
 import { useRouter, usePathname } from 'next/navigation';
 
-// Routes that don't require authentication
-const PUBLIC_ROUTES = ['/', '/ideas', '/how-it-works', '/about', '/contact', '/faq', '/schemes', '/about-us'];
+// Routes that require authentication
+const PROTECTED_PREFIXES = ['/dashboard', '/chat', '/profile', '/onboarding', '/tasks'];
 
-function isPublicRoute(pathname: string): boolean {
-  return PUBLIC_ROUTES.includes(pathname) || pathname.startsWith('/ideas/') || pathname.startsWith('/p/') || pathname.startsWith('/schemes/');
+function isProtectedRoute(pathname: string): boolean {
+  return PROTECTED_PREFIXES.some(prefix => pathname.startsWith(prefix));
 }
 
 export default function AppLayout({
@@ -26,7 +26,7 @@ export default function AppLayout({
     if (isLoading) return;
 
     if (!isAuthenticated || !user) {
-      if (!isPublicRoute(pathname)) {
+      if (isProtectedRoute(pathname)) {
         router.push(`/?login=true&redirect=${encodeURIComponent(pathname)}`);
       }
     } else {
