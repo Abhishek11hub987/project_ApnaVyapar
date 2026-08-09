@@ -1,18 +1,21 @@
-import { createServerClient, type CookieOptions } from '@supabase/ssr'
+import { createServerClient } from '@supabase/ssr'
 import { cookies } from 'next/headers'
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
 export async function GET(request: NextRequest) {
-  const { searchParams, origin } = new URL(request.url)
+  const { searchParams } = new URL(request.url)
   const code = searchParams.get('code')
-  const next = searchParams.get('next') ?? '/'
+  const next = searchParams.get('next') ?? '/dashboard'
 
   // Validate next to prevent open redirect
-  const safeNext = next.startsWith('/') && !next.startsWith('//') ? next : '/'
+  const safeNext = next.startsWith('/') && !next.startsWith('//') ? next : '/dashboard'
 
   if (code) {
     const cookieStore = cookies()
+
+    // Collect cookies set during session exchange so we can forward them on the redirect
+    const newCookies: Array<{ name: string; value: string; options: Record<string, any> }> = []
 
     const supabase = createServerClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -23,8 +26,14 @@ export async function GET(request: NextRequest) {
             return cookieStore.getAll()
           },
           setAll(cookiesToSet) {
+            // Collect the cookies to attach to redirect later
             cookiesToSet.forEach(({ name, value, options }) => {
-              cookieStore.set({ name, value, ...options })
+              newCookies.push({ name, value, options: options ?? {} })
+              try {
+                cookieStore.set({ name, value, ...options })
+              } catch {
+                // Ignore in Route Handler context
+              }
             })
           },
         },
@@ -34,26 +43,23 @@ export async function GET(request: NextRequest) {
     const { data: sessionData, error } = await supabase.auth.exchangeCodeForSession(code)
 
     if (!error && sessionData.user) {
-      try {
-        const { supabaseAdmin } = await import('@/lib/supabase/admin');
-        const user = sessionData.user;
-        const email = user.email;
-        const provider = user.app_metadata?.provider || 'email';
-        const fullName = user.user_metadata?.full_name || '';
-        const firstName = fullName ? fullName.split(' ')[0] : '';
+      // Determine redirect target
+      let redirectUrl = safeNext
 
-        const { data: existing } = await supabaseAdmin
-          .from('signup_analytics')
-          .select('id')
-          .eq('user_id', user.id)
-          .single();
+      try {
+        const { supabaseAdmin } = await import('@/lib/supabase/admin')
+        const user = sessionData.user
+        const email = user.email
+        const provider = user.app_metadata?.provider || 'email'
+        const fullName = user.user_metadata?.full_name || ''
+        const firstName = fullName ? fullName.split(' ')[0] : ''
 
         // Check and create profile if missing
         const { data: existingProfile } = await supabaseAdmin
           .from('profiles')
-          .select('id')
+          .select('id, onboarding_completed')
           .eq('id', user.id)
-          .single();
+          .maybeSingle()
 
         if (!existingProfile) {
           await supabaseAdmin.from('profiles').insert({
@@ -61,47 +67,66 @@ export async function GET(request: NextRequest) {
             email: email,
             full_name: fullName || '',
             onboarding_completed: false
-          });
+          })
         }
 
-        if (!existing) {
+        // Track first-time signups
+        const { data: existingAnalytics } = await supabaseAdmin
+          .from('signup_analytics')
+          .select('id')
+          .eq('user_id', user.id)
+          .maybeSingle()
+
+        if (!existingAnalytics) {
           await supabaseAdmin.from('signup_analytics').insert({
             user_id: user.id,
             email: email,
             provider: provider,
             first_name: firstName,
             is_first_time: true
-          });
+          })
 
           const welcomeMessage = {
             role: 'assistant',
             content: `Welcome to Apna Vyapar${firstName ? `, ${firstName}` : ''}! I am Vyapar Mitra, your AI business assistant. Whether you're looking for the right business idea, trying to understand legal registrations, or need a step-by-step launch plan, I'm here to help.\n\nWhat kind of business are you interested in starting today?`
-          };
+          }
 
-          const { data: newSession } = await supabaseAdmin.from('chat_sessions').insert({
+          const { data: newChatSession } = await supabaseAdmin.from('chat_sessions').insert({
             user_id: user.id,
             title: 'Welcome to Apna Vyapar!',
             messages: [welcomeMessage],
             message_count: 1
-          }).select('id').single();
+          }).select('id').maybeSingle()
 
-          if (newSession) {
-            return NextResponse.redirect(new URL(`/chat?session=${newSession.id}&welcome=true`, request.url))
+          if (newChatSession) {
+            redirectUrl = `/chat?session=${newChatSession.id}&welcome=true`
           }
-
-          return NextResponse.redirect(new URL(`${safeNext}${safeNext.includes('?') ? '&' : '?'}welcome=true`, request.url))
+        } else {
+          // Returning user — send to dashboard
+          redirectUrl = existingProfile?.onboarding_completed === false ? '/onboarding' : '/dashboard'
         }
       } catch (err) {
-        console.error('Analytics tracking error:', err);
+        console.error('[callback] Analytics/profile error:', err)
+        // Don't block login for analytics errors — just go to dashboard
+        redirectUrl = '/dashboard'
       }
 
-      return NextResponse.redirect(new URL(safeNext, request.url))
+      // Build the redirect response and ATTACH session cookies to it
+      const response = NextResponse.redirect(new URL(redirectUrl, request.url))
+      newCookies.forEach(({ name, value, options }) => {
+        response.cookies.set(name, value, options)
+      })
+      return response
+
     } else {
-      console.error('Code exchange error:', error?.message)
-      return NextResponse.redirect(new URL(`/?login=true&error=${encodeURIComponent(error?.message || 'Authentication failed')}`, request.url))
+      console.error('[callback] Code exchange error:', error?.message)
+      return NextResponse.redirect(
+        new URL(`/?login=true&error=${encodeURIComponent(error?.message || 'Authentication failed')}`, request.url)
+      )
     }
   }
 
+  // No code — handle implicit grant (Magic Link via hash fragment)
   const html = `
     <!DOCTYPE html>
     <html>
@@ -113,11 +138,8 @@ export async function GET(request: NextRequest) {
             if (hash) {
               var params = new URLSearchParams(hash);
               if (params.get('access_token')) {
-                // Redirect to homepage trampoline with the hash so the client SDK can parse it
-                // We cannot redirect directly to a protected route (like /dashboard) because 
-                // the server-side middleware will block it before the client has a chance to set the cookie.
-                var next = new URLSearchParams(window.location.search).get('next') || '/dashboard';
-                window.location.href = '/?login=true&redirect=' + encodeURIComponent(next) + '#' + hash;
+                // Let Supabase client-side SDK handle the hash tokens on the homepage
+                window.location.href = '/?login=true&redirect=/dashboard#' + hash;
               } else if (params.get('error_description')) {
                 window.location.href = '/?login=true&error=' + encodeURIComponent(params.get('error_description'));
               } else {
