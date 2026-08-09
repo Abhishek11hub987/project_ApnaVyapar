@@ -4,6 +4,8 @@ import { LandingNavbar } from "@/components/landing/landing-navbar";
 import { LandingFooter } from "@/components/landing/landing-footer";
 import { HowItWorks } from "@/components/landing/how-it-works";
 import { FinalCTA } from "@/components/landing/final-cta";
+import Link from 'next/link';
+import { ArrowLeft } from 'lucide-react';
 
 export default function HowItWorksPage() {
   return (
@@ -11,7 +13,12 @@ export default function HowItWorksPage() {
       <LandingNavbar />
       
       {/* Page Header */}
-      <div className="max-w-4xl mx-auto text-center px-4 py-16 md:py-24">
+      <div className="max-w-4xl mx-auto text-center px-4 py-16 md:py-24 relative">
+        <div className="absolute top-8 left-4 md:left-8">
+          <Link href="/" className="inline-flex items-center gap-2 text-sm font-bold text-gray-500 hover:text-accent-600 transition-colors bg-white/50 px-4 py-2 rounded-full border border-gray-200">
+            <ArrowLeft size={16} /> Return to Home
+          </Link>
+        </div>
         <h1 className="text-4xl md:text-6xl font-extrabold text-gray-900 tracking-tight mb-6">
           How Apna Vyapar Works
         </h1>

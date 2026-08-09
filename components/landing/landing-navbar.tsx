@@ -37,16 +37,16 @@ export function LandingNavbar() {
             isAuthenticated ? (
               <Link
                 href="/dashboard"
-                className="text-sm font-bold bg-gray-100 text-gray-900 px-5 py-2 md:py-2.5 rounded-full hover:bg-gray-200 transition-all duration-300"
+                className="text-xs sm:text-sm font-bold bg-gray-100 text-gray-900 px-4 py-2 sm:px-5 sm:py-2.5 rounded-full hover:bg-gray-200 transition-all duration-300"
               >
                 Dashboard
               </Link>
             ) : (
               <Link
                 href="/ideas"
-                className="text-sm font-bold bg-gray-900 text-white px-5 py-2 md:py-2.5 rounded-full hover:bg-gray-800 transition-all duration-300 shadow-md hover:-translate-y-0.5"
+                className="text-xs sm:text-sm font-bold bg-accent-600 text-white px-4 py-2 sm:px-5 sm:py-2.5 rounded-full hover:bg-accent-700 transition-all duration-300 shadow-md hover:-translate-y-0.5"
               >
-                Ideas
+                Get Started
               </Link>
             )
           )}
