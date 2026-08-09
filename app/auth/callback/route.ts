@@ -113,9 +113,11 @@ export async function GET(request: NextRequest) {
             if (hash) {
               var params = new URLSearchParams(hash);
               if (params.get('access_token')) {
-                // Redirect to dashboard with the hash so the client SDK can parse it
+                // Redirect to homepage trampoline with the hash so the client SDK can parse it
+                // We cannot redirect directly to a protected route (like /dashboard) because 
+                // the server-side middleware will block it before the client has a chance to set the cookie.
                 var next = new URLSearchParams(window.location.search).get('next') || '/dashboard';
-                window.location.href = next + '#' + hash;
+                window.location.href = '/?login=true&redirect=' + encodeURIComponent(next) + '#' + hash;
               } else if (params.get('error_description')) {
                 window.location.href = '/?login=true&error=' + encodeURIComponent(params.get('error_description'));
               } else {
