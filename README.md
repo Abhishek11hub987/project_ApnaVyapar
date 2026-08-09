@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="public/logo.png" width="300" height="300" alt="Apna Vyapar 3D Logo">
+  <img src="public/logo-transparent.png" width="300" height="auto" alt="Apna Vyapar Logo">
   <h1>🚀 Apna Vyapar (अपना व्यापार)</h1>
   <p><strong>An AI‑powered platform empowering aspiring Indian entrepreneurs to discover, evaluate, and launch high‑impact businesses.</strong></p>
   [![Live Demo](https://img.shields.io/badge/Live%20Demo-Visit%20Now-brightgreen?style=for-the-badge)](https://apnavyapar.vercel.app)
@@ -18,7 +18,7 @@
 
 **Apna Vyapar** is a premium SaaS-style web application built specifically for the Indian market. It guides first-time founders from zero to launch with curated business ideas, interactive data visualization, and an intelligent AI co-pilot. 
 
-The entire platform features a stunning **Project Aethereal** glassmorphism aesthetic—complete with dynamic neon glows, adaptive light/dark modes, and smooth micro-animations, providing a world-class user experience.
+The entire platform features a stunning **Glassmorphism Aesthetic**—complete with dynamic neon glows, adaptive light/dark modes, and smooth micro-animations, providing a world-class user experience.
 
 ---
 
@@ -36,8 +36,11 @@ Once you choose an idea, Apna Vyapar generates a personalized, step-by-step road
 ### 🏪 Inventory & Store Builder
 Real-time stock tracking paired with a beautiful, zero-code drag-and-drop storefront builder. Launch your digital dukaan (shop) in minutes and start accepting orders immediately.
 
-### 📊 Analytics Dashboard
-Professional-grade data visualization. Download comprehensive PDF reports, track revenue growth, monitor customer trends, and make data-driven decisions to scale your business.
+### 📊 Analytics Dashboard & PDF Reports
+Professional-grade data visualization. Download comprehensive, beautifully branded PDF reports, track revenue growth, monitor customer trends, and make data-driven decisions to scale your business.
+
+### 🛡️ Secure Admin Control Center
+A completely overhauled Admin Dashboard featuring professional platform metrics, secure Role-Based Access Control (RBAC), and hardened API routes to ensure user data remains completely private.
 
 ### 🎲 Idea Roulette & Bharat Heatmap
 Swipe through business ideas Tinder-style to save what you love. Explore the interactive map of India to see which business sectors are currently trending in your specific state!
@@ -50,12 +53,12 @@ Apna Vyapar is built using a modern, highly scalable, and production-ready archi
 
 - **Framework:** Next.js 14 (App Router) with React 18
 - **Language:** strict TypeScript
-- **Styling:** Tailwind CSS with custom Aethereal glassmorphism utilities & CSS variables
+- **Styling:** Tailwind CSS with custom Glassmorphism utilities & CSS variables
 - **Database & Auth:** Supabase (PostgreSQL) with Row-Level Security (RLS)
 - **AI Integration:** Groq API running `llama-3.3-70b-versatile` for high-speed, accurate AI reasoning
 - **Animations:** Framer Motion & GSAP for fluid scroll effects and micro-interactions
 - **Charts & Maps:** Recharts & react-simple-maps for data visualization
-- **PDF Generation:** jsPDF for auto-generating professional business reports
+- **PDF Generation:** jsPDF and html2canvas for auto-generating professional business reports
 
 ---
 
