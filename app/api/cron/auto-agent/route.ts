@@ -25,8 +25,8 @@ export async function GET(req: Request) {
       .limit(10);
 
     const existingTitles = [
-      ...(recentIdeas?.map(i => i.title) || []),
-      ...(businessIdeas?.map(i => i.title) || [])
+      ...(recentIdeas?.map((i: any) => i.title) || []),
+      ...(businessIdeas?.map((i: any) => i.title) || [])
     ].slice(0, 20).join(', ');
 
     const { data: userLocations } = await supabaseAdmin
