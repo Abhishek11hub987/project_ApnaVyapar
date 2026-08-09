@@ -29,7 +29,7 @@ export function LandingNavbar() {
         <div className="flex items-center justify-between h-16 md:h-[72px]">
           {/* Logo */}
           <Link href="/" className="hover:opacity-90 transition-opacity shrink-0">
-            <Logo iconSize={26} />
+            <Logo />
           </Link>
 
           {/* Right Action: Ideas / Dashboard */}

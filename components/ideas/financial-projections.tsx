@@ -14,6 +14,9 @@ export default function FinancialProjections({ financials }: FinancialsProps) {
     { icon: PieChart, label: 'Expected Profit Margin', value: financials.profit_margin, color: 'text-purple-600', bg: 'bg-purple-50 ' },
   ];
 
+  if (items.every(item => !item.value)) return null;
+
+
   return (
     <div className="bg-white  rounded-2xl border border-slate-200  p-6 shadow-sm">
       <h3 className="text-xl font-bold text-slate-900  mb-6 flex items-center gap-2">

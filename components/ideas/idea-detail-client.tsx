@@ -42,26 +42,24 @@ export default function IdeaDetailClient({ idea }: { idea: BusinessIdea }) {
   };
 
   return (
-    <main className="min-h-screen bg-slate-50  pb-32 font-sans transition-colors">
+    <main className="min-h-screen bg-transparent pb-32 font-sans transition-colors">
       {/* Header/Hero */}
-      <div className="relative bg-white  border-b border-slate-200  shadow-sm overflow-hidden">
+      <div className="relative bg-transparent border-b border-gray-200/50 overflow-hidden">
         
         {/* Background Image with Gradient Overlay */}
         {!imgError ? (
-          <>
-            <div className="absolute inset-0 z-0">
-              <img 
-                src={imgSrc} 
-                alt={idea.title} 
-                className="w-full h-full object-cover" 
-                onError={handleImgError}
-              />
-            </div>
-            <div className="absolute inset-0 z-0 bg-gradient-to-t from-slate-900/90 via-slate-900/70 to-slate-900/40   " />
-          </>
+          <div className="absolute inset-0 z-0">
+            <img 
+              src={imgSrc} 
+              alt={idea.title} 
+              className="w-full h-full object-cover" 
+              onError={handleImgError}
+            />
+          </div>
         ) : (
           <div className={`absolute inset-0 z-0 bg-gradient-to-br ${CATEGORY_GRADIENTS[idea.category] || 'from-slate-700 to-slate-900'}`} />
         )}
+        <div className="absolute inset-0 z-0 bg-gradient-to-t from-gray-900/95 via-gray-900/80 to-gray-900/50" />
 
         <div className={`relative z-10 pt-6 pb-16 px-4 text-white`}>
           <div className="max-w-5xl mx-auto">

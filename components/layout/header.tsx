@@ -58,7 +58,7 @@ export default function Header() {
         <div className="flex items-center justify-between h-16 md:h-[72px]">
           {/* Logo */}
           <Link href="/" className="shrink-0 hover:opacity-90 transition-opacity">
-            <Logo iconSize={24} />
+            <Logo />
           </Link>
 
           {/* Center Nav — Desktop */}
