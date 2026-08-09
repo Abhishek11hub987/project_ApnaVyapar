@@ -113,7 +113,9 @@ export async function GET(request: NextRequest) {
             if (hash) {
               var params = new URLSearchParams(hash);
               if (params.get('access_token')) {
-                window.location.href = '/auth/callback?' + hash;
+                // Redirect to dashboard with the hash so the client SDK can parse it
+                var next = new URLSearchParams(window.location.search).get('next') || '/dashboard';
+                window.location.href = next + '#' + hash;
               } else if (params.get('error_description')) {
                 window.location.href = '/?login=true&error=' + encodeURIComponent(params.get('error_description'));
               } else {
