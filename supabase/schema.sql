@@ -642,3 +642,32 @@ insert into resource_locations (name, type, address, city, state, pincode, phone
 ('District Industries Centre (DIC) - Mumbai', 'DIC', 'Bandra Kurla Complex, Mumbai', 'Mumbai', 'Maharashtra', '400051', '022-26590001', 'dic-mumbai@nic.in', null, 19.0653, 72.8659, array['Industrial Permissions', 'State Subsidies']),
 ('Startup Incubator - T-Hub', 'Incubator', 'Knowledge City, Madhapur, Hyderabad', 'Hyderabad', 'Telangana', '500081', '040-45678901', 'info@t-hub.co', 'https://t-hub.co', 17.4399, 78.3800, array['Mentorship', 'Funding Connections', 'Office Space']),
 ('Common Service Centre (CSC) - HSR Layout', 'CSC', '27th Main, Sector 1, HSR Layout, Bangalore', 'Bangalore', 'Karnataka', '560102', '080-12345678', null, null, 12.9121, 77.6446, array['Aadhaar Updates', 'GST Filing', 'Trade License']);
+
+-- ============================================================================
+-- STORAGE BUCKETS & RLS
+-- ============================================================================
+-- Create product-images bucket if it doesn't exist
+insert into storage.buckets (id, name, public) values ('product-images', 'product-images', true) on conflict do nothing;
+
+-- Create store-logos bucket if it doesn't exist
+insert into storage.buckets (id, name, public) values ('store-logos', 'store-logos', true) on conflict do nothing;
+
+-- RLS for product-images
+drop policy if exists "Public Access to product-images" on storage.objects;
+create policy "Public Access to product-images" on storage.objects for select using ( bucket_id = 'product-images' );
+drop policy if exists "Authenticated users can upload product-images" on storage.objects;
+create policy "Authenticated users can upload product-images" on storage.objects for insert with check ( bucket_id = 'product-images' and auth.role() = 'authenticated' );
+drop policy if exists "Users can update own product-images" on storage.objects;
+create policy "Users can update own product-images" on storage.objects for update using ( bucket_id = 'product-images' and auth.uid() = owner );
+drop policy if exists "Users can delete own product-images" on storage.objects;
+create policy "Users can delete own product-images" on storage.objects for delete using ( bucket_id = 'product-images' and auth.uid() = owner );
+
+-- RLS for store-logos
+drop policy if exists "Public Access to store-logos" on storage.objects;
+create policy "Public Access to store-logos" on storage.objects for select using ( bucket_id = 'store-logos' );
+drop policy if exists "Authenticated users can upload store-logos" on storage.objects;
+create policy "Authenticated users can upload store-logos" on storage.objects for insert with check ( bucket_id = 'store-logos' and auth.role() = 'authenticated' );
+drop policy if exists "Users can update own store-logos" on storage.objects;
+create policy "Users can update own store-logos" on storage.objects for update using ( bucket_id = 'store-logos' and auth.uid() = owner );
+drop policy if exists "Users can delete own store-logos" on storage.objects;
+create policy "Users can delete own store-logos" on storage.objects for delete using ( bucket_id = 'store-logos' and auth.uid() = owner );
