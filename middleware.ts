@@ -33,12 +33,21 @@ export async function middleware(request: NextRequest) {
   const isAdminRoute = request.nextUrl.pathname.startsWith('/admin');
   const isAdminApiRoute = request.nextUrl.pathname.startsWith('/api/admin');
 
+  // Helper to redirect while preserving Supabase cookies (crucial for clearing expired sessions or saving refreshed ones)
+  const redirectWithCookies = (url: URL | string) => {
+    const response = NextResponse.redirect(new URL(url, request.url));
+    supabaseResponse.cookies.getAll().forEach(cookie => {
+      response.cookies.set(cookie.name, cookie.value, cookie);
+    });
+    return response;
+  };
+
   if (isAdminRoute || isAdminApiRoute) {
     if (!user) {
       if (isAdminApiRoute) {
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
       }
-      return NextResponse.redirect(new URL('/?login=true', request.url));
+      return redirectWithCookies('/?login=true');
     }
     
     // Check if user is admin
@@ -63,14 +72,14 @@ export async function middleware(request: NextRequest) {
     if (request.nextUrl.searchParams.get('login') === 'true') {
       return supabaseResponse;
     }
-    return NextResponse.redirect(new URL('/?login=true', request.url))
+    return redirectWithCookies('/?login=true');
   }
 
   // Redirect to onboarding if profile incomplete (skip for onboarding itself)
   if (user && isProtectedRoute && !request.nextUrl.pathname.startsWith('/onboarding')) {
     const { data: profile } = await supabase.from('profiles').select('onboarding_completed').eq('id', user.id).single();
     if (profile && !profile.onboarding_completed) {
-      return NextResponse.redirect(new URL('/onboarding', request.url));
+      return redirectWithCookies('/onboarding');
     }
   }
 
