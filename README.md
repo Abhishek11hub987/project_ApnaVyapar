@@ -100,6 +100,17 @@ The platform is heavily optimized for search engines. It utilizes Next.js `gener
 
 ---
 
+## 🤝 Contact & Support
+
+This project is built and maintained by a solo developer. I am always open to feedback, bug reports, and exciting new ideas to make Apna Vyapar better for everyone!
+
+📧 **Email:** [paradoxhq3@gmail.com](mailto:paradoxhq3@gmail.com)  
+🐙 **GitHub:** [Abhishek11hub987](https://github.com/Abhishek11hub987)
+
+---
+
 <div align="center">
-  <i>Built with passion for the next generation of Indian Entrepreneurs.</i>
+  <em>"व्यापार में जोखिम ही सबसे बड़ा मुनाफा है।"</em><br>
+  (In business, taking risks is the biggest profit.)<br><br>
+  Built with ❤️ for Indian entrepreneurs.
 </div>
