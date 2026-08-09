@@ -1,6 +1,7 @@
 import { supabaseAdmin } from '@/lib/supabase/admin';
 import { Users, Lightbulb, MessageSquare, Clock, Calendar, TrendingUp, Activity, Server, Settings, Shield } from 'lucide-react';
 import Link from 'next/link';
+import AdminControls from './admin-controls';
 
 export const revalidate = 0;
 
@@ -126,13 +127,8 @@ export default async function AdminOverviewPage() {
             </div>
           </div>
 
-          <div className="mt-6 flex flex-wrap gap-3">
-             <button className="btn-secondary text-sm px-4 py-2 flex items-center gap-2">
-               <Server size={16} /> Force Sync Cache
-             </button>
-             <button className="btn-secondary text-sm px-4 py-2 flex items-center gap-2">
-               <Settings size={16} /> Global Platform Settings
-             </button>
+          <div className="mt-6">
+            <AdminControls />
           </div>
         </div>
 
