@@ -8,8 +8,14 @@ import { useAuth } from '@/hooks/use-auth';
 function isSafeRedirect(path: string | null): path is string {
   if (!path) return false;
   try {
-    const url = new URL(path, 'http://localhost');
-    return url.origin === 'http://localhost';
+    // Avoid redirecting back to the login page itself in a loop
+    if (path.includes('login=true')) return false;
+    
+    // Check if the path is a safe relative URL or belongs to the current origin
+    if (path.startsWith('/') && !path.startsWith('//')) return true;
+    
+    const url = new URL(path);
+    return url.origin === window.location.origin;
   } catch {
     return false;
   }

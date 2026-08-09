@@ -7,11 +7,18 @@ interface LogoProps {
   showTagline?: boolean; 
 }
 
-export default function Logo({ className = '' }: LogoProps) {
+export default function Logo({ className = '', iconSize }: LogoProps) {
+  // If iconSize is provided, we use a fixed size. 
+  // We use a 16:9 aspect ratio approximation since the logo is rectangular.
+  const width = iconSize ? iconSize * 1.5 : undefined;
+  
   return (
     <div className={`flex items-center justify-center ${className}`}>
       <div 
-        className="relative mix-blend-multiply h-12 w-20 md:h-16 md:w-28 lg:h-20 lg:w-36 transition-all" 
+        className={`relative mix-blend-multiply transition-all ${
+          !iconSize ? 'h-12 w-20 md:h-16 md:w-28 lg:h-20 lg:w-36' : ''
+        }`}
+        style={iconSize ? { height: iconSize, width } : undefined}
       >
         <Image
           src="/logo-transparent.png"

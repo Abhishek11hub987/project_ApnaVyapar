@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { LandingNavbar } from "@/components/landing/landing-navbar";
 import { LandingFooter } from "@/components/landing/landing-footer";
 import { FinalCTA } from "@/components/landing/final-cta";
@@ -16,7 +17,13 @@ export default function AboutPage() {
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-3xl h-[400px] bg-gradient-to-b from-accent-400/20 to-transparent blur-[100px] pointer-events-none" />
         
         <div className="max-w-4xl mx-auto text-center relative z-10">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/80 backdrop-blur-md border border-gray-100 text-gray-700 text-sm font-bold mb-8 shadow-sm animate-fade-in-up">
+          <div className="mb-6 flex justify-center animate-fade-in-up">
+            <Link href="/" className="inline-flex items-center gap-2 text-sm font-bold text-gray-500 hover:text-accent-600 bg-white/80 backdrop-blur-md px-5 py-2.5 rounded-full border border-gray-200 hover:border-accent-300 transition-all shadow-sm">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+              Return to Home
+            </Link>
+          </div>
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/80 backdrop-blur-md border border-gray-100 text-gray-700 text-sm font-bold mb-8 shadow-sm animate-fade-in-up delay-75">
             <Sparkles size={16} className="text-amber-500" />
             Our Vision
           </div>
