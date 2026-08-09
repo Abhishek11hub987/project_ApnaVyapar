@@ -63,7 +63,10 @@ export async function middleware(request: NextRequest) {
                         request.nextUrl.pathname.startsWith('/ideas/') ||
                         request.nextUrl.pathname.startsWith('/p/') ||
                         request.nextUrl.pathname.startsWith('/schemes/') ||
-                        request.nextUrl.pathname.startsWith('/api/') ||
+                        request.nextUrl.pathname.startsWith('/api/checkout') ||
+                        request.nextUrl.pathname.startsWith('/api/store-chat') ||
+                        request.nextUrl.pathname.startsWith('/api/locations') ||
+                        request.nextUrl.pathname.startsWith('/api/cron') ||
                         request.nextUrl.pathname.startsWith('/_next/') ||
                         request.nextUrl.pathname.startsWith('/images/') ||
                         request.nextUrl.pathname.startsWith('/auth/');

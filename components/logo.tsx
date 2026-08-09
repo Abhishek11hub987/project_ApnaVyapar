@@ -1,4 +1,5 @@
 import React from 'react';
+import Image from 'next/image';
 
 interface LogoProps {
   className?: string;
@@ -9,11 +10,19 @@ interface LogoProps {
 export default function Logo({ className = '', iconSize = 28, showTagline = false }: LogoProps) {
   return (
     <div className={`flex items-center gap-2.5 ${className}`}>
-      <div
-        className="flex items-center justify-center rounded-xl bg-gradient-to-br from-accent-500 to-accent-700 text-white font-extrabold select-none shadow-glow"
-        style={{ width: iconSize + 10, height: iconSize + 10, fontSize: iconSize * 0.48, letterSpacing: '-0.5px' }}
+      <div 
+        className="flex items-center justify-center relative shrink-0 overflow-hidden rounded-xl shadow-glow bg-gradient-to-br from-accent-500 to-accent-700 p-[1px]"
+        style={{ width: iconSize + 10, height: iconSize + 10 }}
       >
-        AV
+        <div className="w-full h-full bg-white rounded-[11px] relative flex items-center justify-center overflow-hidden">
+          <Image
+            src="/logo-transparent.png"
+            alt="Apna Vyapar Logo"
+            fill
+            className="object-contain p-1"
+            priority
+          />
+        </div>
       </div>
       <div className="flex flex-col">
         <span className="font-bold tracking-tight text-gray-900" style={{ fontSize: iconSize * 0.72, lineHeight: 1.15, letterSpacing: '-0.3px' }}>

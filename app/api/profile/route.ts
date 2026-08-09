@@ -1,23 +1,37 @@
 import { NextResponse } from 'next/server';
-import { supabaseAdmin } from '@/lib/supabase/admin';
+import { createServerClient } from '@supabase/ssr';
+import { cookies } from 'next/headers';
+
+function getSupabaseClient() {
+  const cookieStore = cookies();
+  return createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        get(name: string) { return cookieStore.get(name)?.value; },
+      },
+    }
+  );
+}
 
 export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url);
-  const userId = searchParams.get('userId');
-
-  if (!userId) {
-    return NextResponse.json({ error: 'User ID is required' }, { status: 400 });
-  }
-
   try {
-    const { data, error } = await supabaseAdmin
+    const supabase = getSupabaseClient();
+    const { data: { session } } = await supabase.auth.getSession();
+    
+    if (!session?.user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    const { data, error } = await supabase
       .from('profiles')
       .select('*')
-      .eq('id', userId)
+      .eq('id', session.user.id)
       .maybeSingle();
 
     if (error) {
-      console.error('Error fetching profile via admin API:', error);
+      console.error('Error fetching profile:', error);
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
 
@@ -34,22 +48,29 @@ export async function GET(request: Request) {
 
 export async function PATCH(request: Request) {
   try {
-    const body = await request.json();
-    const { userId, updates } = body;
-
-    if (!userId || !updates) {
-      return NextResponse.json({ error: 'User ID and updates are required' }, { status: 400 });
+    const supabase = getSupabaseClient();
+    const { data: { session } } = await supabase.auth.getSession();
+    
+    if (!session?.user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { data, error } = await supabaseAdmin
+    const body = await request.json();
+    const { updates } = body;
+
+    if (!updates) {
+      return NextResponse.json({ error: 'Updates are required' }, { status: 400 });
+    }
+
+    const { data, error } = await supabase
       .from('profiles')
       .update(updates)
-      .eq('id', userId)
+      .eq('id', session.user.id)
       .select()
       .single();
 
     if (error) {
-      console.error('Error updating profile via admin API:', error);
+      console.error('Error updating profile:', error);
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
 

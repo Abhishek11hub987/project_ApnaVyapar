@@ -8,6 +8,7 @@ import LoginHandler from "@/components/auth/login-handler";
 import { ClientProviders } from "@/components/providers/client-providers";
 import SplashScreen from "@/components/splash-screen";
 import { Suspense } from "react";
+import { GlobalBackground } from "@/components/ui/global-background";
 
 export const viewport: Viewport = {
   themeColor: "#0d9488",
@@ -57,6 +58,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${hind.variable} bg-surface-secondary text-gray-900 antialiased`} style={{ fontFamily: '"Plus Jakarta Sans", system-ui, -apple-system, sans-serif' }}>
+        <GlobalBackground />
         <SplashScreen />
         <ClientProviders>
           {children}

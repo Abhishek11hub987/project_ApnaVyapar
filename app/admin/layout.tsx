@@ -15,9 +15,9 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50 text-gray-900 flex">
-      <aside className="w-64 border-r border-gray-200 bg-white flex-col hidden md:flex sticky top-0 h-screen">
-        <div className="p-6 border-b border-gray-100">
+    <div className="min-h-screen text-gray-900 flex relative z-10">
+      <aside className="w-64 border-r border-accent-100/50 bg-white/70 backdrop-blur-xl flex-col hidden md:flex sticky top-0 h-screen shadow-sm">
+        <div className="p-6 border-b border-gray-100/50">
           <Link href="/admin" className="flex items-center gap-3 hover:opacity-90 transition-opacity">
             <Logo iconSize={24} />
             <span className="text-lg font-semibold text-gray-900">Admin</span>
@@ -32,9 +32,9 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
               <Link
                 key={item.name}
                 href={item.href}
-                className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors text-sm font-medium ${
+                className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors text-sm font-bold ${
                   isActive
-                    ? 'bg-gray-100 text-gray-900'
+                    ? 'bg-accent-50 text-accent-700 shadow-sm border border-accent-100'
                     : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'
                 }`}
               >
@@ -45,7 +45,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
           })}
         </nav>
 
-        <div className="p-4 border-t border-gray-100">
+        <div className="p-4 border-t border-gray-100/50">
           <Link
             href="/"
             className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-500 hover:text-gray-900 hover:bg-gray-50 transition-colors text-sm font-medium"
@@ -56,8 +56,8 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
         </div>
       </aside>
 
-      <main className="flex-1 flex flex-col min-w-0 overflow-y-auto">
-        <header className="md:hidden flex items-center justify-between p-4 border-b border-gray-100 bg-white sticky top-0 z-50">
+      <main className="flex-1 flex flex-col min-w-0 overflow-y-auto bg-transparent">
+        <header className="md:hidden flex items-center justify-between p-4 border-b border-gray-100/50 bg-white/70 backdrop-blur-xl sticky top-0 z-50">
           <Link href="/admin" className="flex items-center gap-2">
             <Logo iconSize={22} />
             <span className="text-base font-semibold">Admin</span>
