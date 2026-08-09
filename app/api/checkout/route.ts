@@ -14,9 +14,9 @@ const CartItemSchema = z.object({
 
 const CustomerInfoSchema = z.object({
   name: z.string().min(1, 'Name is required').max(200),
-  email: z.string().email('Invalid email'),
-  phone: z.string().min(5).max(20).optional(),
-  address: z.string().min(1, 'Address is required').max(2000),
+  email: z.string().email('Please enter a valid email address'),
+  phone: z.string().min(3, 'Phone number is too short').max(20).optional(),
+  address: z.string().min(1, 'Shipping address is required').max(2000),
 });
 
 const CheckoutSchema = z.object({

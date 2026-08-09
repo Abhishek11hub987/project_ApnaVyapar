@@ -10,6 +10,7 @@ export function CartDrawer({ store }: { store: any }) {
   const [checkoutMode, setCheckoutMode] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [orderSuccess, setOrderSuccess] = useState(false);
+  const [checkoutError, setCheckoutError] = useState<string | null>(null);
   
   const [customerInfo, setCustomerInfo] = useState({
     name: "",
@@ -27,6 +28,7 @@ export function CartDrawer({ store }: { store: any }) {
       setTimeout(() => {
         setCheckoutMode(false);
         setOrderSuccess(false);
+        setCheckoutError(null);
       }, 300);
     }
   }, [isCartOpen]);
@@ -92,10 +94,11 @@ export function CartDrawer({ store }: { store: any }) {
             <form id="checkout-form" className="space-y-6 animate-in slide-in-from-right-4 duration-300" onSubmit={async (e) => {
               e.preventDefault();
               if (!disclaimerAccepted) {
-                alert("You must accept the disclaimer to proceed.");
+                setCheckoutError("You must accept the liability acknowledgment to proceed.");
                 return;
               }
               setIsSubmitting(true);
+              setCheckoutError(null);
               try {
                 const res = await fetch('/api/checkout', {
                   method: 'POST',
@@ -113,7 +116,7 @@ export function CartDrawer({ store }: { store: any }) {
                 setOrderSuccess(true);
                 clearCart();
               } catch (err: any) {
-                alert(err.message || "Failed to place order.");
+                setCheckoutError(err.message || "Failed to place order.");
               } finally {
                 setIsSubmitting(false);
               }
@@ -124,6 +127,13 @@ export function CartDrawer({ store }: { store: any }) {
                 </button>
                 <h3 className="font-black text-xl text-gray-900">Checkout</h3>
               </div>
+
+              {checkoutError && (
+                <div className="bg-red-50 text-red-600 p-4 rounded-xl text-sm font-bold border border-red-100 flex items-start gap-3 animate-in fade-in zoom-in-95 duration-200">
+                  <ShieldAlert size={18} className="mt-0.5 flex-shrink-0" />
+                  <p>{checkoutError}</p>
+                </div>
+              )}
 
               <div className="space-y-4">
                 <div>
