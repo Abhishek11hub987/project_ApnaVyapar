@@ -16,7 +16,7 @@ export default function ClientIdeasTable({ initialIdeas }: { initialIdeas: any[]
     const result = await deleteBusinessIdea(id);
     
     if (result.success) {
-      setIdeas(ideas.filter(idea => idea.id !== id));
+      setIdeas(ideas.filter((idea: any) => idea.id !== id));
     } else {
       alert(`Failed to delete: ${result.error}`);
     }
@@ -43,7 +43,7 @@ export default function ClientIdeasTable({ initialIdeas }: { initialIdeas: any[]
                 </td>
               </tr>
             )}
-            {ideas.map((idea) => (
+            {ideas.map((idea: any) => (
               <tr key={idea.id} className="hover:bg-white/5 transition-colors group">
                 <td className="px-6 py-4">
                   <div className="flex items-center gap-3">

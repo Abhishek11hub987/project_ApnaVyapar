@@ -46,7 +46,7 @@ export default async function AdminUsersPage() {
                   </td>
                 </tr>
               )}
-              {signups?.map((user) => (
+              {signups?.map((user: any) => (
                 <tr key={user.id} className="hover:bg-white/5 transition-colors group">
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-3">
