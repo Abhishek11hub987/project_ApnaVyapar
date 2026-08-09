@@ -12,7 +12,7 @@ interface AuthState {
   initialize: () => Promise<void>;
 }
 
-// Fetch profile directly from Supabase client — no server round-trip needed
+// Fetch profile directly from Supabase client — no server round-trip
 async function fetchProfileFromDB(userId: string): Promise<Profile | null> {
   try {
     const { data, error } = await supabase
@@ -26,7 +26,7 @@ async function fetchProfileFromDB(userId: string): Promise<Profile | null> {
       return null;
     }
 
-    // Auto-create profile if missing (RLS allows user to insert own row)
+    // Auto-create profile if missing
     if (!data) {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return null;
@@ -68,30 +68,43 @@ export const useAuth = create<AuthState>()((set) => ({
   },
 
   initialize: async () => {
-    set({ isLoading: true });
-    try {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (session?.user) {
-        const profile = await fetchProfileFromDB(session.user.id);
-        set({ user: profile, isAuthenticated: !!profile, isLoading: false });
-      } else {
-        set({ user: null, isAuthenticated: false, isLoading: false });
-      }
-    } catch (err) {
-      console.error('[useAuth] initialize error:', err);
-      set({ user: null, isAuthenticated: false, isLoading: false });
-    }
+    // Do nothing — auth state is managed entirely by onAuthStateChange below.
+    // This function exists for backwards compatibility.
   },
 }));
 
-// Listen for auth state changes (handles Magic Link, Google OAuth, sign-out)
+// Single source of truth: onAuthStateChange handles ALL auth events including
+// INITIAL_SESSION (page load with existing session), SIGNED_IN (after OAuth/magic link),
+// TOKEN_REFRESHED, and SIGNED_OUT.
 if (typeof window !== 'undefined') {
   supabase.auth.onAuthStateChange(async (event, session) => {
-    console.log('[useAuth] auth event:', event);
-    if ((event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') && session?.user) {
+    console.log('[useAuth] event:', event, '| user:', session?.user?.email ?? 'none');
+
+    if (event === 'INITIAL_SESSION') {
+      if (session?.user) {
+        // User has a valid session on page load
+        const profile = await fetchProfileFromDB(session.user.id);
+        useAuth.setState({ user: profile, isAuthenticated: !!profile, isLoading: false });
+      } else {
+        // No session on page load
+        useAuth.setState({ user: null, isAuthenticated: false, isLoading: false });
+      }
+    }
+
+    if (event === 'SIGNED_IN' && session?.user) {
       const profile = await fetchProfileFromDB(session.user.id);
       useAuth.setState({ user: profile, isAuthenticated: !!profile, isLoading: false });
     }
+
+    if (event === 'TOKEN_REFRESHED' && session?.user) {
+      // Don't re-fetch profile for token refresh, just keep session alive
+      const current = useAuth.getState();
+      if (!current.isAuthenticated) {
+        const profile = await fetchProfileFromDB(session.user.id);
+        useAuth.setState({ user: profile, isAuthenticated: !!profile, isLoading: false });
+      }
+    }
+
     if (event === 'SIGNED_OUT') {
       useAuth.setState({ user: null, isAuthenticated: false, isLoading: false });
     }
