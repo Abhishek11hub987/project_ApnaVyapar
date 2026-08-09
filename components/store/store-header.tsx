@@ -1,12 +1,52 @@
 "use client";
 
-import { ShoppingBag } from "lucide-react";
+import { ShoppingBag, Share2, DownloadCloud } from "lucide-react";
 import { useCart } from "./cart-context";
+import { useState, useEffect } from "react";
 
 export function StoreHeader({ store }: { store: any }) {
   const { items, setIsCartOpen } = useCart();
   const itemCount = items.reduce((total, item) => total + item.quantity, 0);
   const themeColor = store?.theme_color || "#0f172a";
+  const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+  const [showInstall, setShowInstall] = useState(false);
+
+  useEffect(() => {
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      setDeferredPrompt(e);
+      setShowInstall(true);
+    });
+  }, []);
+
+  const handleInstallClick = async () => {
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      if (outcome === 'accepted') {
+        setShowInstall(false);
+      }
+      setDeferredPrompt(null);
+    }
+  };
+
+  const handleShare = async () => {
+    const shareData = {
+      title: `${store.store_name} | Apna Vyapar`,
+      text: store.hero_text || `Shop online at ${store.store_name}!`,
+      url: window.location.href,
+    };
+    if (navigator.share) {
+      try {
+        await navigator.share(shareData);
+      } catch (err) {
+        console.error("Error sharing:", err);
+      }
+    } else {
+      navigator.clipboard.writeText(window.location.href);
+      alert("Link copied to clipboard! Share it with your friends.");
+    }
+  };
 
   return (
     <header className="sticky top-0 z-40 w-full bg-white/90 backdrop-blur-xl border-b border-gray-100 shadow-sm">
@@ -49,23 +89,42 @@ export function StoreHeader({ store }: { store: any }) {
           Powered by <span className="font-black text-gray-400">Apna Vyapar</span>
         </a>
 
-        {/* Cart Button */}
-        <button
-          onClick={() => setIsCartOpen(true)}
-          className="relative flex items-center gap-2.5 pl-4 pr-5 py-2.5 rounded-xl font-bold text-sm transition-all hover:scale-105 active:scale-95 shadow-sm flex-shrink-0"
-          style={{
-            background: themeColor,
-            color: '#fff',
-          }}
-        >
-          <ShoppingBag size={16} />
-          <span>Cart</span>
-          {itemCount > 0 && (
-            <span className="absolute -top-2 -right-2 w-5 h-5 bg-red-500 text-white text-[10px] font-black rounded-full flex items-center justify-center shadow-sm animate-bounce">
-              {itemCount}
-            </span>
+        {/* Actions */}
+        <div className="flex items-center gap-2">
+          {showInstall && (
+            <button
+              onClick={handleInstallClick}
+              className="hidden sm:flex items-center gap-1.5 px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl text-xs font-bold transition-colors"
+            >
+              <DownloadCloud size={14} /> Install App
+            </button>
           )}
-        </button>
+          
+          <button
+            onClick={handleShare}
+            className="flex items-center justify-center w-10 h-10 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-700 transition-colors flex-shrink-0"
+            title="Share Store"
+          >
+            <Share2 size={16} />
+          </button>
+
+          <button
+            onClick={() => setIsCartOpen(true)}
+            className="relative flex items-center gap-2.5 pl-4 pr-5 py-2.5 rounded-xl font-bold text-sm transition-all hover:scale-105 active:scale-95 shadow-sm flex-shrink-0"
+            style={{
+              background: themeColor,
+              color: '#fff',
+            }}
+          >
+            <ShoppingBag size={16} />
+            <span className="hidden sm:inline">Cart</span>
+            {itemCount > 0 && (
+              <span className="absolute -top-2 -right-2 w-5 h-5 bg-red-500 text-white text-[10px] font-black rounded-full flex items-center justify-center shadow-sm animate-bounce">
+                {itemCount}
+              </span>
+            )}
+          </button>
+        </div>
       </div>
     </header>
   );

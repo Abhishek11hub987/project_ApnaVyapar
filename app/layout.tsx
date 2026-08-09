@@ -18,6 +18,7 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://apnavyapar.vercel.app"),
   title: "Apna Vyapar",
   description: "AI-powered guidance, business ideas, and step-by-step roadmaps to launch your dream business.",
+  keywords: ["Apna Vyapar", "Business Ideas", "Micro-SaaS", "Digital Storefront", "Indian Entrepreneurship", "Start a Business"],
   openGraph: {
     title: "Apna Vyapar - Start Your Business Journey",
     description: "AI-powered guidance, business ideas, and step-by-step roadmaps to launch your dream business.",
@@ -27,10 +28,10 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "/opengraph-image.png",
-        width: 1200,
-        height: 630,
-        alt: "Apna Vyapar",
+        url: "/logo-transparent.png",
+        width: 800,
+        height: 800,
+        alt: "Apna Vyapar Logo",
       },
     ],
   },
@@ -38,12 +39,19 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Apna Vyapar",
     description: "AI-powered guidance, business ideas, and step-by-step roadmaps to launch your dream.",
-    images: ["/twitter-image.png"],
+    images: ["/logo-transparent.png"],
   },
+  icons: {
+    icon: "/logo-transparent.png",
+    shortcut: "/logo-transparent.png",
+    apple: "/logo-transparent.png",
+  },
+  manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
     title: "Apna Vyapar",
+    startupImage: ["/logo-transparent.png"],
   },
   formatDetection: {
     telephone: false,
