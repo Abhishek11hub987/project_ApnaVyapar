@@ -44,9 +44,9 @@ export async function GET(req: Request) {
     if (isHealthy) {
       message = `✅ *Apna Vyapar Health Check*\n\nAll systems are 100% secure and operational.\n• Database: Connected\n• Environment: Secure\n• AI Agent: Active`;
     } else {
-      message = `⚠️ *Apna Vyapar Security Alert*\n\nIssues detected:\n${issues.map(i => `• ${i}`).join('\n')}\n\n`;
+      message = `⚠️ *Apna Vyapar Security Alert*\n\nIssues detected:\n${issues.map((i: any) => `• ${i}`).join('\n')}\n\n`;
       if (fixes.length > 0) {
-        message += `*Auto-Fixed:*\n${fixes.map(f => `• ${f}`).join('\n')}`;
+        message += `*Auto-Fixed:*\n${fixes.map((f: any) => `• ${f}`).join('\n')}`;
       } else {
         message += `Please review the Vercel dashboard immediately.`;
       }

@@ -226,7 +226,7 @@ function TasksContent() {
 
   const handleStatusChange = async (taskId: string, newStatus: string) => {
     // Optimistic update
-    setTasks(tasks.map(t => t.id === taskId ? { ...t, status: newStatus as any } : t));
+    setTasks(tasks.map((t: any) => t.id === taskId ? { ...t, status: newStatus as any } : t));
     
     // Sync to DB
     await supabase
@@ -289,8 +289,8 @@ function TasksContent() {
   const completedCount = tasks.filter(t => t.status === 'completed').length;
   
   // Group tasks by category
-  const categories = Array.from(new Set(tasks.map(t => t.category)));
-  const groupedTasks = categories.map(cat => ({
+  const categories = Array.from(new Set(tasks.map((t: any) => t.category)));
+  const groupedTasks = categories.map((cat: any) => ({
     category: cat,
     tasks: tasks.filter(t => t.category === cat).sort((a, b) => a.sort_order - b.sort_order)
   }));
@@ -346,14 +346,14 @@ function TasksContent() {
       </div>
 
       <div className="space-y-10">
-        {groupedTasks.map(group => (
+        {groupedTasks.map((group: any) => (
           <div key={group.category} className="animate-in fade-in slide-in-from-bottom-4 duration-500">
             <h3 className="text-xl font-black text-gray-900 mb-5 flex items-center gap-3">
               <div className="w-2 h-8 bg-gradient-to-b from-accent-500 to-indigo-500 rounded-full"></div>
               {group.category}
             </h3>
             <div className="space-y-3">
-              {group.tasks.map(task => (
+              {group.tasks.map((task: any) => (
                 <TaskItem key={task.id} task={task} onStatusChange={handleStatusChange} />
               ))}
             </div>
