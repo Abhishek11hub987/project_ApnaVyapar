@@ -9,14 +9,14 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     scroll-behavior: smooth;
-    overflow-x: hidden;
+    overflow-x: clip;
     width: 100%;
   }
 
   body {
     @apply bg-surface-secondary text-gray-900;
     font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
-    overflow-x: hidden;
+    overflow-x: clip;
     width: 100%;
   }
 
