@@ -194,7 +194,7 @@ export default function PremiumFeaturePage({ params }: { params: { slug: string 
       <nav className="border-b border-slate-100 bg-white/70 backdrop-blur-xl sticky top-0 z-50 transition-all">
         <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
           <Link href="/" className="hover:opacity-80 transition-opacity flex items-center gap-2">
-            <Logo iconSize={32} />
+            <Logo />
           </Link>
           <Link href="/" className="group text-sm font-bold text-slate-900 hover:text-white transition-all bg-white hover:bg-slate-900 px-6 py-2.5 rounded-full border border-slate-200 flex items-center gap-2 shadow-subtle hover:shadow-lg">
             <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
@@ -285,7 +285,7 @@ export default function PremiumFeaturePage({ params }: { params: { slug: string 
       <footer className="border-t border-slate-100 py-12 relative z-10 bg-white/50 backdrop-blur-lg">
         <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4 text-slate-500 text-sm font-medium">
           <div className="flex items-center gap-2">
-            <Logo iconSize={20} />
+            <Logo iconSize={32} />
           </div>
           <div className="flex items-center gap-6">
             <Link href="/features" className="hover:text-slate-900 transition-colors">All Features</Link>
