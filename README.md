@@ -12,40 +12,48 @@
 
 ---
 
-## 🌟 Key Features
+## 🌟 Comprehensive Feature Suite
+
+### 💡 Business Ideas Engine & Roulette
+- **AI-Curated Catalog**: Browse high-profit, hand-picked business ideas tailored specifically for the Indian market.
+- **Detailed Roadmaps**: Every idea comes with deep insights including Market Analysis, Financial Projections, Risk Mitigation, and a step-by-step Execution Roadmap.
+- **Idea Roulette**: Don't know where to start? "Spin the wheel" with our Business Idea Roulette to randomly discover your next big venture.
 
 ### 🏪 Real-time Digital Storefronts
-- **Zero-Config E-Commerce**: Users can launch a custom-branded digital store in minutes.
+- **Zero-Config E-Commerce**: Launch a custom-branded digital store in minutes using our intuitive Store Builder.
 - **Real-time Inventory Sync**: Powered by Supabase real-time websockets, storefronts update instantly without page reloads when inventory changes.
-- **Premium UI/UX**: Stores feature glassmorphism design, custom theme colors, advanced product filtering, and a modern cart drawer.
 - **Web Share & PWA Ready**: Native sharing to WhatsApp/Instagram and prompt-to-install "Download App" features built directly into the storefront.
 
-### 🧠 Vyapar Mitra (AI Business Assistant)
-- Context-aware AI chatbot that knows the merchant's exact inventory and store details.
-- Helps customers find products, answers FAQs, and provides business guidance to the merchant.
+### 🤖 Vyapar Mitra (AI Business Assistant)
+- Your 24/7 personal AI business consultant integrated directly into your dashboard.
+- Context-aware chatbot that understands your exact inventory, business type, and market challenges to provide actionable advice.
 
-### 📊 Powerful Analytics
-- Real-time revenue tracking, order management, and customer insights.
-- Professional, downloadable PDF Analytics Reports (dynamically generated with embedded SVG branding).
+### 📋 Smart Setup Checklist
+- A tailored step-by-step blueprint guiding you through the exact requirements for your specific business.
+- Tracks legal guidance (GST, MSME) and operational tasks to ensure a smooth launch.
+
+### 👥 Customer CRM & Digital Profiles
+- **Centralized Identity**: A complete Profile System to manage your account details, notifications, and settings securely.
+- **Customer Management**: Track your leads, log customer communication, and manage your sales pipeline. 
+- **Export Data**: Easily export your customer lists and order history to CSV for external accounting or marketing.
+
+### 📊 Advanced Analytics & Downloadable Reports
+- **Real-time Dashboards**: Monitor sales, profit margins, and traffic trends as they happen.
+- **Professional Reports**: Download instantly generated, branded PDF analytics reports for your stakeholders or records.
 
 ### 🚀 SEO & Discoverability
 - **Dynamic Open Graph Meta Tags**: Every storefront gets its own dynamic SEO metadata, ensuring links shared on WhatsApp, Facebook, and Instagram display beautiful, accurate preview cards.
-- **PWA Manifest Integration**: Fully installable on mobile devices with high-resolution app icons.
 
 ---
 
-## 🔒 Enterprise-Grade Security (Score: 9.5/10)
+## 🔒 Enterprise-Grade Security
 
 Apna Vyapar is built on modern security principles, ensuring data integrity and user privacy at all times:
 
 1. **Authentication**: Uses Supabase Auth (PKCE flow) with secure, HttpOnly cookies managed via Next.js server-side middleware.
-2. **Strict Route Protection**: Administrative and dashboard routes (`/admin`, `/dashboard`) are protected at the Edge (Middleware level). Client-side bypasses are impossible.
-3. **Row Level Security (RLS)**: Deeply integrated PostgreSQL RLS policies ensure that:
-   - Merchants can only read/update their own profiles, products, and store settings.
-   - Customers can only see active products.
-   - Administrative roles are strictly enforced via a secure `exists()` subquery pattern that prevents privilege escalation.
-4. **Data Validation**: Client and server-side validation is enforced across checkout and product management flows.
-5. **No Cross-Site Scripting (XSS)**: Strict React rendering patterns and HTML sanitization on all user-generated content.
+2. **Strict Route Protection**: Administrative and dashboard routes are protected at the Edge (Middleware level). Client-side bypasses are impossible.
+3. **Row Level Security (RLS)**: Deeply integrated PostgreSQL RLS policies ensure strict data isolation between merchants and customers.
+4. **Data Validation**: Client and server-side validation is enforced across all API routes and checkout flows using Zod.
 
 ---
 
@@ -54,7 +62,7 @@ Apna Vyapar is built on modern security principles, ensuring data integrity and 
 - **Framework**: Next.js 14 (App Router, Server Actions)
 - **Database & Auth**: Supabase (PostgreSQL, Realtime Subscriptions, RLS)
 - **Styling**: Tailwind CSS + Lucide Icons
-- **AI Integration**: Google Gemini / OpenAI capabilities (for Vyapar Mitra)
+- **AI Integration**: Google Gemini / OpenAI capabilities
 - **Deployment**: Vercel (Edge Network)
 
 ---
@@ -84,6 +92,7 @@ Apna Vyapar is built on modern security principles, ensuring data integrity and 
    ```env
    NEXT_PUBLIC_SUPABASE_URL=your-supabase-url
    NEXT_PUBLIC_SUPABASE_ANON_KEY=your-supabase-anon-key
+   SUPABASE_SERVICE_ROLE_KEY=your-supabase-service-role-key
    ```
 
 4. **Run the application**
@@ -91,12 +100,6 @@ Apna Vyapar is built on modern security principles, ensuring data integrity and 
    npm run dev
    ```
    Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
----
-
-## 📈 Search Engine Optimization (SEO)
-
-The platform is heavily optimized for search engines. It utilizes Next.js `generateMetadata` to inject dynamic `<title>`, `<meta name="description">`, and `openGraph` tags based on live database records. This ensures that every storefront created on Apna Vyapar inherently benefits from Google indexing and high-quality social media previews.
 
 ---
 
