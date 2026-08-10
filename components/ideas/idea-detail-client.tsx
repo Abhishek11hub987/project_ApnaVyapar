@@ -42,7 +42,7 @@ export default function IdeaDetailClient({ idea }: { idea: BusinessIdea }) {
   };
 
   return (
-    <main className="min-h-screen bg-transparent pb-32 font-sans transition-colors">
+    <main className="min-h-screen bg-transparent pb-40 font-sans selection:bg-indigo-500/30">
       {/* Header/Hero */}
       <div className="relative bg-transparent border-b border-gray-200/50 overflow-hidden">
         
@@ -121,13 +121,15 @@ export default function IdeaDetailClient({ idea }: { idea: BusinessIdea }) {
 
               <div className="w-full h-px bg-slate-100 "></div>
 
-              <div>
-                <div className="flex items-center gap-2.5 text-slate-500  mb-1.5">
-                  <div className="w-8 h-8 rounded-full bg-blue-50  flex items-center justify-center"><MapPin size={16} className="text-blue-600 " /></div>
-                  <span className="text-sm font-bold">Location Setup</span>
+              {locationType ? (
+                <div>
+                  <div className="flex items-center gap-2.5 text-slate-500  mb-1.5">
+                    <div className="w-8 h-8 rounded-full bg-blue-50  flex items-center justify-center"><MapPin size={16} className="text-blue-600 " /></div>
+                    <span className="text-sm font-bold">Location Setup</span>
+                  </div>
+                  <div className="text-lg font-bold text-slate-900  ml-10 capitalize">{locationType.replace('-', ' ')}</div>
                 </div>
-                <div className="text-lg font-bold text-slate-900  ml-10 capitalize">{locationType.replace('-', ' ')}</div>
-              </div>
+              ) : null}
 
               <div className="w-full h-px bg-slate-100 "></div>
 

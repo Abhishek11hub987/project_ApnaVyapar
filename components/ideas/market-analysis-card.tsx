@@ -8,10 +8,10 @@ export default function MarketAnalysisCard({ analysis }: MarketAnalysisProps) {
   if (!analysis || Object.keys(analysis).length === 0) return null;
 
   const items = [
-    { icon: BarChart, label: 'Market Size', value: analysis.market_size },
-    { icon: Users, label: 'Target Audience', value: analysis.target_audience },
-    { icon: TrendingUp, label: 'Growth Trends', value: analysis.growth_trends },
-    { icon: Target, label: 'Demand in India', value: analysis.demand_india },
+    { icon: BarChart, label: 'Market Size', value: analysis.marketSize || analysis.market_size },
+    { icon: Users, label: 'Target Audience', value: analysis.targetAudience || analysis.target_audience },
+    { icon: TrendingUp, label: 'Growth Potential', value: analysis.growthPotential || analysis.growth_trends },
+    { icon: Target, label: 'Competitive Landscape', value: analysis.competitiveLandscape || analysis.competitive_landscape || analysis.demand_india },
   ];
 
   if (items.every(item => !item.value)) return null;

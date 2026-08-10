@@ -5,7 +5,15 @@ interface RiskProps {
 }
 
 export default function RiskAnalysis({ risks }: RiskProps) {
-  if (!risks || !Array.isArray(risks) || risks.length === 0) return null;
+  let formattedRisks = risks;
+  if (risks && !Array.isArray(risks) && risks.keyRisks && risks.mitigationStrategies) {
+    formattedRisks = risks.keyRisks.map((risk: string, idx: number) => ({
+      risk,
+      mitigation: risks.mitigationStrategies[idx] || 'No specific mitigation provided.'
+    }));
+  }
+
+  if (!formattedRisks || !Array.isArray(formattedRisks) || formattedRisks.length === 0) return null;
 
   return (
     <div className="bg-white  rounded-2xl border border-slate-200  p-6 shadow-sm">
@@ -15,7 +23,7 @@ export default function RiskAnalysis({ risks }: RiskProps) {
       </h3>
       
       <div className="space-y-4">
-        {risks.map((item, idx) => (
+        {formattedRisks.map((item, idx) => (
           <div key={idx} className="flex flex-col md:flex-row gap-0 border border-slate-200  rounded-xl overflow-hidden">
             <div className="flex-1 bg-amber-50  p-4 border-b md:border-b-0 md:border-r border-slate-200 ">
               <div className="flex gap-2 items-start">

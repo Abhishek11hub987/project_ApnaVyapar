@@ -8,10 +8,10 @@ export default function FinancialProjections({ financials }: FinancialsProps) {
   if (!financials || Object.keys(financials).length === 0) return null;
 
   const items = [
-    { icon: TrendingUp, label: 'Break Even Point', value: financials.break_even, color: 'text-blue-600', bg: 'bg-blue-50 ' },
-    { icon: IndianRupee, label: 'Estimated Monthly Revenue', value: financials.monthly_revenue, color: 'text-emerald-600', bg: 'bg-emerald-50 ' },
-    { icon: Wallet, label: 'Estimated Monthly Costs', value: financials.monthly_costs, color: 'text-amber-600', bg: 'bg-amber-50 ' },
-    { icon: PieChart, label: 'Expected Profit Margin', value: financials.profit_margin, color: 'text-purple-600', bg: 'bg-purple-50 ' },
+    { icon: TrendingUp, label: 'Break Even Point', value: financials.breakEven || financials.break_even, color: 'text-blue-600', bg: 'bg-blue-50 ' },
+    { icon: IndianRupee, label: 'Estimated Monthly Revenue', value: financials.monthlyRevenue || financials.monthly_revenue, color: 'text-emerald-600', bg: 'bg-emerald-50 ' },
+    { icon: Wallet, label: 'Initial Investment', value: financials.initialInvestment || financials.monthly_costs, color: 'text-amber-600', bg: 'bg-amber-50 ' },
+    { icon: PieChart, label: 'Expected Profit Margin', value: financials.profitMargin || financials.profit_margin, color: 'text-purple-600', bg: 'bg-purple-50 ' },
   ];
 
   if (items.every(item => !item.value)) return null;

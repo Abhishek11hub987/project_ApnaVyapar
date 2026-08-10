@@ -5,7 +5,17 @@ interface RoadmapProps {
 }
 
 export default function RoadmapTimeline({ roadmap }: RoadmapProps) {
-  if (!roadmap || !Array.isArray(roadmap) || roadmap.length === 0) return null;
+  let formattedRoadmap = roadmap;
+  if (roadmap && !Array.isArray(roadmap) && typeof roadmap === 'object') {
+    formattedRoadmap = Object.keys(roadmap)
+      .filter(k => k.startsWith('phase'))
+      .map(key => ({
+        phase: key.replace('phase', 'Phase '),
+        tasks: [roadmap[key]]
+      }));
+  }
+
+  if (!formattedRoadmap || !Array.isArray(formattedRoadmap) || formattedRoadmap.length === 0) return null;
 
   return (
     <div className="bg-white  rounded-2xl border border-slate-200  p-6 shadow-sm">
@@ -15,7 +25,7 @@ export default function RoadmapTimeline({ roadmap }: RoadmapProps) {
       </h3>
       
       <div className="relative border-l-2 border-indigo-100  ml-3 md:ml-4 space-y-8">
-        {roadmap.map((phase, idx) => (
+        {formattedRoadmap.map((phase, idx) => (
           <div key={idx} className="relative pl-6 md:pl-8">
             <div className="absolute -left-[9px] top-1 w-4 h-4 rounded-full bg-white  border-2 border-indigo-500 shadow-[0_0_0_4px_rgba(99,102,241,0.1)]"></div>
             
