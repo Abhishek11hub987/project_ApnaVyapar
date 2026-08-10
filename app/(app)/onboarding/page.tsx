@@ -62,10 +62,10 @@ export default function OnboardingPage() {
     setSaving(true);
     try {
       // We store skills and time in work_experience as JSON to avoid DB schema alterations
-      const workExperienceData = JSON.stringify({
+      const workExperienceData = {
         skills: formData.skills,
         time_commitment: formData.time
-      });
+      };
 
       await updateProfile(user.id, {
         full_name: formData.full_name,
@@ -80,9 +80,9 @@ export default function OnboardingPage() {
 
       await initialize(); // Refresh auth context
       router.push('/ideas');
-    } catch (err) {
+    } catch (err: any) {
       console.error(err);
-      alert('Failed to save profile.');
+      alert('Failed to save profile: ' + (err.message || 'Unknown error'));
       setSaving(false);
     }
   };

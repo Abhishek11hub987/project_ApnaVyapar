@@ -193,19 +193,19 @@ export function DashboardSidebar() {
       {/* Mobile top bar */}
       <div className="md:hidden fixed top-0 left-0 right-0 h-16 bg-white/90 backdrop-blur-xl border-b border-gray-100 z-40 flex items-center justify-between px-4 shadow-xs">
         <div className="flex items-center gap-2">
-          <Link href="/ideas" className="p-1.5 -ml-1.5 text-gray-400 hover:text-accent-600 hover:bg-accent-50 rounded-lg transition-colors" title="Back">
-            <ArrowLeft size={20} />
-          </Link>
+          <button
+            onClick={() => setMobileMenuOpen(true)}
+            className="p-1.5 -ml-1.5 text-gray-400 hover:text-accent-600 hover:bg-accent-50 rounded-lg transition-colors"
+          >
+            <Menu size={20} />
+          </button>
           <Link href="/" className="hover:opacity-90 transition-opacity">
             <Logo />
           </Link>
         </div>
-        <button
-          onClick={() => setMobileMenuOpen(true)}
-          className="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg"
-        >
-          <Menu size={20} />
-        </button>
+        <Link href="/ideas" className="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg" title="Back to Ideas">
+          <ArrowLeft size={20} />
+        </Link>
       </div>
 
       {/* Mobile overlay */}

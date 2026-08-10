@@ -196,9 +196,9 @@ export default function PremiumFeaturePage({ params }: { params: { slug: string 
           <Link href="/" className="hover:opacity-80 transition-opacity flex items-center gap-2">
             <Logo iconSize={32} />
           </Link>
-          <Link href="/features" className="group text-sm font-bold text-slate-900 hover:text-white transition-all bg-white hover:bg-slate-900 px-6 py-2.5 rounded-full border border-slate-200 flex items-center gap-2 shadow-subtle hover:shadow-lg">
+          <Link href="/" className="group text-sm font-bold text-slate-900 hover:text-white transition-all bg-white hover:bg-slate-900 px-6 py-2.5 rounded-full border border-slate-200 flex items-center gap-2 shadow-subtle hover:shadow-lg">
             <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
-            Back to Features
+            Return to Home
           </Link>
         </div>
       </nav>
@@ -287,7 +287,10 @@ export default function PremiumFeaturePage({ params }: { params: { slug: string 
           <div className="flex items-center gap-2">
             <Logo iconSize={20} />
           </div>
-          <div>&copy; {new Date().getFullYear()} Apna Vyapar. Open Source for India.</div>
+          <div className="flex items-center gap-6">
+            <Link href="/features" className="hover:text-slate-900 transition-colors">All Features</Link>
+            <div>&copy; {new Date().getFullYear()} Apna Vyapar. Open Source for India.</div>
+          </div>
         </div>
       </footer>
     </div>

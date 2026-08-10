@@ -213,7 +213,7 @@ export default function IdeasCatalog() {
                 <div className="text-5xl mb-4">🔍</div>
                 <h3 className="text-xl font-semibold text-gray-900 mb-2">No ideas found</h3>
                 <p className="text-gray-500 text-sm mb-8 max-w-md mx-auto">We couldn't find any business ideas matching your search.</p>
-                <div className="flex items-center justify-center gap-4">
+                <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                   {search ? (
                     <button 
                       onClick={() => router.push(`/chat?query=${encodeURIComponent(`I want to start a business related to "${search}". Can you research this idea and publish it to the community catalog?`)}`)}
@@ -267,7 +267,7 @@ export default function IdeasCatalog() {
                 <h3 className="text-xl font-semibold text-gray-900 mb-2">No community ideas found</h3>
                 <p className="text-gray-500 text-sm mb-8 max-w-md mx-auto">Be the first to contribute a business idea!</p>
                 
-                <div className="flex items-center justify-center gap-4">
+                <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                   {search ? (
                     <button 
                       onClick={() => router.push(`/chat?query=${encodeURIComponent(`I want to start a business related to "${search}". Can you research this idea and publish it to the community catalog?`)}`)}
