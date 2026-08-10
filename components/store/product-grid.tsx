@@ -24,7 +24,7 @@ export function ProductGrid({ products, store }: { products: Product[], store: a
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 pt-[64px]">
       {/* Hero Banner */}
       <div
         className="relative overflow-hidden py-16 md:py-24 text-center"

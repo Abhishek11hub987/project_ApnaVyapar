@@ -64,7 +64,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         </div>
       )}
 
-      <main className={`flex-1 flex flex-col ${isDashboard ? '' : isChat ? 'pb-0 md:pb-0' : 'pb-20 md:pb-0'}`}>
+      <main className={`flex-1 flex flex-col ${!isDashboard && !isChat ? 'pt-16 md:pt-[72px]' : ''} ${isDashboard ? '' : isChat ? 'pt-16 md:pt-[72px] pb-0 md:pb-0' : 'pb-20 md:pb-0'}`}>
         {children}
       </main>
 
