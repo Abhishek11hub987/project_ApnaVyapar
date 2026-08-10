@@ -55,14 +55,16 @@ export default function Header() {
   return (
     <header className="fixed top-0 left-0 right-0 z-50 w-full bg-white/80 backdrop-blur-2xl border-b border-gray-100 shadow-sm transition-all">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16 md:h-[72px]">
-          {/* Logo */}
-          <Link href="/" className="shrink-0 hover:opacity-90 transition-opacity">
-            <Logo />
-          </Link>
+        <div className="flex items-center justify-between min-h-[80px] md:min-h-[100px] py-2">
+          {/* Logo Container - fixed width to balance the right side */}
+          <div className="w-[180px] md:w-[240px] shrink-0 flex items-center">
+            <Link href="/" className="hover:opacity-90 transition-opacity">
+              <Logo />
+            </Link>
+          </div>
 
           {/* Center Nav — Desktop */}
-          <nav className="hidden md:flex items-center gap-1.5">
+          <nav className="hidden md:flex flex-1 items-center justify-center gap-1.5">
             {navItems.map((item) => {
               const active = pathname === item.href || (item.href !== '/ideas' && pathname.startsWith(item.href));
               const classes = `px-4 py-2 text-sm font-bold rounded-full transition-all duration-300 ${
@@ -86,7 +88,7 @@ export default function Header() {
           </nav>
 
           {/* Right Actions — Desktop */}
-          <div className="hidden md:flex items-center gap-2">
+          <div className="hidden md:flex items-center justify-end gap-2 w-[180px] md:w-[240px]">
             {/* User Section */}
             {isAuthenticated && user ? (
               <div className="relative" ref={profileRef}>
