@@ -110,9 +110,15 @@ export default function IdeaCard({ idea, isCommunity = false }: { idea: any, isC
         <span className="text-xs font-medium text-accent-600 bg-accent-50 px-2.5 py-1 rounded-full w-fit mb-3">
           {localizedCategory}
         </span>
-        <h3 className="text-base font-semibold text-gray-900 mb-4 line-clamp-2 leading-snug">
+        <h3 className="text-base font-semibold text-gray-900 mb-2 line-clamp-2 leading-snug">
           {localizedTitle}
         </h3>
+        
+        {idea.description && (
+          <p className="text-sm text-gray-500 line-clamp-2 mb-3 leading-relaxed">
+            {idea.description}
+          </p>
+        )}
 
         <div className="mt-auto space-y-2.5 text-sm text-gray-500 mb-4">
           <div className="flex justify-between items-center bg-gray-50 px-3 py-2 rounded-lg">
@@ -122,8 +128,12 @@ export default function IdeaCard({ idea, isCommunity = false }: { idea: any, isC
             </span>
           </div>
           <div className="flex justify-between items-center px-1">
-            <span className="font-medium">{t('card.location')}</span>
-            <span className="font-semibold text-gray-700 capitalize">{idea.location_type.replace('-', ' ')}</span>
+            <span className="font-medium text-gray-400">Time</span>
+            <span className="font-semibold text-gray-700 capitalize">{idea.time_commitment ? idea.time_commitment.replace('-', ' ') : 'Flexible'}</span>
+          </div>
+          <div className="flex justify-between items-center px-1">
+            <span className="font-medium text-gray-400">Skill Level</span>
+            <span className="font-semibold text-gray-700 capitalize">{idea.skill_level || 'Beginner'}</span>
           </div>
           <div className="flex justify-between items-center px-1">
             <span className="font-medium">{t('card.profit')}</span>
