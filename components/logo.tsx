@@ -17,7 +17,7 @@ export default function Logo({ className = '', iconSize }: LogoProps) {
     <div className={`flex items-center justify-center ${className}`}>
       <div 
         className={`relative mix-blend-multiply transition-all ${
-          !iconSize ? 'h-20 w-44 md:h-24 md:w-56' : ''
+          !iconSize ? 'h-14 w-32 md:h-24 md:w-56' : ''
         }`}
         style={iconSize ? { height, width } : undefined}
       >
